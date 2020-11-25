@@ -1,0 +1,84 @@
+<!--ORDER CONFIRMATION PAGE CODE INJECTION-->
+<script>
+	// create a variable to hold our ecommerce transaction information
+	var ssRawTransactionJSON;
+
+  	// grab all the scripts that have been loaded on the page thus far
+	var ssAllLoadedScripts = document.querySelectorAll('script');
+
+  	// look for the one that has the checkout information we need
+	for (var ssindex = 0; ssindex < ssAllLoadedScripts.length; ssindex++) {
+		// the .match method returns 'null' if it doesn't find a match
+      	var ssCommerceScriptHTML = ssAllLoadedScripts[ssindex].innerHTML.match(/checkoutConfirmed\((.+?)\);/);
+      
+  		// if the match function above returned something, then we parse it as JSON and store it in our JSON variable
+		if(ssCommerceScriptHTML){ 
+			ssRawTransactionJSON = JSON.parse(ssCommerceScriptHTML[1]);
+        }
+    }
+      
+    // remove any potential PII before pushing to dataLayer
+  	// if the "customer" field exists, reset it to an empty string
+    if(typeof(ssRawTransactionJSON.billingDetails.customer) != "undefined"){
+    	ssRawTransactionJSON.billingDetails.customer = "";
+	}  
+
+    // push the anonymous transaction information to the dataLayer
+	window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+		'event' : 'ssRawTransactionJSONPushed_ss',
+        'ssRawTransactionJSON': ssRawTransactionJSON
+    });
+
+</script>
+<!--ORDER CONFIRMATION PAGE CODE INJECTION END-->
+
+
+
+
+
+
+
+<!--REFERENCE OBJECT PUSH-->
+<!--DO NOT USE THIS CODE IN SQUARESPACE -- IT IS JUST FOR REFERENCE-->
+<script>
+
+dataLayer.push({
+	event: 'ssRawTransactionJSONPushed_ss',
+	ssCommerceScriptJSON: {
+	  id: '5fb734bc1b54d22df157f49a', // the squarespace transaction ID
+	  orderNumber: '12439',
+	  websiteId: '5db646aa924a603ce094fb9b',
+	  purchasedCartId: '5fb73476da47fc7bdff15746',
+	  testMode: true,
+	  grandTotal: {currencyCode: 'USD', value: 1100, decimalValue: '11.00', fractionalDigits: 2},
+	  grandTotalFormatted: '$11.00',
+	  subtotal: {currencyCode: 'USD', value: 1000, decimalValue: '10.00', fractionalDigits: 2},
+	  subtotalFormatted: '$10.00',
+	  taxTotal: {currencyCode: 'USD', value: 0, decimalValue: '0.00', fractionalDigits: 2},
+	  taxTotalFormatted: '$0.00',
+	  shippingTotal: {currencyCode: 'USD', value: 100, decimalValue: '1.00', fractionalDigits: 2},
+	  shippingTotalFormatted: '$1.00',
+	  billingDetails: {customer: ''},
+	  items: [
+		{
+		  sku: 'SQ4897009',
+		  productName: 'MARE LUNE sticker',
+		  unitPrice: {currencyCode: 'USD', value: 500, decimalValue: '5.00', fractionalDigits: 2},
+		  quantity: 1
+		},
+		{
+		  sku: 'SQ7346474',
+		  productName: 'YOUR HEART sticker',
+		  unitPrice: {currencyCode: 'USD', value: 500, decimalValue: '5.00', fractionalDigits: 2},
+		  quantity: 1
+		}
+	  ]
+	},
+	gtm.uniqueEventId: 6
+  })
+
+</script>
+
+<!--REFERENCE OBJECT PUSH-->
+<!--DO NOT USE THIS CODE IN SQUARESPACE -- IT IS JUST FOR REFERENCE-->
