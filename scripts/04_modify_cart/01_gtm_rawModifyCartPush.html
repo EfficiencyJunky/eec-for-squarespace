@@ -1,0 +1,98 @@
+<script>
+
+    var oldCartJSON = {{JS Utility - get Cart JSON from script in document}}(document);
+
+    console.log("initial cart", oldCartJSON);
+
+    // Select the node that will be observed for mutations
+    // in this case it's the main Cart Page Container div
+    var nodeToObserve = document.querySelector("div.CartPage-container-3tQnb");
+    var subtotalPriceClassName = "CartTable-subtotalPrice-2JFeD";
+    var emptyCartMessageClassName = "empty-message";
+  
+    if(nodeToObserve){
+      
+      var observerCallback = function(mutationsList, observer){
+
+        for(var j=0; j < mutationsList.length; j++){
+          
+            // first check to see if any nodes were added and grab the classList of the proper element in the mutationObject
+            var classListToSearch = (mutationsList[j].addedNodes.length === 0)
+                                    ? mutationsList[j].target.parentElement.classList // if a node was not added use this
+                                    : mutationsList[j].addedNodes[0].classList;       // if a node was added use this
+
+          
+            var cartChanged = false;
+            // NOTE: since the classList is a DomTokenList, we can use the "contains" method
+          
+            // if the classList contains "CartTable-subtotalPrice-2JFeD" then the subtotal changed
+            if(classListToSearch.contains(subtotalPriceClassName)){
+                console.log("subtotal changed");
+                cartChanged = true;
+            }
+            // if the classList contains "empty-message" then the cart is empty
+            else if(classListToSearch.contains(emptyCartMessageClassName)){
+                //{JS Utility - HTTP Request for Cart Page}();
+                console.log("cart empty");
+                cartChanged = true;
+            }
+          
+
+            if(cartChanged){
+                var httpRequest = new XMLHttpRequest();
+                var cartURL = "https://cachetattoo.com/cart";
+                
+                httpRequest.open("GET", cartURL);
+                httpRequest.send();
+
+                // this event fires once the request is complete
+                // more info found here: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+                httpRequest.onload = function(e){
+          
+                    console.log("HTTP Request Finished");
+          
+                    var domParser = new DOMParser();
+
+                    var httpResponse = domParser.parseFromString(httpRequest.responseText, "text/html");
+              
+                    //var oldCartJSONCopy = JSON.parse(JSON.stringify(oldCartJSON));
+                    var newCartJSON = {{JS Utility - get Cart JSON from script in document}}(httpResponse);
+
+                    // create the raw modified cart JSON to send
+                    // "oldCart" is the snapshot with all relevant items in the previous version of the cart
+                    // "newCart" is the snapshot with all relevant items in the updated version of the cart
+                    var ssModifyCartItems = {
+                        //'oldCartItems': {JS Utility - convert cartJSON to trimmed item JSON}(oldCartJSONCopy),
+                        'oldCartItems': {{JS Utility - convert cartJSON to trimmed item JSON}}(oldCartJSON),
+                        'newCartItems': {{JS Utility - convert cartJSON to trimmed item JSON}}(newCartJSON)
+                    }
+
+                    // push this raw JSON to dataLayer with an event key ("_gtm" tells us that it is coming from GTM)
+                    window.dataLayer.push({
+                        'event' : 'ssModifyCartItemsPushed_gtm',
+                        'ssModifyCartItems': ssModifyCartItems
+                    });
+
+                    //console.log("old", oldCartJSONCopy);              
+                    //console.log("new", newCartJSON); 
+
+                    oldCartJSON = newCartJSON;
+                };
+            }
+                    
+        }
+        
+      }
+      
+      var observer = new MutationObserver(observerCallback);
+      
+      // Options for the observer (which mutations to observe)
+      //var config = { attributes: false, childList: false, subtree: true, characterData: true };
+      var observerConfig = { childList: true, subtree: true, characterData: true };    
+      
+      // Start observing the target node for configured mutations
+      observer.observe(nodeToObserve, observerConfig);
+      
+    }
+  
+</script>

@@ -29,3 +29,63 @@ Then push the rawJSON to dataLayer with a unique event key
 5. Create a trigger that fires when the Squarespace event key in step 1 is detected in the dataLayer
 
 6. Create a tag that fires on this trigger and sends an event hit to GA with custom dimension for SS Transaction ID and Enhanced Ecommerce enabled with data from custom Javascript in Step 2
+
+
+
+
+
+## OBJECT REFERENCE
+
+
+**EXAMPLE OF PURCHASE OBJECT**
+<script>
+	// COOKIE LOGIC
+	// -- id
+	// -- category
+    // -- dimension6
+    // -- dimension7    
+
+    // create our properly formatted enhanced ecommerce add object
+    var purchase = {
+      'ecommerce': {
+        'purchase': {
+          'products': [{
+//            'id': itemId,
+            'name': itemTitle,
+//            'category': variantDetails.optionValues[0].value,
+            //variant: 'xyz', // maybe use this for sku instead of dimension
+            'brand': {{const - eec brand}},
+            'price': variantPrice.toFixed(2),
+            'quantity': quantityAdded,
+            'dimension5': variantDetails.sku,
+//            'dimension6': (variantDetails.unlimited || variantDetails.qtyInStock > 0) ? 'In Stock' : 'Sold Out',
+//            'dimension7': (!variantDetails.onSale) ? 'Regular Price' : 'On Sale',
+          }]
+        }
+      }
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,13 +1,12 @@
 # EXECUTION PLAN
 
 **SQUARESPACE WORK**
-1. Push ssRawProductDetailJSON to the data layer
+1. Data will be scraped in Squarespace Footer Code Injection to generate a raw object of all the product details. This will be sent to dataLayer with event key `ssRawProductDetailJSONPushed_ss` and variable key `ssRawProductDetailJSON`
+    Add code to Squarespace's Code Injection in the "Footer" section. This code will scrub the page for all scripts and find the one with the Squarespace Context object `Static.SQUARESPACE_CONTEXT`, which has all the product detail information
 
-Add code to Squarespace's Code Injection in the "Footer" section. This code will scrub the page for all scripts and find the one with the Squarespace Context object `Static.SQUARESPACE_CONTEXT`, which has all the product detail information
+    [How to scrape information from SS](https://stackoverflow.com/questions/58053572/scraping-information-from-a-script-tag-using-javascript/64887166#64887166)
 
-[How to scrape information from SS](https://stackoverflow.com/questions/58053572/scraping-information-from-a-script-tag-using-javascript/64887166#64887166)
-
-then form that into an object with a key containing information to the object and a key containing informtion on the product variants and push this to dataLayer
+    then this object will be split and loaded into an object with a key containing information to the item and a key containing informtion on the product variants
 
 ```
             ssRawProductDetailJSON = {
@@ -15,6 +14,8 @@ then form that into an object with a key containing information to the object an
                 "product": ssContextObject.product
             };
 ```
+
+    this is pushed to the dataLayer with event `ssRawProductDetailJSONPushed_ss`
 
 
 **GTM WORK**
