@@ -1,0 +1,44 @@
+<script>
+
+    var currentPageURL = document.URL;
+    
+  	// this will match any product detail page
+  	// the regex makes sure that "/store/" plus at least one character is in the URL
+    if(currentPageURL.match(/\/store\/./)){
+        // create a variable to hold our product information
+        var ssContextObject;
+
+        // grab all the scripts that have been loaded on the page thus far
+        var ssAllScripts = document.querySelectorAll('script');
+
+        // look for the one that has the checkout information we need
+        for (var scriptIndex = 0; scriptIndex < ssAllScripts.length; scriptIndex++) {
+            // the .match method returns 'null' if it doesn't find a match
+            var ssContextObjectScriptHTML = ssAllScripts[scriptIndex].innerHTML.match(/Static\.SQUARESPACE_CONTEXT = (.+?)\};/);
+        
+            // if the match function above returned something, then we parse it as JSON and store it in our JSON variable
+            if(ssContextObjectScriptHTML){ 
+                ssContextObject = JSON.parse(ssContextObjectScriptHTML[1] + "}");
+            }
+        }
+
+        var ssRawProductDetailJSON;
+      	
+        if(typeof(ssContextObject.product) != 'undefined'){
+            ssRawProductDetailJSON = {
+                "item": ssContextObject.item,
+                "product": ssContextObject.product
+            };
+        }
+
+        // push the anonymous transaction information to the dataLayer
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event' : 'ssRawProductDetailJSONPushed_ss',
+            'ssRawProductDetailJSON': ssRawProductDetailJSON
+        });
+
+    }
+
+
+</script>
