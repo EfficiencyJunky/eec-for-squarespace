@@ -88,3 +88,35 @@ For this step we need to do something totally different.
   quantityAdded: '1'
 }
 </script>
+
+
+
+<script>
+var productJSON = {
+    'productId': newlyAdded.itemId,
+    'productName': newlyAdded.title,
+    'productCategory': variantAdded.optionValues[0].value,
+    'variants':
+    [{
+        'sku': variantAdded.sku,
+        'price': variantPrice.toFixed(2),
+        'unlimited': variantAdded.unlimited,
+        'qtyInStock': variantAdded.qtyInStock, // can be 0 if unlimited is true
+        'onSale': variantAdded.onSale
+    }]
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

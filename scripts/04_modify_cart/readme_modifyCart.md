@@ -82,9 +82,9 @@ cart.items[0] = {
         'itemTitle': rawItem.productName,
         'itemCategory': rawItem.variantOptions[0].value,
         'variantDetails': {
+            'sku': rawItem.sku,
             'price': rawItem.unitPrice.decimalValue,
-            'quantityInCart': rawItem.quantity,
-            //'sku': rawItem.sku,
+            //'quantityInCart': rawItem.quantity,
             'unlimited': variantCookieData.unlimited, // get from cookie -- used for dimension6 -- "In Stock" or "Sold Out"
             'qtyInStock': variantCookieData.qtyInStock, // get from cookie -- used for dimension6 -- "In Stock" or "Sold Out"
             'onSale': variantCookieData.onSale // get from cookie -- used for dimension7 -- "Regular Price" or "On Sale"

@@ -1,8 +1,8 @@
-// UTILITY NAME: {{JS Utility - add list from referrer}}
+// UTILITY NAME: {JS Utility - add list from referrer}
 
 function(){
 
-    return function(eecObj, eecObjType, fullReferrer){
+    return function(eecObj, eecAction, fullReferrer){
       
       // if there wasn't a referrer then return
       if(fullReferrer == '' || fullReferrer == undefined){
@@ -26,12 +26,12 @@ function(){
       var listName = parsedURI.queryKey.category || "All";
     
       // add the "actionField" key with one item including the "list" key and the listName var from above as value
-      eecObj.ecommerce[eecObjType]["actionField"] = { 'list': listName };
+      eecObj.ecommerce[eecAction]["actionField"] = { 'list': listName };
     
       // the above line will format our ecommerce object to look like this (adding the 'actionField' object)
       /*
       ecommerce: {
-        eecObjType: {
+        eecAction: {
           actionField: {
             list: listName
           },
@@ -42,4 +42,4 @@ function(){
     
       return;
     }
-  }
+}

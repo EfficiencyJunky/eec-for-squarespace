@@ -1,50 +1,26 @@
 <script>
+
     // this script adds an event listener to the squarespace CommerceAnalytics object that fires when the object reports a successful add to cart event
     // then we grab the information of the newlyAdded item and send it along with the quantity added (which we get from the value in the quantity input box on the page)
     try{
         // add an event listener on "commerce-item-added" to the Squarespace CommerceAnalytics object
         Y.Squarespace.CommerceAnalytics.on("commerce-item-added",function(e){
-        
+
             // for debugging purposes, these are the relevant items that get sent along with the event
 //          console.log(e.newlyAdded);
 //          console.log(e.shoppingCart);
 
-            
-            // store important data on items in cookie
-            // #1 create the object for this SKU that we want to add to the cookie
-            var variantSku = e.newlyAdded.chosenVariant.sku;
-            var variantCookieData = {
-                'id': e.newlyAdded.itemId,
-                'category': e.newlyAdded.chosenVariant.optionValues[0].value,
-                'unlimited': e.newlyAdded.chosenVariant.unlimited,
-                'qtyInStock': e.newlyAdded.chosenVariant.qtyInStock,
-                'onSale': e.newlyAdded.chosenVariant.onSale
-            }
+            var productJSON = convertNewlyAddedtoProductJSON(e.newlyAdded);
 
-            // #2 get the value of the current cookie if there is one or create an empty object
-            var cookieVal = JSON.parse({{Cookie - added product details}} || '{}');
-
-            // #3 set the object with SKU as key
-            cookieVal[variantSku] = variantCookieData;
-
-            console.log(JSON.stringify(cookieVal));
-
-            // #4 save the cookie again
-            {{JS Utility - setCookie}}(
-                                        "addedProductDetails", 
-                                        JSON.stringify(cookieVal), 
-                                        2419200000, 
-                                        '/', 
-                                        'cachetattoo.com'
-                                      );
+            updateCookie_VariantsAddedToCart(productJSON);
 
             // create the raw add to cart JSON to send
             // "itemDetails" provides access to the details of the newlyAdded item that we get from the event
             // "quantityAdded" is pulled from the <input> on the page that has the value of the number added
             // we can't use the "quantity" value in the "itemDetails" object because it actually tells the total number of this item in the cart
             var ssRawAddToCartJSON = {
-                'itemDetails': e.newlyAdded,
-                'quantityAdded': document.querySelector(".product-quantity-input input").value 
+                'quantityAdded': document.querySelector(".product-quantity-input input").value,
+                'productJSON': productJSON
             }
 
             // push this raw JSON to dataLayer with an event key ("_gtm" tells us that it is coming from GTM)
@@ -53,8 +29,6 @@
                 'ssRawAddToCartJSON': ssRawAddToCartJSON
             });
 
-
-              
         });
   
     //    console.log("added event listener");
@@ -64,64 +38,63 @@
       console.error('trying to attach listener to "commerce-item-added" event');
       console.error(error);
     }
-    
+
+
+
+    function convertNewlyAddedtoProductJSON(newlyAdded){
+        var variantAdded = newlyAdded.chosenVariant;
+        var variantPrice =  ( !variantAdded.onSale ? 
+                              variantAdded.price : 
+                              variantAdded.salePrice 
+                            ) / 100;
+
+        var productJSON = {
+            'productId': newlyAdded.itemId,
+            'productName': newlyAdded.title,
+            'productCategory': variantAdded.optionValues[0].value,
+            'variants':
+            [{
+                'sku': variantAdded.sku,
+                'price': variantPrice.toFixed(2),
+                'unlimited': variantAdded.unlimited,
+                'qtyInStock': variantAdded.qtyInStock, // can be 0 if unlimited is true
+                'onSale': variantAdded.onSale
+            }]
+        }
+
+        return productJSON;
+    }
+
+
+    function updateCookie_VariantsAddedToCart(productJSON){
+
+        var variantToUpdate = productJSON.variants[0].sku;
+
+        // #1 create the updated cookie object for this variant
+        var variantDetails = {
+            'id': productJSON.productId,
+            'category': productJSON.productCategory,
+            'unlimited': productJSON.variants[0].unlimited,
+            'qtyInStock': productJSON.variants[0].qtyInStock,
+            'onSale': productJSON.variants[0].onSale
+        }
+
+        // #2 get the value of the current cookie if there is one or create an empty object
+        var cookieVal = JSON.parse({{Cookie - variantsAddedToCart}} || '{}');
+
+        // #3 set the object with SKU as key
+        cookieVal[variantToUpdate] = variantDetails;
+
+        console.log(JSON.stringify(cookieVal));
+
+        // #4 save the cookie again
+        {{JS Utility - setCookie}}(
+                                    "variantsAddedToCart", 
+                                    JSON.stringify(cookieVal), 
+                                    2419200000, 
+                                    '/', 
+                                    'cachetattoo.com'
+                                  );
+    }    
+
 </script>
-
-
-
-
-
-
-
-
-
-
-<!-- 
-
-
-
-
-<script>
-    // this script adds an event listener to the squarespace CommerceAnalytics object that fires when the object reports a successful add to cart event
-    // then we grab the information of the newlyAdded item and send it along with the quantity added (which we get from the value in the quantity input box on the page)
-    try{
-      // add an event listener on "commerce-item-added" to the Squarespace CommerceAnalytics object
-      Y.Squarespace.CommerceAnalytics.on("commerce-item-added",function(e){
-        
-        // for debugging purposes, these are the relevant items that get sent along with the event
-        if(typeof(e.newlyAdded) != "undefined"){
-  //          console.log(e.newlyAdded);
-        }
-        if(typeof(e.shoppingCart) != "undefined"){
-  //          console.log(e.shoppingCart);
-        }    
-        
-        // create the raw add to cart JSON to send
-        // "itemDetails" provides access to the details of the newlyAdded item that we get from the event
-        // "quantityAdded" is pulled from the <input> on the page that has the value of the number added
-        // we can't use the "quantity" value in the "itemDetails" object because it actually tells the total number of this item in the cart
-        var ssRawAddToCartJSON = {
-          'itemDetails': e.newlyAdded,
-          'quantityAdded': document.querySelector(".product-quantity-input input").value 
-        }
-        
-        // push this raw JSON to dataLayer with an event key ("_gtm" tells us that it is coming from GTM)
-        window.dataLayer.push({
-            'event' : 'ssRawAddToCartJSONPushed_gtm',
-            'ssRawAddToCartJSON': ssRawAddToCartJSON
-        });
-  
-        // log the results in the console for quick debugging
-        // console.log("ssRawAddToCartJSON:", ssRawAddToCartJSON);
-              
-      });
-  
-  //    console.log("added event listener");
-      
-    }
-    catch(error){
-      console.error('trying to attach listener to "commerce-item-added" event');
-      console.error(error);
-    }
-    
-  </script> -->

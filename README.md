@@ -3,22 +3,66 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 
 
-Builtin Variables Required
+## Builtin Variables Required
 * {{Referrer}}
 
+## **NOTE ON COOKIES**
+
+	We will need to store cookies in order to persist certain details about each product/variant throughout the funnel.
+
+	CART PAGE: In the case of modifications made on the cart page, we will be missing `dimension6` (sku) and `dimension7` (stock availability) for each item/SKU
+
+	ORDER COMPLETION PAGE: In the case of sending the final purchase event on the order completion page, we will be missing the `id`, `category`, `dimension6` and `dimension7` (sale status) for each SKU
 
 
 
-# **COOKIE PLAN**
 
-We will need to store cookies in order to persist certain details about each product/variant throughout the funnel.
 
-CART PAGE: In the case of modifications made on the cart page, we will be missing `dimension6` and `dimension7` for each item/SKU
 
-ORDER COMPLETION PAGE: In the case of sending the final purchase event on the order completion page, we will be missing the `id`, `category`, `dimension6` and `dimension7` for each SKU
+
+# DATA STRUCTURES
+## Product / Product Variant Data Structures
+
+* A product is the highest level data structure for any item for sale on a website
+* The data structure must include at least the product's "productId", "productName", and "productCategory"
+* In any case where it is feasible, the product data structure should also contain one or more variants depending on the situation (detail view could contain all variants while add/remove from cart might contain only one variant)
+
+<script>
+var productJSON = {
+    'productId': alphanumeric String,
+    'productName': String,
+	'productCategory': String,
+	// may want to add 'productPrice' but this is TBD
+    'variants': List of variant Objects
+    [{
+        'sku': alphanumeric String,
+        'price': String (a 2 decimal Number cast as String),
+        'unlimited': Boolean,
+        'qtyInStock': Integer, // can be 0 if unlimited is true
+        'onSale': Boolean
+    }]
+}
+</script>
+
+
+
+## Cart Item
+
+* A cartItem is a reference to a row in the Cart Table on the "/cart/" page
+* It describes the product/variant that is in the cart (represented by a productJSON) as well as the quantity of that product/variant currently in the cart
+
+<script>
+var cartItemJSON = {
+	'quantityInCart': Number,
+	'productJSON': productJSON
+}
+</script>
+
+
+
 
 	
-## COOKIE DATA STRUCTURE
+## Cookie Data Structure
 The cookie's data structure will have the usual cookie keys:
   * name -- The cookie name.
   * value --  Value for the cookie (a stringified JSON with our product data)
@@ -30,7 +74,7 @@ The cookie's data structure will have the usual cookie keys:
 COOKIE VALUE
 The value of the cookie will be a stringified JSON object with primary keys set to the SKU of each item/variant that has been added to the cart and primary values will be objects with `id`, `category`, `unlimited`, `qtyInStock`, and `onSale` as the second level key/value pairs
 
-```	
+<script>
 {
 	'sku123' : {
 		'id': string,
@@ -40,11 +84,11 @@ The value of the cookie will be a stringified JSON object with primary keys set 
 		'onSale': true/false		
 	}
 }
-```
+</script>
 
 
 Example of stringifying a JSON to set a cookie
-```
+<script>
 (function(){
    	var myObject = JSON.parse('{
 								"sku123": {
@@ -69,4 +113,4 @@ Example of stringifying a JSON to set a cookie
 						'; path=' + path +
 						'; domain=' + domain;
 })()
-```
+</script>
