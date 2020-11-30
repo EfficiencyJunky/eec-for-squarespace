@@ -1,32 +1,28 @@
 <script>
 
     // this script adds an event listener to the squarespace CommerceAnalytics object that fires when the object reports a successful add to cart event
-    // then we grab the information of the newlyAdded item and send it along with the quantity added (which we get from the value in the quantity input box on the page)
+    // then we grab the information of the "newlyAdded" product, update our "variantsAddedToCart" cookie, and push "newlyAdded" to dataLayer along with the quantity added (which we get from the value in the quantity input box on the page)
     try{
         // add an event listener on "commerce-item-added" to the Squarespace CommerceAnalytics object
-        Y.Squarespace.CommerceAnalytics.on("commerce-item-added",function(e){
+        Y.Squarespace.CommerceAnalytics.on("commerce-item-added", function(e){
 
-            // for debugging purposes, these are the relevant items that get sent along with the event
-//          console.log(e.newlyAdded);
 //          console.log(e.shoppingCart);
 
-            var productJSON = convertNewlyAddedtoProductJSON(e.newlyAdded);
+            // update our "variantsAddedToCart" cookie with the information from the "newlyAdded" product
+            update_variantsAddedToCart_cookie(e.newlyAdded);
 
-            updateCookie_VariantsAddedToCart(productJSON);
-
-            // create the raw add to cart JSON to send
-            // "itemDetails" provides access to the details of the newlyAdded item that we get from the event
+            // "e.newlyAdded" provides access to the details of the newlyAdded item that we get from the event
             // "quantityAdded" is pulled from the <input> on the page that has the value of the number added
-            // we can't use the "quantity" value in the "itemDetails" object because it actually tells the total number of this item in the cart
-            var ssRawAddToCartJSON = {
+            // we can't use the "quantity" value in the "e.newlyAdded" object because it actually tells the total number of this item in the cart
+            var ssRawAddToCart = {
                 'quantityAdded': document.querySelector(".product-quantity-input input").value,
-                'productJSON': productJSON
+                'newlyAdded': e.newlyAdded
             }
 
-            // push this raw JSON to dataLayer with an event key ("_gtm" tells us that it is coming from GTM)
+            // push this raw event info to dataLayer with an event key
             window.dataLayer.push({
-                'event' : 'ssRawAddToCartJSONPushed_gtm',
-                'ssRawAddToCartJSON': ssRawAddToCartJSON
+                'event' : 'ssRawAddToCartPush',
+                'ssRawAddToCart': ssRawAddToCart
             });
 
         });
@@ -39,53 +35,32 @@
       console.error(error);
     }
 
+    // *******************************************************************************
+    // This function takes the relevant details from "newlyAdded"
+    // and saves them in the "variantsAddedToCart" cookie
+    // we will use this thoughout the funnel to form our other productJSON objects
+    // *******************************************************************************
+    function update_variantsAddedToCart_cookie(newlyAdded){
 
-
-    function convertNewlyAddedtoProductJSON(newlyAdded){
         var variantAdded = newlyAdded.chosenVariant;
-        var variantPrice =  ( !variantAdded.onSale ? 
-                              variantAdded.price : 
-                              variantAdded.salePrice 
-                            ) / 100;
-
-        var productJSON = {
-            'productId': newlyAdded.itemId,
-            'productName': newlyAdded.title,
-            'productCategory': variantAdded.optionValues[0].value,
-            'variants':
-            [{
-                'sku': variantAdded.sku,
-                'price': variantPrice.toFixed(2),
-                'unlimited': variantAdded.unlimited,
-                'qtyInStock': variantAdded.qtyInStock, // can be 0 if unlimited is true
-                'onSale': variantAdded.onSale
-            }]
-        }
-
-        return productJSON;
-    }
-
-
-    function updateCookie_VariantsAddedToCart(productJSON){
-
-        var variantToUpdate = productJSON.variants[0].sku;
+        var variantSku = variantAdded.sku;
 
         // #1 create the updated cookie object for this variant
         var variantDetails = {
-            'id': productJSON.productId,
-            'category': productJSON.productCategory,
-            'unlimited': productJSON.variants[0].unlimited,
-            'qtyInStock': productJSON.variants[0].qtyInStock,
-            'onSale': productJSON.variants[0].onSale
+            'id': newlyAdded.itemId,
+            'category': variantAdded.optionValues[0].value,
+            'unlimited': variantAdded.unlimited,
+            'qtyInStock': variantAdded.qtyInStock,
+            'onSale': variantAdded.onSale
         }
 
         // #2 get the value of the current cookie if there is one or create an empty object
         var cookieVal = JSON.parse({{Cookie - variantsAddedToCart}} || '{}');
 
         // #3 set the object with SKU as key
-        cookieVal[variantToUpdate] = variantDetails;
+        cookieVal[variantSku] = variantDetails;
 
-        console.log(JSON.stringify(cookieVal));
+        //console.log(JSON.stringify(cookieVal));
 
         // #4 save the cookie again
         {{JS Utility - setCookie}}(
@@ -94,7 +69,10 @@
                                     2419200000, 
                                     '/', 
                                     'cachetattoo.com'
-                                  );
-    }    
+                                );
+    }
+
+
+
 
 </script>

@@ -3,9 +3,6 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 
 
-## Builtin Variables Required
-* {{Referrer}}
-
 ## **NOTE ON COOKIES**
 
 	We will need to store cookies in order to persist certain details about each product/variant throughout the funnel.
@@ -16,16 +13,19 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 
 
-
-
-
-
 # DATA STRUCTURES
+## Builtin Variables Required
+* {{Referrer}}
+
+
 ## Product / Product Variant Data Structures
 
 * A product is the highest level data structure for any item for sale on a website
-* The data structure must include at least the product's "productId", "productName", and "productCategory"
-* In any case where it is feasible, the product data structure should also contain one or more variants depending on the situation (detail view could contain all variants while add/remove from cart might contain only one variant)
+* PRODUCT DETAILS: The data structure must include at least the product's "productId", "productName", and "productCategory"
+* VARIANT DETAILS
+  * NO VARIANTS: In the case where it is not desireable to send any variant information, the `variants` object should be set to `[]`. This should be done in the case of a `eec.detail` view where a product has multiple variants because only the highest level product detail information should be sent for the detail view. The variant information will be sent along once the product is added to cart
+  * 1 VARIANT: In any case where it is feasible, the product data structure should also contain one variant
+  * MULTIPLE VARIANTS: At this point in time there doesn't seem to be a case where a product would be sent with multiple variants but it's possible there will be a case for this in the future
 
 <script>
 var productJSON = {
@@ -33,7 +33,7 @@ var productJSON = {
 	'productName': String,
 	'productCategory': String,
 	// may want to add 'productPrice' but this is TBD
-	'variants': List of variant Objects
+	'variants': List of variant Objects // CAN BE SET TO `[]` for `eec.detail` object
 	[{
 		'sku': alphanumeric String,
 		'price': String (a 2 decimal Number cast as String),
@@ -48,7 +48,7 @@ var productJSON = {
 
 ## Cart Item
 
-* A cartItem is a reference to a row in the Cart Table on the "/cart/" page
+* A cartItem is a reference to a row in the Cart Table on the "/cart/" page or 
 * It describes the product/variant that is in the cart (represented by a productJSON) as well as the quantity of that product/variant currently in the cart
 
 <script>
@@ -114,3 +114,21 @@ Example of stringifying a JSON to set a cookie
 						'; domain=' + domain;
 })()
 </script>
+
+
+
+
+# UTILITY FUNCTIONS
+A `utility function` is a Custom Javascript Variable that returns a function that can be called by other Custom Javascript Variables. There are a few utility functions that will need to be implemented along with the main Custom Javascript Variables.
+
+
+
+
+
+
+
+
+
+
+
+

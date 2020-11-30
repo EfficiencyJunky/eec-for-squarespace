@@ -4,10 +4,13 @@ function(){
     // if the conversionType is not specified, we assume the caller wants a cartItemsObj
     return function(rawItemsList, conversionType){
 
-        // pull the raw items list from the cart object
-        //var rawItemsList = rawCartJSON.cart.items;
+        // create our cartItemsObject
         var cartItemsObj = {};
 
+        // if the conversionType is set to "cartItemsList" then we will want to 
+        // fill the cartItemsObj with two lists. 
+        //      One with all the productJSONs
+        //      and one with the corresponding Quantities
         if(conversionType === 'cartItemsList'){
             cartItemsObj["productJSONList"] = [];
             cartItemsObj["quantityList"] = [];
@@ -44,6 +47,9 @@ function(){
                 }]
             }
 
+            // depending on the conversionType, 
+            // either add the productJSON and quantity to lists
+            // or add them to an object with the product's sku as the primary key
             if(conversionType === "cartItemsList"){
                 cartItemsObj.productJSONList.push(productJSON);
                 cartItemsObj.quantityList.push(rawItem.quantity);

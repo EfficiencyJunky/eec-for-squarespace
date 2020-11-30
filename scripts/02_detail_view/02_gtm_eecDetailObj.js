@@ -1,33 +1,15 @@
 // this function takes the rawProductDetail and converts it into a properly formatted object with a single "detail" key that Google Tag Manager can use to generate an Enhanced Ecommerce event for the Product Detail View
 function(){
   
-    var rawProductDetail = {{DL - SS Raw Product Detail}};  
+    var ssRawProductDetail = {{DL - SS Raw Product Detail}};  
 
     // first check to make sure something didn't go wrong in the formation of this object
-    if(rawProductDetail == undefined){
+    if(ssRawProductDetail == undefined){
         return undefined; 
     }
   
-    // pull out the category
-    // this should eventually be replaced by a cookie saving info from product impressions
-    var category = rawProductDetail.product.variants[0].attributes.category;
-
-    var variant = rawProductDetail.product.variants[0];
-
-    // initialize the productJSON
-    var productJSON = {
-        'productId': rawProductDetail.item.id,
-        'productName': rawProductDetail.item.title,
-        'productCategory': category,
-        // may want to add 'productPrice' but this is TBD
-        'variants': [{
-            'sku': variant.sku,
-            'price': (variant.onSale) ? variant.salePrice.decimalValue : variant.price.decimalValue,
-            'unlimited': variant.stock.unlimited,
-            'qtyInStock': variant.stock.quantity, // can be 0 if unlimited is true
-            'onSale': variant.onSale
-        }]
-    }
+    // convert the raw "ssRawProductDetail" object to a productJSON
+    var productJSON = convertSSRawProductDetailtoProductJSON(ssRawProductDetail);
 
     // create our base level eecCheckout object with the products list
     var eecDetailObj = {{JS Utility - create eecObjectFromAction}}('detail', productJSON);
@@ -39,4 +21,35 @@ function(){
     
     // return our properly formatted enhanced ecommerce detail event object
     return eecDetailObj;
+
+
+    // *********************************************************************************
+    // This function does the work of converting the newlyAdded object to a productJSON
+    // *********************************************************************************
+    function convertSSRawProductDetailtoProductJSON(ssRawProductDetail){
+
+        // pull out the category
+        // this should eventually be replaced by a cookie saving info from product impressions
+        var category = ssRawProductDetail.product.variants[0].attributes.category;
+
+        var variant = ssRawProductDetail.product.variants[0];
+
+        // initialize the productJSON
+        var productJSON = {
+            'productId': ssRawProductDetail.item.id,
+            'productName': ssRawProductDetail.item.title,
+            'productCategory': category,
+            // may want to add 'productPrice' but this is TBD
+            'variants': [{
+                'sku': variant.sku,
+                'price': (variant.onSale) ? variant.salePrice.decimalValue : variant.price.decimalValue,
+                'unlimited': variant.stock.unlimited,
+                'qtyInStock': variant.stock.quantity, // can be 0 if unlimited is true
+                'onSale': variant.onSale
+            }]
+        };
+
+        return productJSON;
+    }
+
 }

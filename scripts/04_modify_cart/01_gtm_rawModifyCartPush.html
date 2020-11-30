@@ -4,8 +4,8 @@
 
     // push the initial state of the cart to dataLayer
     window.dataLayer.push({
-        'event' : 'ssModifyCartPushed_gtm',
-        'ssModifyCart': { 
+        'event' : 'ssRawModifyCartPush',
+        'ssRawModifyCart': { 
             'initialCartItemsList': oldCartItemsList 
         }
     });
@@ -71,8 +71,8 @@
 
                     // push these raw lists to dataLayer with an event key ("_gtm" tells us that it is coming from GTM)
                     window.dataLayer.push({
-                        'event' : 'ssModifyCartPushed_gtm',
-                        'ssModifyCart': {
+                        'event' : 'ssRawModifyCartPush',
+                        'ssRawModifyCart': {
                             'oldCartItemsList': oldCartItemsList,
                             'newCartItemsList': newCartItemsList
                         }

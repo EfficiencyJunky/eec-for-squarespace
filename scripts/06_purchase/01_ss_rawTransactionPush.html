@@ -1,7 +1,7 @@
 <!--ORDER CONFIRMATION PAGE CODE INJECTION-->
 <script>
 	// create a variable to hold our ecommerce transaction information
-	var ssRawTransactionJSON;
+	var ssRawTransaction;
 
   	// grab all the scripts that have been loaded on the page thus far
 	var ssAllLoadedScripts = document.querySelectorAll('script');
@@ -13,21 +13,21 @@
       
   		// if the match function above returned something, then we parse it as JSON and store it in our JSON variable
 		if(ssCommerceScriptHTML){ 
-			ssRawTransactionJSON = JSON.parse(ssCommerceScriptHTML[1]);
+			ssRawTransaction = JSON.parse(ssCommerceScriptHTML[1]);
         }
     }
       
     // remove any potential PII before pushing to dataLayer
   	// if the "customer" field exists, reset it to an empty string
-    if(typeof(ssRawTransactionJSON.billingDetails.customer) != "undefined"){
-    	ssRawTransactionJSON.billingDetails.customer = "";
+    if(typeof(ssRawTransaction.billingDetails.customer) != "undefined"){
+    	ssRawTransaction.billingDetails.customer = "";
 	}  
 
     // push the anonymous transaction information to the dataLayer
 	window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-		'event' : 'ssRawTransactionJSONPushed_ss',
-        'ssRawTransactionJSON': ssRawTransactionJSON
+		'event' : 'ssRawTransactionPush',
+        'ssRawTransaction': ssRawTransaction
     });
 
 </script>
