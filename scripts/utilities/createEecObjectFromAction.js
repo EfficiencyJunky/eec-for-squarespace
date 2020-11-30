@@ -42,6 +42,7 @@ function(){
                         // add metric1
                         eecProduct['metric1'] = Number(variant.price) * quantity;
                     case "checkout":
+                    case "purchase":    
                         eecProduct['quantity'] = Math.abs(quantity[j]);
                     case "detail":
                         eecProduct['price'] = variant.price;         

@@ -16,8 +16,8 @@ function(){
         // grab the cookie with the additional parameters for all the variants
         var cookieData = JSON.parse({{Cookie - variantsAddedToCart}} || '{}');
 
-        // variables to use in the list
-        var i, rawItem, variantCookieData, productJSON;
+        // variables to use in the loop
+        var i, rawItem, variantCookieData, productId, category, productJSON;
 
         // for each item in the cart items list, extract the relevant information and combine it with the cookie information to create a new cartItemJSON with all relevant details to create our eec action
         for(i=0; i < rawItemsList.length; i++){
@@ -26,10 +26,14 @@ function(){
             // adding the "or empty obj" avoids function failure if cookie is missing or malformed when we try to access keys below 
             variantCookieData = cookieData[rawItem.sku] || {};
 
+            // if the data doesn't exist in the item try to get it from the cookie
+            productId = rawItem.productId || variantCookieData.id;
+            category = (rawItem.variantOptions) ? rawItem.variantOptions[0].value : variantCookieData.category;
+
             productJSON = {
-                'productId': rawItem.productId,
+                'productId': productId,
                 'productName': rawItem.productName,
-                'productCategory': rawItem.variantOptions[0].value,
+                'productCategory': category,
                 'variants': 
                 [{
                     'sku': rawItem.sku,
