@@ -1,34 +1,49 @@
 # eec-for-squarespace
 This is a project where I learn how to integrate/implement Google Analytics Enhanced Ecommerce tracking into a Squarespace store using nothing but Squarespace Code Injections and Google Tag Manager
 
+**RESOURCES**
+* [Simo Ahava: The difinitive Enhanced Ecommerce guide for Google Tag Manager](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/)
+* [Simo Ahava: Product scoped custom dimensions and metrics](https://www.simoahava.com/gtm-tips/product-scoped-custom-dimensions-and-metrics/)
+* [Simo Ahava: Two ways to persist data via Google Tag Manager](https://www.simoahava.com/analytics/two-ways-to-persist-data-via-google-tag-manager/)
+* [Official Google Analytics Developer Guide for Enhanced Ecommerce](https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce)
+* [How to scrape Squarespace Commerce Analytics data from <script> tags in an <html> document](https://stackoverflow.com/questions/58053572/scraping-information-from-a-script-tag-using-javascript/64887166#64887166)
 
 
-## ENHANCED ECOMMERCE FUNNEL ACTIONS
-1. Impressions (not actually an action)
+
+# THE GOOGLE ANALYTICS ENHANCED ECOMMERCE FUNNEL
+1. **Impressions** (not actually an action)
 	*	When a customer sees a product either on a store page, or as a related item on another product page in the "YOU MIGHT ALSO LIKE" section.
 
-2. Impression Click
+2. **Impression Click**
 	*	When a customer clicks on a product they saw as an impression
 
-3. Product Detail View
+3. **Product Detail View**
 	*	When a customer clicks on a product to view that product's detail view. In some cases, a site may also have "Quick View" available (this could complicate implementation slightly)
 
-4. Add To Cart
+4. **Add To Cart**
 	*	When a customer adds an item to cart 
-	*	*NOTE: This can happen from a product detail view OR if a modification is made to the number of items in the customer's cart while on the `/cart` page*
+	*	**NOTE:** *This can happen from a product detail view OR if a modification is made to the number of items in the customer's cart while on the `/cart` page*
 
-5. Remove From Cart
+5. **Remove From Cart**
 	*	When a customer removes an item from their cart 
-	*	*NOTE: This only happens if a modification is made to the number of items in the customer's cart while on the `/cart` page*
+	*	**NOTE:** *This only happens if a modification is made to the number of items in the customer's cart while on the `/cart` page*
 
-6. Checkout
+6. **Checkout**
 	*	When a customer initiates the checkout process. 
-	*	*NOTE: This one is a little tricky with Squarespace (at least in the lower tiers of service) because Squarespace DOES NOT do Code Injections on their externally hosted secure checkout page. So we will only be able to send an EEC event when a customer clicks the "Checkout" button and then when they complete their transaction by landing on the "Order Complete" page. If they don't complete their transaction we won't know what they did on the checkout page. This cannot be fixed.*
+	*	**NOTE:** *This one is a little tricky with Squarespace (at least in the lower tiers of service) because Squarespace DOES NOT do Code Injections on their externally hosted secure checkout page. So we will only be able to send an EEC event when a customer clicks the "Checkout" button and then when they complete their transaction by landing on the "Order Complete" page. If they don't complete their transaction we won't know what they did on the checkout page. This cannot be fixed.*
 
-7. Purchase
+7. **Purchase**
 	*	When a customer completes a transaction and lands on the "Order Complete" page
 
+---
+---
 
+## TAGS WE WILL USE
+1. **Product Detail View**
+2. **Add To Cart**
+3. **Remove From Cart**
+4. **Checkout**
+5. **Purchase**
 
 
 
@@ -37,9 +52,6 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 ---
 ---
-
-
-
 ## **NOTE ON COOKIES**
 
 We will need to store cookies in order to persist certain details about each product/variant throughout the funnel.
