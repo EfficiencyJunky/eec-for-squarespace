@@ -4,25 +4,29 @@ function(){
     // first check to make sure something didn't go wrong in the formation of this object
     // or to see if it is the initial state of the cart on page load
     // if either of these is true, return undefined
-    if( {{DL - SS Raw Modify Cart JSON}} == undefined || typeof({{DL - SS Raw Modify Cart JSON}}.initialCartItemsJSON) != "undefined" ){
+    if( {{DL - SS Raw Modify Cart}} == undefined || typeof({{DL - SS Raw Modify Cart}}.initialCartItemsList) != "undefined" ){
         //console.log("no cart available OR initial cart instance");
         return undefined;    
     }
 
     // extract the old and new cart objects
-    var oldCartItemsJSON = {{DL - SS Raw Modify Cart JSON}}.oldCartItemsJSON;
-    var newCartItemsJSON = {{DL - SS Raw Modify Cart JSON}}.newCartItemsJSON;
+    var oldCartItemsJSON = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( {{DL - SS Raw Modify Cart}}.oldCartItemsList );
+    var newCartItemsJSON = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( {{DL - SS Raw Modify Cart}}.newCartItemsList );
 
     // grab the keys from the oldCartItemsJSON. the keys correspond to the SKU of each item
-    var oldCartItemsSKUs = Object.keys(oldCartItemsJSON);
+    //var oldCartItemsSKUs = Object.keys(oldCartItemsJSON);
 
     // we'll reset these variables each time through the loop
     var sku, oldCartItem, newCartItem, eecAction, quantityDifference;
 
+
+    for(sku in oldCartItemsJSON){
+
+
     // loop through the keys from the old cart
-    for(var j=0; j < oldCartItemsSKUs.length; j++){
+    // for(var j=0; j < oldCartItemsSKUs.length; j++){
         
-        sku = oldCartItemsSKUs[j];
+        //sku = oldCartItemsSKUs[j];
         oldCartItem = oldCartItemsJSON[sku];
         newCartItem = newCartItemsJSON[sku];
 

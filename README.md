@@ -29,18 +29,18 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 <script>
 var productJSON = {
-    'productId': alphanumeric String,
-    'productName': String,
+	'productId': alphanumeric String,
+	'productName': String,
 	'productCategory': String,
 	// may want to add 'productPrice' but this is TBD
-    'variants': List of variant Objects
-    [{
-        'sku': alphanumeric String,
-        'price': String (a 2 decimal Number cast as String),
-        'unlimited': Boolean,
-        'qtyInStock': Integer, // can be 0 if unlimited is true
-        'onSale': Boolean
-    }]
+	'variants': List of variant Objects
+	[{
+		'sku': alphanumeric String,
+		'price': String (a 2 decimal Number cast as String),
+		'unlimited': Boolean,
+		'qtyInStock': Integer, // can be 0 if unlimited is true
+		'onSale': Boolean
+	}]
 }
 </script>
 

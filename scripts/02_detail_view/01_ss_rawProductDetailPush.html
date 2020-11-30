@@ -22,10 +22,17 @@
             }
         }
 
-        var ssRawProductDetailJSON;
+        var ssRawProductDetail;
       	
         if(typeof(ssContextObject.product) != 'undefined'){
-            ssRawProductDetailJSON = {
+
+            var productVariants = ssContextObject.product.variants;
+
+            for(var i=0; i < productVariants.length; i++){
+                productVariants[i]['mainImage'] = {};
+            }
+
+            ssRawProductDetail = {
                 "item": ssContextObject.item,
                 "product": ssContextObject.product
             };
@@ -34,8 +41,8 @@
         // push the anonymous transaction information to the dataLayer
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({
-            'event' : 'ssRawProductDetailJSONPushed_ss',
-            'ssRawProductDetailJSON': ssRawProductDetailJSON
+            'event' : 'ssRawProductDetailPushed_ss',
+            'ssRawProductDetail': ssRawProductDetail
         });
 
     }

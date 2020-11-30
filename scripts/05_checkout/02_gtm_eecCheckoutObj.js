@@ -1,44 +1,32 @@
-// this function takes the raw Modify Cart JSON "initialCartItemsJSON" or "newCartItemsJSON" and turns it into an eecCheckout Action object
+// this function takes the raw Modify Cart JSON "initialCartItemsList" or "newCartItemsList" and turns it into an eecCheckout Action object
 function(){
   
-    var ssModifyCartJSON = {{DL - SS Raw Modify Cart JSON}};
-    var currentCartItemsJSON;
+    // grab a reference
+    var ssModifyCartObject = {{DL - SS Raw Modify Cart}};
+    var currentCartItemsList;
 
     // first check to make sure something didn't go wrong in the formation of this object
-    if(ssModifyCartJSON == undefined){
-        return undefined;    
+    if(ssModifyCartObject == undefined){
+        return undefined;
     }
-    else if(ssModifyCartJSON.initialCartItemsJSON){
-        currentCartItemsJSON = ssModifyCartJSON.initialCartItemsJSON;
+    // if the "initialCartItemsList" object exists then we must have just initialized the cart
+    else if(ssModifyCartObject.initialCartItemsList){
+        currentCartItemsList = ssModifyCartObject.initialCartItemsList;
     }
+    // otherwise use the "newCartItemsList", which means the cart has been modified
     else{
-        currentCartItemsJSON = ssModifyCartJSON.newCartItemsJSON;
+        currentCartItemsList = ssModifyCartObject.newCartItemsList;
     }
 
-    var eecProductList = [];
+    // convert the rawCartItemsList into an object with a list of productJSONs and a list of quantities
+    var currentCartItemsJSON = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( currentCartItemsList, 'cartItemsList');
 
-    var sku, productJSON, quantityInCart, eecProduct;
+    // create our base level eecCheckout object with the products list
+    var eecCheckoutObj = {{JS Utility - create eecObjectFromAction}}('checkout', currentCartItemsJSON.productJSONList, currentCartItemsJSON.quantityList);
 
-    for(sku in currentCartItemsJSON){
-        productJSON = currentCartItemsJSON[sku].productJSON;
-        quantityInCart = currentCartItemsJSON[sku].quantityInCart;
+    // add the appropriate actionField object to indicate step 1 of checkout
+    eecCheckoutObj.ecommerce.checkout['actionField'] = {'step': 1};
 
-        eecProduct = {{JS Utility - create eecObjectFromAction}}("eecProduct", productJSON, quantityInCart);
-
-        eecProductList.push(eecProduct);
-    }
-
-
-    var eecCheckoutObj = {
-        'ecommerce': {
-            'checkout': {
-              'actionField': {
-                'step': 1
-              },
-              'products': eecProductList
-            }
-        }
-    }
-
+    // return our finished object
     return eecCheckoutObj;
 }

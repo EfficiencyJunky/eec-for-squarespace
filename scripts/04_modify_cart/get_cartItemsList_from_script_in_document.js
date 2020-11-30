@@ -10,8 +10,15 @@ function(){
             // the .match method returns 'null' if it doesn't find a match
             if(ssCartAllScripts[scriptIndex].innerHTML.match(/"cart":/)){
 
-                //var ssCartJSON = JSON.parse(ssCartAllScripts[scriptIndex].innerHTML);
-                return JSON.parse(ssCartAllScripts[scriptIndex].innerHTML);
+                var ssCartJSON = JSON.parse(ssCartAllScripts[scriptIndex].innerHTML);
+                var ssCartItemsList = ssCartJSON.cart.items;
+                
+                for(var i=0; i < ssCartItemsList.length; i++){
+                    ssCartItemsList[i].image = "";
+                    ssCartItemsList[i].productDescription = "";
+                }
+
+                return ssCartItemsList;
             }
         }
 
