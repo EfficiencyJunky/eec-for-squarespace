@@ -10,7 +10,16 @@
         }
     });
 
-//    console.log("initial cart", oldCartItemsList);
+    // initialize the DL variable we will use to identify the action taken when our tag fires
+    // this variable will be set with 'add' or 'remove' whenever the 'ssRawModifyCartPush' DL Push event occurs
+    window.dataLayer.push({
+        'event' : 'initModifyCartTagInfo',
+        'modifyCartTagInfo':{
+            'action': 'not_set',
+            'quantity': '0',
+            'productName': 'not_set'
+        }
+    });
 
     // Select the node that will be observed for mutations
     // in this case it's the main Cart Page Container div
@@ -31,17 +40,14 @@
 
           
             var cartChanged = false;
-            // NOTE: since the classList is a DomTokenList, we can use the "contains" method
-          
-            // if the classList contains "CartTable-subtotalPrice-2JFeD" then the subtotal changed
+
+            // NOTE: since the classList is a DomTokenList, we can use the "contains" method          
+            // If the classList contains "CartTable-subtotalPrice-2JFeD" then the SUBTOTAL CHANGED
             if(classListToSearch.contains(subtotalPriceClassName)){
-//                console.log("subtotal changed");
                 cartChanged = true;
             }
-            // if the classList contains "empty-message" then the cart is empty
+            // If the classList contains "empty-message" then the CART IS EMPTY
             else if(classListToSearch.contains(emptyCartMessageClassName)){
-                //{JS Utility - HTTP Request for Cart Page}();
-//                console.log("cart empty");
                 cartChanged = true;
             }
           
@@ -68,7 +74,6 @@
                     // create the raw modified cart object
                     // "oldCartItemsList" is the snapshot with all relevant items in the previous version of the cart
                     // "newCartItemsList" is the snapshot with all relevant items in the updated version of the cart
-
                     // push these raw lists to dataLayer with an event key ("_gtm" tells us that it is coming from GTM)
                     window.dataLayer.push({
                         'event' : 'ssRawModifyCartPush',
@@ -78,8 +83,11 @@
                         }
                     });
 
-                    //console.log("old", oldCartItemsList);              
-                    //console.log("new", newCartItemsList); 
+                    // the above push will set the 'modifyActionType' DL variable
+                    // so now we need another push action to trigger the actual Modify Cart tag
+                    window.dataLayer.push({
+                        'event' : 'fireModifyCartTag'
+                    });
 
                     oldCartItemsList = newCartItemsList;
                 };
@@ -89,10 +97,10 @@
         
       }
       
+      // create our observer and set it's callback to the function above
       var observer = new MutationObserver(observerCallback);
       
       // Options for the observer (which mutations to observe)
-      //var config = { attributes: false, childList: false, subtree: true, characterData: true };
       var observerConfig = { childList: true, subtree: true, characterData: true };    
       
       // Start observing the target node for configured mutations

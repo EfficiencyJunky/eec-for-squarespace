@@ -41,7 +41,13 @@ function(){
 
         // if there was a difference in quantity, create the eecObj accordingly
         if(quantityDifference != 0){
-            eecAction = (quantityDifference > 0 ) ? 'add' : 'remove'; 
+            eecAction = (quantityDifference > 0 ) ? 'add' : 'remove';
+
+            var gtmDataLayerRef = window.google_tag_manager[{{Container ID}}].dataLayer;
+            gtmDataLayerRef.set('modifyCartTagInfo.action', eecAction);
+            gtmDataLayerRef.set('modifyCartTagInfo.quantity', quantityDifference);
+            gtmDataLayerRef.set('modifyCartTagInfo.productName', oldCartItem.productJSON.productName);
+
             return {{JS Utility - create eecObjectFromAction}}(eecAction, oldCartItem.productJSON, quantityDifference);
         }
 

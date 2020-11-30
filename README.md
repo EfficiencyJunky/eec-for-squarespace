@@ -5,6 +5,7 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 * [Simo Ahava: The difinitive Enhanced Ecommerce guide for Google Tag Manager](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/)
 * [Simo Ahava: Product scoped custom dimensions and metrics](https://www.simoahava.com/gtm-tips/product-scoped-custom-dimensions-and-metrics/)
 * [Simo Ahava: Two ways to persist data via Google Tag Manager](https://www.simoahava.com/analytics/two-ways-to-persist-data-via-google-tag-manager/)
+* [Official Google Tag Manager Developer Guide for Enhanced Ecommerce](https://developers.google.com/tag-manager/enhanced-ecommerce)
 * [Official Google Analytics Developer Guide for Enhanced Ecommerce](https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce)
 * [How to scrape Squarespace Commerce Analytics data from <script> tags in an <html> document](https://stackoverflow.com/questions/58053572/scraping-information-from-a-script-tag-using-javascript/64887166#64887166)
 
@@ -40,14 +41,60 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 ## TAGS WE WILL USE
 1. **Product Detail View**
+*	Category: `Ecommerce`
+*	Action: `Product Detail View`
+*	Label: `{{DL - EEC Detail - Product Name}}` (the name of the product)
+*	Non-Interactioin Hit: `True`
+*	More Settings -> Ecommerce: 
+	*	Enable Enhanced Ecommerce Features: `True`
+	*	Read Data from Variable: `{{JS - eec.detail}}`
+
 2. **Add To Cart**
-3. **Remove From Cart**
-4. **Checkout**
-5. **Purchase**
+*	Category: `Ecommerce`
+*	Action: `Add To Cart`
+*	Label: `{{DL - EEC Detail - Product Name}}`
+*	Non-Interactioin Hit: `False`
+*	More Settings -> Ecommerce: 
+	*	Enable Enhanced Ecommerce Features: `True`
+	*	Read Data from Variable: `{{JS - eec.add}}`
 
+3. **Modify Cart** -- Sends either `add` or `remove` EEC Actions depending on the modification
+*	Category: `Ecommerce`
+*	Action: `Modify Cart`
+*	Label: `{{DL - EEC Modify - action}}: {{DL - EEC Modify - productName}}`
+*	Value: `{{DL - EEC Modify - quantity}}`
+*	Non-Interactioin Hit: `False`
+*	More Settings -> Ecommerce: 
+	*	Enable Enhanced Ecommerce Features: `True`
+	*	Read Data from Variable: `{{JS - eec.modify}}`
 
+1. **Checkout**
+*	Category: `Ecommerce`
+*	Action: `Checkout`
+*	Label: ``
+*	Non-Interactioin Hit: `False`
+*	More Settings -> Ecommerce: 
+	*	Enable Enhanced Ecommerce Features: `True`
+	*	Read Data from Variable: `{{JS - eec.checkout}}`
 
+1. **Purchase**
+*	Category: `Ecommerce`
+*	Action: `Purchase`
+*	Label: `Order ID: {{DL - EEC Purchase - Order ID}}`
+*	Value: `{{DL - EEC Purchase - Revenue}}`
+*	Non-Interactioin Hit: `True`
+*	More Settings -> Ecommerce: 
+	*	Enable Enhanced Ecommerce Features: `True`
+	*	Read Data from Variable: `{{JS - eec.purchase}}`
 
+---
+---
+## CUSTOM DIMENTIONS AND METRICS
+*	dimension4 	- SS Transaction ID
+*	dimension5 	- SS SKU
+*	dimension6 	- SS Availability - 'In Stock' : 'Sold Out'
+*	dimension7 	- SS Price Status - 'On Sale' : 'Regular Price'
+*	metric1 	- Cart Value - The combined value of products added or removed from cart
 
 
 ---
@@ -56,7 +103,7 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 We will need to store cookies in order to persist certain details about each product/variant throughout the funnel.
 
-*	CART PAGE: In the case of modifications made on the cart page, we will be missing `dimension6` (sku) and `dimension7` (stock availability) for each item/SKU.
+*	CART PAGE: In the case of modifications made on the cart page, we will be missing `dimension6` (stock availability) and `dimension7` (sale status) for each item/SKU.
 
 *	ORDER COMPLETION PAGE: In the case of sending the final purchase event on the order completion page, we will be missing the `id`, `category`, `dimension6` and `dimension7` (sale status) for each SKU
 
@@ -65,6 +112,7 @@ We will need to store cookies in order to persist certain details about each pro
 # DATA STRUCTURES
 ## Builtin Variables Required
 * {{Referrer}}
+* {{Container ID}}
 
 
 ## Product / Product Variant Data Structures
