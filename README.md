@@ -94,7 +94,7 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 *	dimension5 	- SS SKU
 *	dimension6 	- SS Availability - 'In Stock' : 'Sold Out'
 *	dimension7 	- SS Price Status - 'On Sale' : 'Regular Price'
-*	metric1 	- Cart Value - The combined value of products added or removed from cart
+*	metric1 	- Cart Value - The combined value of products added or removed from cart - Scope: Product -- Type: Currency (Decimal)
 
 
 ---

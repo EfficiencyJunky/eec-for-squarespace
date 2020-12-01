@@ -12,10 +12,12 @@
             update_variantsAddedToCart_cookie(e.newlyAdded);
 
             // "e.newlyAdded" provides access to the details of the newlyAdded item that we get from the event
-            // "quantityAdded" is pulled from the <input> on the page that has the value of the number added
+            // "quantityAdded" is pulled from the <input> on the page that has the value of the number added. But if the <input> element doesn't exist, then we set the quantity to 1. (the input will not be placed on the page if there is only one of an item left)
             // we can't use the "quantity" value in the "e.newlyAdded" object because it actually tells the total number of this item in the cart
+            var quantityInput = document.querySelector(".product-quantity-input input");
+
             var ssRawAddToCart = {
-                'quantityAdded': document.querySelector(".product-quantity-input input").value,
+                'quantityAdded': (quantityInput) ? Number(quantityInput.value) : 1,
                 'newlyAdded': e.newlyAdded
             }
 

@@ -39,16 +39,16 @@ function(){
                 switch(eecAction){
                     case "add":
                     case "remove":
-                        // add metric1
                         eecProduct['metric1'] = Number(variant.price) * quantity;
                     case "checkout":
                     case "purchase":    
                         eecProduct['quantity'] = Math.abs(quantity[j]);
+                        eecProduct['dimension5'] = variant.sku;
                     case "detail":
                         eecProduct['price'] = variant.price;         
-                        eecProduct['dimension5'] = variant.sku;
                         eecProduct['dimension6'] = (variant.unlimited || variant.qtyInStock > 0) ? 'In Stock' : 'Sold Out';
-                        eecProduct['dimension7'] = (!variant.onSale) ? 'Regular Price' : 'On Sale';
+                        eecProduct['dimension7'] = (variant.onSale) ? 'On Sale' : 'Regular Price';
+                    
                     default:
                         break;
                 }

@@ -32,7 +32,29 @@ function(){
         // this should eventually be replaced by a cookie saving info from product impressions
         var category = ssRawProductDetail.product.variants[0].attributes.category;
 
-        var variant = ssRawProductDetail.product.variants[0];
+        // this is where we get the details for how this product is displayed
+        var variants = ssRawProductDetail.product.variants;
+
+        var onSale = variants[0].onSale,         
+            unlimited = variants[0].stock.unlimited, 
+            qtyInStock = variants[0].stock.quantity,
+            price = (variants[0].onSale) ? variants[0].salePrice.decimalValue : variants[0].price.decimalValue,   
+            i_price;
+
+        // onSale - set to 'true' if any of the variants is listed as onSale (even if it's out of stock)
+        // unlimited - set to 'true' if any of the variants is unlimited
+        // qtyInStock - set to 0 if unlimited is true, otherwise set to the highest value of the items
+        // price - save the lowest price of all the variants (even if it is out of stock)
+        for(var i=1; i < variants.length; i++){
+            onSale = onSale || variants[i].onSale;
+            unlimited = unlimited || variants[i].stock.unlimited;
+            qtyInStock =  (unlimited) ? 0 : 
+                            (qtyInStock >= variants[i].stock.quantity) ? qtyInStock : variants[i].stock.quantity;
+            
+            // capture the price of the next variant in the list
+            i_price = (variants[i].onSale) ? variants[i].salePrice.decimalValue : variants[i].price.decimalValue;
+            price = (price <= i_price) ? price: i_price;
+        }
 
         // initialize the productJSON
         var productJSON = {
@@ -41,13 +63,31 @@ function(){
             'productCategory': category,
             // may want to add 'productPrice' but this is TBD
             'variants': [{
-                'sku': variant.sku,
-                'price': (variant.onSale) ? variant.salePrice.decimalValue : variant.price.decimalValue,
-                'unlimited': variant.stock.unlimited,
-                'qtyInStock': variant.stock.quantity, // can be 0 if unlimited is true
-                'onSale': variant.onSale
+                'sku': 'not_added',
+                'price': price,
+                'unlimited': unlimited,
+                'qtyInStock': qtyInStock, // can be 0 if unlimited is true
+                'onSale': onSale
             }]
         };
+
+        // THIS IS THE WAY WE WERE ORIGINALY GOING TO DO THINGS
+        //var variant = ssRawProductDetail.product.variants[0];
+
+        // // initialize the productJSON
+        // var productJSON = {
+        //     'productId': ssRawProductDetail.item.id,
+        //     'productName': ssRawProductDetail.item.title,
+        //     'productCategory': category,
+        //     // may want to add 'productPrice' but this is TBD
+        //     'variants': [{
+        //         'sku': variant.sku,
+        //         'price': (variant.onSale) ? variant.salePrice.decimalValue : variant.price.decimalValue,
+        //         'unlimited': variant.stock.unlimited,
+        //         'qtyInStock': variant.stock.quantity, // can be 0 if unlimited is true
+        //         'onSale': variant.onSale
+        //     }]
+        // };
 
         return productJSON;
     }
