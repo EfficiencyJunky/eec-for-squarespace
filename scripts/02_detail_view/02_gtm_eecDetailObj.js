@@ -29,8 +29,8 @@ function(){
     function convertSSRawProductDetailtoProductJSON(ssRawProductDetail){
 
         // pull out the category
-        // this should eventually be replaced by a cookie saving info from product impressions
-        var category = ssRawProductDetail.product.variants[0].attributes.category;
+        // we may want to update this to retrieve category info from product a cookie generated during product impressions
+        var category = ssRawProductDetail.category;
 
         // this is where we get the details for how this product is displayed
         var variants = ssRawProductDetail.product.variants;

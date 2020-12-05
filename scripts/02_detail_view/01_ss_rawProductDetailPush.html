@@ -26,15 +26,30 @@
       	
         if(typeof(ssContextObject.product) != 'undefined'){
 
-            var productVariants = ssContextObject.product.variants;
+            // strip the information in the key "mainImage" from each product variant
+            // it's a crazy mess of alphanumeric stuff that we don't need in our dataLayer
+            var productVariants = ssContextObject.product.variants;            
 
             for(var i=0; i < productVariants.length; i++){
                 productVariants[i]['mainImage'] = {};
             }
 
+            // grab the category information from the element with id="productWrapper"
+            // loop through its classes and find any class with "category-" in the title
+            // remove the "category-" and append the rest of the class name to the productCategory variable
+            // make sure to add a "/" in between each category
+            var productWrapperElement = document.querySelector("#productWrapper");
+            var productWrapperCategoryClasses = (productWrapperElement) ? productWrapperElement.className.match(/\bcategory-[\S]*/g) : [];
+            var categoryString = "";
+
+            for(var i=0; i < productWrapperCategoryClasses.length; i++){
+                categoryString = categoryString + ( i!=0 ? "/" : "") + productWrapperCategoryClasses[i].replace(/category-/, '');
+            }
+
             ssRawProductDetail = {
                 "item": ssContextObject.item,
-                "product": ssContextObject.product
+                "product": ssContextObject.product,
+                "category": categoryString
             };
         }
 

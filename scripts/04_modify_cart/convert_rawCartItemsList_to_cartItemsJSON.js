@@ -31,7 +31,8 @@ function(){
 
             // if the data doesn't exist in the item try to get it from the cookie
             productId = rawItem.productId || variantCookieData.id;
-            category = (rawItem.variantOptions) ? rawItem.variantOptions[0].value : variantCookieData.category;
+            //category = (rawItem.variantOptions) ? rawItem.variantOptions[0].value : variantCookieData.category;
+            category = variantCookieData.category;
 
             productJSON = {
                 'productId': productId,

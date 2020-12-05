@@ -50,7 +50,9 @@
         // #1 create the updated cookie object for this variant
         var variantDetails = {
             'id': newlyAdded.itemId,
-            'category': variantAdded.optionValues[0].value,
+            //'category': variantAdded.optionValues[0].value,
+            // we may want to update this to retrieve category info from product a cookie generated during product impressions
+            'category': {{DL - SS Raw Product Detail}}.category,
             'unlimited': variantAdded.unlimited,
             'qtyInStock': variantAdded.qtyInStock,
             'onSale': variantAdded.onSale

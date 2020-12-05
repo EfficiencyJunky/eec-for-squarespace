@@ -37,7 +37,8 @@ function(){
     var productJSON = {
         'productId': newlyAdded.itemId,
         'productName': newlyAdded.title,
-        'productCategory': variantAdded.optionValues[0].value,
+        // we may want to update this to retrieve category info from product a cookie generated during product impressions
+        'productCategory': {{DL - SS Raw Product Detail}}.category,
         'variants':
         [{
             'sku': variantAdded.sku,
