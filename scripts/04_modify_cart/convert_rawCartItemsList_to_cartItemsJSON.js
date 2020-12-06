@@ -22,7 +22,7 @@ function(){
         // variables to use in the loop
         var i, rawItem, variantCookieData, productJSON;
 
-        // for each item in the cart items list, extract the relevant information and combine it with the cookie information to create a new cartItemJSON with all relevant details to create our eec action
+        // for each item in the cart items list, extract the relevant information and combine it with the cookie information to create a new productJSON with all relevant details to create our eec action
         for(i=0; i < rawItemsList.length; i++){
             rawItem = rawItemsList[i];
 
