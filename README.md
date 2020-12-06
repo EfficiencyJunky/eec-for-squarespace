@@ -121,12 +121,10 @@ The cookie's data structure will have the usual cookie keys:
 **Constant Variables**
 * {{const - eec brand}} -- Set this to the brand name you want to appear for your products
 
-**URL Variables**
-Compoent Type: Query
+**URL Variables**<br/>
+Component Type: Query
 * {{URL Query - oid (for SS Transaction ID)}} -- Query Key: `oid`
-* {{URL Query - category (for Product List)}} -- Query Key: `category`
-This will grab the Squarespace Transaction ID on any page with path `/checkout/order-confirmed` and the `oid` query parameter
-This will grab the name of the product list a user has filtered by on the `/store` page from the `category` query parameter
+
 
 **1st Party Cookie Variables**
 * {{Cookie - variantsAddedToCart}} -- Cookie Name: `variantsAddedToCart`
@@ -196,7 +194,9 @@ A `utility function` is a Custom Javascript Variable that returns a function tha
 ---
 # TAGS
 ## UPDATE EXISTING TAG
-*	Google Analytics Pageview Tag - Need to add a custom dimension who's value is the same as the custom dimension defined for the `SS Transaction ID` (in all of the examples this code is referencing this is `dimension4`). Set the value for the dimension to the `URL Query - oid (for SS Transaction ID)` variable
+*	Google Analytics Pageview Tag - Assuming you've already setup the basic pageview tag that fires on all pages of your website, you will need to add a custom dimension to this tag by checking the `Enable overriding settings in this tag` box and then adding the Custom Dimension in the `Custom Dimensions` section, 
+	Set the `Index` value to the number associated with the custom dimension that you've defined for the `SS Transaction ID` (in all of the examples this code is referencing this is `dimension4` so you would put `4` in the index section). 
+	Set the value for the dimension to the `URL Query - oid (for SS Transaction ID)` variable. This will grab the Squarespace Transaction ID from the url of pages with the `oid` query parameter (which should only actually appear on pages who's path is `/checkout/order-confirmed`), and set dimension4 to this value for the pageview hit.
 
 
 
