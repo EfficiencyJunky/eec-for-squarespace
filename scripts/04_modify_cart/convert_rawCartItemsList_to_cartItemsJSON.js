@@ -20,7 +20,7 @@ function(){
         var cookieData = JSON.parse({{Cookie - variantsAddedToCart}} || '{}');
 
         // variables to use in the loop
-        var i, rawItem, variantCookieData, productId, category, productJSON;
+        var i, rawItem, variantCookieData, productJSON;
 
         // for each item in the cart items list, extract the relevant information and combine it with the cookie information to create a new cartItemJSON with all relevant details to create our eec action
         for(i=0; i < rawItemsList.length; i++){
@@ -29,22 +29,18 @@ function(){
             // adding the "or empty obj" avoids function failure if cookie is missing or malformed when we try to access keys below 
             variantCookieData = cookieData[rawItem.sku] || {};
 
-            // if the data doesn't exist in the item try to get it from the cookie
-            productId = rawItem.productId || variantCookieData.id;
-            //category = (rawItem.variantOptions) ? rawItem.variantOptions[0].value : variantCookieData.category;
-            category = variantCookieData.category;
-
             productJSON = {
-                'productId': productId,
+                // if the data doesn't exist in the item try to get it from the cookie
+                'productId': rawItem.productId || variantCookieData.pid,
                 'productName': rawItem.productName,
-                'productCategory': category,
+                'productCategory': variantCookieData.cat,
                 'variants': 
                 [{
                     'sku': rawItem.sku,
                     'price': rawItem.unitPrice.decimalValue,
-                    'unlimited': variantCookieData.unlimited,
-                    'qtyInStock': variantCookieData.qtyInStock,
-                    'onSale': variantCookieData.onSale
+                    'unlimited': variantCookieData.unl,
+                    'qtyInStock': variantCookieData.qty,
+                    'onSale': variantCookieData.sal
                 }]
             }
 

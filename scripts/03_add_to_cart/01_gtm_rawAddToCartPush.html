@@ -6,11 +6,6 @@
         // add an event listener on "commerce-item-added" to the Squarespace CommerceAnalytics object
         Y.Squarespace.CommerceAnalytics.on("commerce-item-added", function(e){
 
-//          console.log(e.shoppingCart);
-
-            // update our "variantsAddedToCart" cookie with the information from the "newlyAdded" product
-            update_variantsAddedToCart_cookie(e.newlyAdded);
-
             // "e.newlyAdded" provides access to the details of the newlyAdded item that we get from the event
             // "quantityAdded" is pulled from the <input> on the page that has the value of the number added. But if the <input> element doesn't exist, then we set the quantity to 1. (the input will not be placed on the page if there is only one of an item left)
             // we can't use the "quantity" value in the "e.newlyAdded" object because it actually tells the total number of this item in the cart
@@ -36,46 +31,6 @@
       console.error('trying to attach listener to "commerce-item-added" event');
       console.error(error);
     }
-
-    // *******************************************************************************
-    // This function takes the relevant details from "newlyAdded"
-    // and saves them in the "variantsAddedToCart" cookie
-    // we will use this thoughout the funnel to form our other productJSON objects
-    // *******************************************************************************
-    function update_variantsAddedToCart_cookie(newlyAdded){
-
-        var variantAdded = newlyAdded.chosenVariant;
-        var variantSku = variantAdded.sku;
-
-        // #1 create the updated cookie object for this variant
-        var variantDetails = {
-            'id': newlyAdded.itemId,
-            //'category': variantAdded.optionValues[0].value,
-            // we may want to update this to retrieve category info from product a cookie generated during product impressions
-            'category': {{DL - SS Raw Product Detail}}.category,
-            'unlimited': variantAdded.unlimited,
-            'qtyInStock': variantAdded.qtyInStock,
-            'onSale': variantAdded.onSale
-        }
-
-        // #2 get the value of the current cookie if there is one or create an empty object
-        var cookieVal = JSON.parse({{Cookie - variantsAddedToCart}} || '{}');
-
-        // #3 set the object with SKU as key
-        cookieVal[variantSku] = variantDetails;
-
-        //console.log(JSON.stringify(cookieVal));
-
-        // #4 save the cookie again
-        {{JS Utility - setCookie}}(
-                                    "variantsAddedToCart", 
-                                    JSON.stringify(cookieVal), 
-                                    2419200000, 
-                                    '/', 
-                                    'cachetattoo.com'
-                                );
-    }
-
 
 
 

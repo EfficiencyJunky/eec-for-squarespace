@@ -12,6 +12,9 @@ function(){
   // convert the raw "newlyAdded" object to a productJSON
   var productJSON = convertNewlyAddedtoProductJSON(ssRawAddToCart.newlyAdded);
 
+  // update our "variantsAddedToCart" cookie with the information from the "productJSON"
+  {{JS Utility - Update cookie named variantsAddedToCart}}(productJSON);
+
   // create our basic eec object of type "add"
   var eecAddObj = {{JS Utility - create eecObjectFromAction}}('add', productJSON, ssRawAddToCart.quantityAdded);
 
@@ -37,7 +40,7 @@ function(){
     var productJSON = {
         'productId': newlyAdded.itemId,
         'productName': newlyAdded.title,
-        // we may want to update this to retrieve category info from product a cookie generated during product impressions
+        // we may want to update this to retrieve category info from a cookie generated during product impressions
         'productCategory': {{DL - SS Raw Product Detail}}.category,
         'variants':
         [{

@@ -28,10 +28,6 @@ function(){
     // *********************************************************************************
     function convertSSRawProductDetailtoProductJSON(ssRawProductDetail){
 
-        // pull out the category
-        // we may want to update this to retrieve category info from product a cookie generated during product impressions
-        var category = ssRawProductDetail.category;
-
         // this is where we get the details for how this product is displayed
         var variants = ssRawProductDetail.product.variants;
 
@@ -60,7 +56,8 @@ function(){
         var productJSON = {
             'productId': ssRawProductDetail.item.id,
             'productName': ssRawProductDetail.item.title,
-            'productCategory': category,
+            // we may want to update this to retrieve category info from a cookie generated during product impressions
+            'productCategory': ssRawProductDetail.category,
             // may want to add 'productPrice' but this is TBD
             'variants': [{
                 'sku': 'not_added',
@@ -70,24 +67,6 @@ function(){
                 'onSale': onSale
             }]
         };
-
-        // THIS IS THE WAY WE WERE ORIGINALY GOING TO DO THINGS
-        //var variant = ssRawProductDetail.product.variants[0];
-
-        // // initialize the productJSON
-        // var productJSON = {
-        //     'productId': ssRawProductDetail.item.id,
-        //     'productName': ssRawProductDetail.item.title,
-        //     'productCategory': category,
-        //     // may want to add 'productPrice' but this is TBD
-        //     'variants': [{
-        //         'sku': variant.sku,
-        //         'price': (variant.onSale) ? variant.salePrice.decimalValue : variant.price.decimalValue,
-        //         'unlimited': variant.stock.unlimited,
-        //         'qtyInStock': variant.stock.quantity, // can be 0 if unlimited is true
-        //         'onSale': variant.onSale
-        //     }]
-        // };
 
         return productJSON;
     }
