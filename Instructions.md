@@ -138,27 +138,31 @@ Next we will setup a bunch of other User-Defined variables that are pretty strai
 
 I'll provide a screenshot of the first one to show how to set them up and then rely on text for the rest.
 
-**Constant Variable**<br/>
+**Constant Variable**
+
 1.  Variable Name: `const - eec brand`<br/>
     Variable Type: Constant<br/>
     Value: "Your Brand Name"<br/>
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06--variable_setup.png" height=300>
 
-**1st Party Cookie Variable**<br/>
+**1st Party Cookie Variable**
+
 2.  Variable Name: `Cookie - variantsAddedToCart`<br/>
     Variable Type: 1st Party Cookie<br/>
     Cookie Name: `variantsAddedToCart`<br/>
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
 
-**Data Layer VERSION 1 Variable**<br/>
+**Data Layer VERSION 1 Variable**
+
 3.  Variable Name: `DL - SS Raw Modify Cart`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawModifyCart`<br/>
     Data Layer Version: Version 1<br/>
 
-**Data Layer VERSION 2 Variables**<br/>
+**Data Layer VERSION 2 Variables**
+
 4.  Variable Name: `DL - SS Raw Product Detail`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawProductDetail`<br/>
