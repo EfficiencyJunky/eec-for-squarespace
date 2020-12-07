@@ -21,7 +21,7 @@ This Guide is organized in the following structure:
 7.  TEST IT THOROUGHLY
 
 
-# SECTION 1 PREPARE GOOGLE ANALYTICS ACCOUNT
+# SECTION 1: PREPARE GOOGLE ANALYTICS ACCOUNT
 ## Property Settings
 In Google Analytics, go to settings, and choose the property that will be used for EEC
    
@@ -104,8 +104,7 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
 3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages" (if you don't have one yet you should create one)
 4.  Check the "Enable overriding settings in this tag" box
 5.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
-6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in <a href="./Instructions.md#SECTION-1:-PREPARE-GOOGLE-ANALYTICS-ACCOUNT" target="_blank">foobar</a>**SECTION 1: Step 1**<br/>
-[Link to section1](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-ACCOUNT)
+6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-ACCOUNT)
 7.  Set the "Dimension Value" to the variable we just created either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
