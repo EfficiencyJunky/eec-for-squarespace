@@ -21,7 +21,7 @@ This Guide is organized in the following structure:
 7.  TEST IT THOROUGHLY
 
 
-# SECTION 1 -- PREPARE GOOGLE ANALYTICS ACCOUNT
+# SECTION 1: PREPARE GOOGLE ANALYTICS ACCOUNT
 ## Property Settings
 In Google Analytics, go to settings, and choose the property that will be used for EEC
    
@@ -93,7 +93,7 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
 1.  In the "User-Defined Variables" section, click "New" to start the custom variable creation process
 2.  Name the variable `URL Query - oid (for SS Transaction ID)`<br/>
     Choose the variable type "URL"<br/>
-    Set the "Component Type" to `Query`
+    Set the "Component Type" to `Query`<br/>
     Set the "Query Key" to `oid`<br/>
     The point of this variable is to capture the Squarespace (SS) Transaction ID out of the URL Query Parameters whenever a customer finishes checkout and lands on the Checkout Complete page. Click save to complete the variable completion process.
 
@@ -101,10 +101,10 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/04--urlquery_variable.png" height=350>
 
 
-3.  Now go to "Tags" and open the Pageview tag that is firing on "All Pages".
+3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages" (if you don't have one yet you should create one)
 4.  Check the "Enable overriding settings in this tag" box
 5.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
-6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in **SECTION 1: Step 1**
+6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in <a href="./Instructions.md#SECTION-1:-PREPARE-GOOGLE-ANALYTICS-ACCOUNT" target="_blank">foobar</a>**SECTION 1: Step 1**
 7.  Set the "Dimension Value" to the variable we just created either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
