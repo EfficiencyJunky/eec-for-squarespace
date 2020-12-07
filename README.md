@@ -38,23 +38,17 @@ This is a project where I learn how to integrate/implement Google Analytics Enha
 
 ---
 ---
-## CUSTOM DIMENTIONS AND METRICS
+## CUSTOM DIMENSIONS AND METRICS
 *	dimension4 	- SS Transaction ID
 *	dimension5 	- SS SKU
 *	dimension6 	- SS Availability - 'In Stock' : 'Sold Out'
-*	dimension7 	- SS Price Status - 'On Sale' : 'Regular Price'
+*	dimension7 	- SS Sale Status - 'On Sale' : 'Regular Price'
 *	metric1 	- Cart Value - The combined value of products added or removed from cart - Scope: Product -- Type: Currency (Decimal)
 
 
 ---
 ---
-## **NOTE ON COOKIES**
 
-We will need to store cookies in order to persist certain details about each product/variant throughout the funnel.
-
-*	CART PAGE: In the case of modifications made on the cart page, we will be missing `dimension6` (stock availability) and `dimension7` (sale status) for each item/SKU.
-
-*	ORDER COMPLETION PAGE: In the case of sending the final purchase event on the order completion page, we will be missing the `id`, `category`, `dimension6` and `dimension7` (sale status) for each SKU
 
 
 
@@ -88,6 +82,13 @@ var productJSON = {
 
 	
 ## Cookie Data Structure
+We will need to store a cookie in order to persist certain details about each product/variant throughout the funnel.
+
+*	CART PAGE: In the case of modifications made on the cart page, we will be missing  `dimension6` (stock availability) and `dimension7` (sale status) for each item/SKU.
+
+*	ORDER COMPLETION PAGE: In the case of sending the final purchase event on the order completion page, we will be missing the `id`, `category`, `dimension6` and `dimension7` (sale status) for each SKU
+
+
 The cookie's data structure will have the usual cookie keys:
   * name -- The cookie name `variantsAddedToCart`
   * value -- The value of the cookie will be a stringified JSON object with primary keys set to the SKU of each variant that has been added to the cart. Each object accessible by a variant SKU will contain the keys `pid`, `cat`, `unl`, `qty`, and `sal`. An example of the cookie value's data structure before being stringified is below.
@@ -99,15 +100,16 @@ The cookie's data structure will have the usual cookie keys:
 **COOKIE VALUE EXAMPLE**
 <script>
 {
-	'abc123' : { // the key corresponds with the `sku` of one of the variants added to cart
+	'abc123' : { // this key is set to the `sku` of one of the variants that's been added to cart
 		'pid': string, // the productId
 		'cat': string, // the productCategory
-		'unl': true/false, // the variant's `unlimited` value
-		'qty': integer // the variant's `qtyInStock` value
-		'sal': true/false // the variant's `onSale` value
+		'unl': true/false, // the variant's `unlimited` value -- helps calculate dimension6
+		'qty': integer // the variant's `qtyInStock` value -- helps calculate dimension6
+		'sal': true/false // the variant's `onSale` value -- helps calculate dimension7
 	}
 }
 </script>
+
 
 
 
@@ -116,14 +118,16 @@ The cookie's data structure will have the usual cookie keys:
 **Built-In Variables**
 * {{Referrer}}
 * {{Container ID}}
+* {{Event}}
 * {{Page Hostname}}
-
-**Constant Variables**
-* {{const - eec brand}} -- Set this to the brand name you want to appear for your products
 
 **URL Variables**<br/>
 Component Type: Query
 * {{URL Query - oid (for SS Transaction ID)}} -- Query Key: `oid`
+
+
+**Constant Variables**
+* {{const - eec brand}} -- Set this to the brand name you want to appear for your products
 
 
 **1st Party Cookie Variables**
@@ -134,17 +138,16 @@ Data Layer Version: 1
 * {{DL - SS Raw Modify Cart}} -- Data Layer Variable Name: `ssRawModifyCart`
 
 Data Layer Version: 2
-* {{DL - EEC Add - Quantity Added}} -- Data Layer Variable Name: `ssRawAddToCart.quantityAdded`
+* {{DL - SS Raw Product Detail}} -- Data Layer Variable Name: `ssRawProductDetail`
 * {{DL - EEC Detail - Product Name}} -- Data Layer Variable Name: `ssRawProductDetail.item.title`
+* {{DL - SS Raw Add To Cart}} -- Data Layer Variable Name: `ssRawAddToCart`
+* {{DL - EEC Add - Quantity Added}} -- Data Layer Variable Name: `ssRawAddToCart.quantityAdded`
 * {{DL - EEC Modify - action}} -- Data Layer Variable Name: `modifyCartTagInfo.action`
 * {{DL - EEC Modify - productName}} -- Data Layer Variable Name: `modifyCartTagInfo.productName`
 * {{DL - EEC Modify - quantity}} -- Data Layer Variable Name: `modifyCartTagInfo.quantity`
 * {{DL - EEC Purchase - Order ID}} -- Data Layer Variable Name: `ssRawTransaction.orderNumber`
 * {{DL - EEC Purchase - Revenue}} -- Data Layer Variable Name: `ssRawTransaction.grandTotal.decimalValue`
 * {{DL - EEC Purchase - SS Transaction ID}} -- Data Layer Variable Name: `ssRawTransaction.id`
-* {{DL - modifyCartTagInfo}} -- Data Layer Variable Name: `modifyCartTagInfo`
-* {{DL - SS Raw Add To Cart}} -- Data Layer Variable Name: `ssRawAddToCart`
-* {{DL - SS Raw Product Detail}} -- Data Layer Variable Name: `ssRawProductDetail`
 * {{DL - SS Raw Transaction}} -- Data Layer Variable Name: `ssRawTransaction`
 
 
@@ -243,7 +246,7 @@ A `utility function` is a Custom Javascript Variable that returns a function tha
 4. **Checkout**
 *	Category: `Ecommerce`
 *	Action: `Checkout`
-*	Label: ``
+*	Label: `Checkout {number of items} {value}`
 *	Non-Interactioin Hit: `False`
 *	More Settings -> Ecommerce: 
 	*	Enable Enhanced Ecommerce Features: `True`

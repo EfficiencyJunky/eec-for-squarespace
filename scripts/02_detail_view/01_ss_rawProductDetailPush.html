@@ -1,11 +1,10 @@
 <script>
-
-    var currentPageURL = document.URL;
     
   	// this will match any product detail page
-  	// the regex makes sure that "/store/" plus at least one character is in the URL
-    if(currentPageURL.match(/\/store\/./)){
-        // create a variable to hold our product information
+    // the regex makes sure that "/store/" plus at least one character is in the URL
+    // if you're store is not named store, you will need to replace the word "store" with the URL path of your store
+    if(document.URL.match(/\/store\/./)){
+
         var ssContextObject;
 
         // grab all the scripts that have been loaded on the page thus far
@@ -22,10 +21,10 @@
             }
         }
 
-        var ssRawProductDetail;
-      	
+
         if(typeof(ssContextObject.product) != 'undefined'){
 
+            // STRIP SUPERFLUOUS INFORMATION
             // strip the information in the key "mainImage" from each product variant
             // it's a crazy mess of alphanumeric stuff that we don't need in our dataLayer
             var productVariants = ssContextObject.product.variants;            
@@ -34,32 +33,46 @@
                 productVariants[i]['mainImage'] = {};
             }
 
-            // grab the category information from the element with id="productWrapper"
-            // loop through its classes and find any class with "category-" in the title
-            // remove the "category-" and append the rest of the class name to the productCategory variable
-            // make sure to add a "/" in between each category
-            var productWrapperElement = document.querySelector("#productWrapper");
-            var productWrapperCategoryClasses = (productWrapperElement) ? productWrapperElement.className.match(/\bcategory-[\S]*/g) : [];
-            var categoryString = "";
+            // SEARCH FOR CATEGORY TAGS -- THIS MIGHT BE UNRELIABLE
+            // the following code attempts to scrape the DOM to find category information for the product
+            // if the category information exists it should be found in the class names list within one of the elements in the page
+            // if this element exists, it will have one or more classes that start with "category-"
+            // so we will attempt to find it and then loop through its classes and find any class with "category-" in the title
+            // remove the "category-" and append the rest of the class name to the categoryString variable
+            // if there are more than one category it will place a "/" in between each category
+            // it will stop looking after the 5th category to comply with Google Analytics 5 category depth limit
+            var categoryClassesElement, categoryClasses, categoryString = "";
 
-            for(var i=0; i < productWrapperCategoryClasses.length; i++){
-                categoryString = categoryString + ( i!=0 ? "/" : "") + productWrapperCategoryClasses[i].replace(/category-/, '');
+            categoryClassesElement = document.querySelector('[data-content-field="main-content"]');
+
+            if(categoryClassesElement){
+                categoryClassesElement = categoryClassesElement.querySelector('[class*=category-]');
+            }
+            else{
+                categoryClassesElement = document.querySelector('body [class*=category-]');
             }
 
-            ssRawProductDetail = {
+            categoryClasses = (categoryClassesElement) ? categoryClassesElement.className.match(/\bcategory-[\S]*/g) : [];
+
+            for(var i=0; i < categoryClasses.length && i < 5; i++){
+                categoryString = categoryString + ( i!=0 ? "/" : "") + categoryClasses[i].replace(/category-/, '');
+            }
+
+            // CREATE AN OBJECT WITH THE RAW SQUARESPACE DATA
+            var ssRawProductDetail = {
                 "item": ssContextObject.item,
                 "product": ssContextObject.product,
                 "category": categoryString
             };
+        
+
+            // PUSH TO DATALAYER
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                'event' : 'ssRawProductDetailPush',
+                'ssRawProductDetail': ssRawProductDetail
+            });
         }
-
-        // push the anonymous transaction information to the dataLayer
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-            'event' : 'ssRawProductDetailPush',
-            'ssRawProductDetail': ssRawProductDetail
-        });
-
     }
 
 
