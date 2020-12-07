@@ -14,7 +14,7 @@ And without further adoo, let's get started!
 This Guide is organized roughly in the following structure:
 1.  [Prepare Google Analytics Property and View Settings](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
 2.  [Install Google Tag Manager (GTM) container code snippet on Squarespace (SS)](#SECTION-2-\-\--INSTALL-GTM-CONTAINER-CODE-SNIPPET-ON-SS)
-3.  [Configure a variety of basic variables in GTM](#SECTION-3-\-\--CONFIGURE-THE-BASIC-BUILT\-IN-AND-USER\-DEFINED-VARIABLES)
+3.  [Configure basic Built-In and User-Defined variables in GTM](#SECTION-3-\-\--CONFIGURE-BASIC-BUILT\-IN-AND-USER\-DEFINED-VARIABLES)
 4.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-4-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLES,-HTML-TAGS,-AND-SS-CODE-INJECTIONS-TO-GENERATE-EEC-DATA-STRUCTURES): This section is the bulk of the work where we perform our EEC dataLayer manipulation and prepare our EEC data structures to be sent to Google Analytics. To do this we will create a variety of Custom Javascript Variables and HTML Tags in GTM as well as Code Injections in SS. The structure will mirror the user journey by implementing our 5 funnel steps in chronological order.
     1.  Product Detail Views
         1.  push raw data to dataLayer from SS Code Injection
@@ -76,7 +76,7 @@ Now for the view settings. Repeat the following steps for each view that we want
 
 **That's it for Google Analytics. The rest of the work will happen in Google Tag Manager (GTM) and Squarespace (SS)**
 
-
+---
 # SECTION 2 -- INSTALL GTM CONTAINER CODE SNIPPET ON SS
 
 I'll assume you've already setup a Google Tag Manager account and know how to use it, but you may not have set up Squarespace to work with Google Tag Manager.
@@ -95,8 +95,8 @@ I'll assume you've already setup a Google Tag Manager account and know how to us
 4.  Make sure to test that the integration is working.
 
 
-
-# SECTION 3 -- CONFIGURE THE BASIC BUILT-IN AND USER-DEFINED VARIABLES
+---
+# SECTION 3 -- CONFIGURE BASIC BUILT-IN AND USER-DEFINED VARIABLES
 ## A) Setup a few Built-in Variables
 We will be using 4 built-in variables so we need to make sure they are configured
 1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, and `Referrer` by checking the box next to them in the list.
@@ -138,27 +138,27 @@ Next we will setup a bunch of other User-Defined variables that are pretty strai
 
 I'll provide a screenshot of the first one to show how to set them up and then rely on text for the rest.
 
-**Constant Variable**
+**Constant Variable**<br/>
 1.  Variable Name: `const - eec brand`<br/>
     Variable Type: Constant<br/>
     Value: "Your Brand Name"<br/>
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06--variable_setup.png" height=300>
 
-**1st Party Cookie Variable**
+**1st Party Cookie Variable**<br/>
 2.  Variable Name: `Cookie - variantsAddedToCart`<br/>
     Variable Type: 1st Party Cookie<br/>
     Cookie Name: `variantsAddedToCart`<br/>
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
 
-**Data Layer VERSION 1 Variable**
+**Data Layer VERSION 1 Variable**<br/>
 3.  Variable Name: `DL - SS Raw Modify Cart`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawModifyCart`<br/>
     Data Layer Version: Version 1<br/>
 
-**Data Layer VERSION 2 Variables**
+**Data Layer VERSION 2 Variables**<br/>
 4.  Variable Name: `DL - SS Raw Product Detail`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawProductDetail`<br/>
@@ -220,14 +220,14 @@ I'll provide a screenshot of the first one to show how to set them up and then r
     Data Layer Version: Version 2<br/>
 
 
-
+---
 # SECTION 4 -- CONFIGURE CUSTOM JAVASCRIPT VARIABLES, HTML TAGS, AND SS CODE INJECTIONS TO GENERATE EEC DATA STRUCTURES
 
-
+---
 # SECTION 5 -- CONFIGURE TAG FIRING TRIGGERS
 
 
-
+---
 # SECTION 6 -- CONFIGURE EEC TAGS
 
 
