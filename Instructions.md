@@ -33,7 +33,7 @@ In Google Analytics, go to settings, and choose the property that will be used f
     *	`SS Availability`   - Product Scoped - Value will be either 'In Stock' or 'Sold Out'
     *	`SS Sale Status`    - Product Scoped - Value will be either 'On Sale' or 'Regular Price'
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/01--GA_Setup/01--Settings--Property--custom_dimensions.png" height=300>
 
 
 
@@ -42,22 +42,23 @@ In Google Analytics, go to settings, and choose the property that will be used f
     We will need to setup 1 custom metric:
     *	`Cart Value` - Product Scoped - Currency (Decimal) - This will provide the combined value of products added or removed from cart
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/01--GA_Setup/02--Settings--Property--custom_metrics.png">
 
 
 Now for the view settings. We will have to repeat the following steps for each view that we want to set up for EEC tracking.
     
-3.  Choose "View Settings" and under "Exclude URL Query Parameters" add `oid,authCode`
+1.  Choose "View Settings" and under "Exclude URL Query Parameters" add `oid,authCode`
     
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/01--GA_Setup/04--Settings--View--exclude_query_params.png">
 
 
 
-4.  Choose "Ecommerce Settings" and turn on both "Enable Ecommerce" and "Enable Enhanced Ecommerce Reporting". Don't worry about "Checkout Labeling" as we will not be able to do this anyways.
+2.  Choose "Ecommerce Settings" and turn on both "Enable Ecommerce" and "Enable Enhanced Ecommerce Reporting". Don't worry about "Checkout Labeling" as we will not be able to do this anyways.
+    
+    <img src="./media/tutorial_images/01--GA_Setup/05--Settings--View--enable_eec.png" height=400>
 
 
-That's it for Google Analytics. The rest of the work will happen in Google Tag Manager.
-
+**That's it for Google Analytics. The rest of the work will happen in Google Tag Manager (GTM) and Squarespace (SS)**
 
 
 # SECTION 2 -- CONNECT GOOGLE TAG MANAGER AND SQUARESPACE
@@ -66,12 +67,12 @@ I'll assume you've already setup a Google Tag Manager account and know how to us
 
 1.  In GTM, click on your container ID to open up the "Install Google Tag Manager" window
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/01--get_GTM_tracking_code.png" height=350>
 
 2.  Leave this window open and in a new window open up Squarespace and go to "Settings -> Advanced -> Code Injection". Copy the code from the top box in GTM to the "Header" section in Squarespace and the code from the bottom box in GTM to the "Footer" section in Squarespace. Make sure to save changes in Squarespace
 
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/02--copy_code_to_ss.png">
 
 
 3.  If you haven't already, setup a pageview tag in Google Tag Manager to fire on an "All Pages" trigger
@@ -84,7 +85,7 @@ We will be using 4 built-in variables so we need to make sure they are configure
 1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, and `Referrer` by checking the box next to them in the list.
 
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/03--builtin_variables.png">
 
 
 # SECTION 4 -- SETUP THE FIRST USER-DEFINED VARIABLE AND MODIFY PAGEVIEW TAG
@@ -98,7 +99,7 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
 3.  Choose the variable type "URL", set the "Component Type" to `Query` and the "Query Key" to `oid`. The point of this variable is to capture the Squarespace (SS) Transaction ID out of the URL Query Parameters whenever a customer finishes checkout and lands on the Checkout Complete page. Click save to complete the variable completion process.
 
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/04--urlquery_variable.png" height=350>
 
 
 4.  Now go to "Tags" and open the Pageview tag that is firing on "All Pages".
@@ -107,7 +108,7 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
 7.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in **SECTION 1: Step 1**
 8.  Set the "Dimension Value" to the variable we just created either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
 
 9.  Don't forget to click the "save" button!
 
@@ -123,17 +124,17 @@ I'll provide a screenshot of the first one to show how to set them up and then r
     Variable Type: Constant
     Value: "Your Brand Name"
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06--variable_setup.png" height=300>
 
 **1st Party Cookie Variables**
-2.  Variable Name: `Cookie - variantsAddedToCart`
+1.  Variable Name: `Cookie - variantsAddedToCart`
     Variable Type: 1st Party Cookie
     Cookie Name: `variantsAddedToCart`
 
-    <<INSERT IMAGE HERE>>
+    <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
 
 **Data Layer VERSION 1 Variables**
-3.  Variable Name: `DL - SS Raw Modify Cart`
+1.  Variable Name: `DL - SS Raw Modify Cart`
     Variable Type: Data Layer Variable
     Data Layer Variable Name: `ssRawModifyCart`
     Data Layer Version: Version 1
