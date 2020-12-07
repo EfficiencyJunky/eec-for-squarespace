@@ -115,42 +115,6 @@ The cookie's data structure will have the usual cookie keys:
 
 # VARIABLES
 
-**Built-In Variables**
-* {{Referrer}}
-* {{Container ID}}
-* {{Event}}
-* {{Page Hostname}}
-
-**URL Variables**<br/>
-Component Type: Query
-* {{URL Query - oid (for SS Transaction ID)}} -- Query Key: `oid`
-
-
-**Constant Variables**
-* {{const - eec brand}} -- Set this to the brand name you want to appear for your products
-
-
-**1st Party Cookie Variables**
-* {{Cookie - variantsAddedToCart}} -- Cookie Name: `variantsAddedToCart`
-
-**Data Layer Variables**
-Data Layer Version: 1
-* {{DL - SS Raw Modify Cart}} -- Data Layer Variable Name: `ssRawModifyCart`
-
-Data Layer Version: 2
-* {{DL - SS Raw Product Detail}} -- Data Layer Variable Name: `ssRawProductDetail`
-* {{DL - EEC Detail - Product Name}} -- Data Layer Variable Name: `ssRawProductDetail.item.title`
-* {{DL - SS Raw Add To Cart}} -- Data Layer Variable Name: `ssRawAddToCart`
-* {{DL - EEC Add - Quantity Added}} -- Data Layer Variable Name: `ssRawAddToCart.quantityAdded`
-* {{DL - EEC Modify - action}} -- Data Layer Variable Name: `modifyCartTagInfo.action`
-* {{DL - EEC Modify - productName}} -- Data Layer Variable Name: `modifyCartTagInfo.productName`
-* {{DL - EEC Modify - quantity}} -- Data Layer Variable Name: `modifyCartTagInfo.quantity`
-* {{DL - EEC Purchase - Order ID}} -- Data Layer Variable Name: `ssRawTransaction.orderNumber`
-* {{DL - EEC Purchase - Revenue}} -- Data Layer Variable Name: `ssRawTransaction.grandTotal.decimalValue`
-* {{DL - EEC Purchase - SS Transaction ID}} -- Data Layer Variable Name: `ssRawTransaction.id`
-* {{DL - SS Raw Transaction}} -- Data Layer Variable Name: `ssRawTransaction`
-
-
 
 **Custom Javascript Variables**
 Variable Type: Custom Javascript
@@ -212,54 +176,3 @@ A `utility function` is a Custom Javascript Variable that returns a function tha
 
 
 ## EEC EVENT TAGS
-1. **Product Detail View**
-*	Category: `Ecommerce`
-*	Action: `Product Detail View`
-*	Label: `{{DL - EEC Detail - Product Name}}` (the name of the product)
-*	Non-Interactioin Hit: `True`
-*	More Settings -> Ecommerce: 
-	*	Enable Enhanced Ecommerce Features: `True`
-	*	Read Data from Variable: `{{JS - eec.detail}}`
-*	Trigger: `custom event - ssRawProductDetailPush`
-
-2. **Add To Cart**
-*	Category: `Ecommerce`
-*	Action: `Add To Cart`
-*	Label: `{{DL - EEC Detail - Product Name}}`
-*	Non-Interactioin Hit: `False`
-*	More Settings -> Ecommerce: 
-	*	Enable Enhanced Ecommerce Features: `True`
-	*	Read Data from Variable: `{{JS - eec.add}}`
-*	Trigger: `custom event - ssRawAddToCartPush`
-
-3. **Modify Cart** -- Sends either `add` or `remove` EEC Actions depending on the modification
-*	Category: `Ecommerce`
-*	Action: `Modify Cart`
-*	Label: `{{DL - EEC Modify - action}}: {{DL - EEC Modify - productName}}`
-*	Value: `{{DL - EEC Modify - quantity}}`
-*	Non-Interactioin Hit: `False`
-*	More Settings -> Ecommerce: 
-	*	Enable Enhanced Ecommerce Features: `True`
-	*	Read Data from Variable: `{{JS - eec.modify}}`
-*	Trigger: `custom event - fireModifyCartTag`
-
-4. **Checkout**
-*	Category: `Ecommerce`
-*	Action: `Checkout`
-*	Label: `Checkout {number of items} {value}`
-*	Non-Interactioin Hit: `False`
-*	More Settings -> Ecommerce: 
-	*	Enable Enhanced Ecommerce Features: `True`
-	*	Read Data from Variable: `{{JS - eec.checkout}}`
-*	Trigger: `click - CHECKOUT button`
-
-5. **Purchase**
-*	Category: `Ecommerce`
-*	Action: `Purchase`
-*	Label: `Order ID: {{DL - EEC Purchase - Order ID}}`
-*	Value: `{{DL - EEC Purchase - Revenue}}`
-*	Non-Interactioin Hit: `True`
-*	More Settings -> Ecommerce: 
-	*	Enable Enhanced Ecommerce Features: `True`
-	*	Read Data from Variable: `{{JS - eec.purchase}}`
-*	Trigger: `custom event - ssRawTransactionPush`

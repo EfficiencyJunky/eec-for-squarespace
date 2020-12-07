@@ -15,7 +15,10 @@ This Guide is organized roughly in the following structure:
 1.  [Prepare Google Analytics Property and View Settings](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
 2.  [Install Google Tag Manager (GTM) container code snippet on Squarespace (SS)](#SECTION-2-\-\--INSTALL-GTM-CONTAINER-CODE-SNIPPET-ON-SS)
 3.  [Configure basic Built-In and User-Defined variables in GTM](#SECTION-3-\-\--CONFIGURE-BASIC-BUILT\-IN-AND-USER\-DEFINED-VARIABLES)
-4.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-4-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLES,-HTML-TAGS,-AND-SS-CODE-INJECTIONS-TO-GENERATE-EEC-DATA-STRUCTURES): This section is the bulk of the work where we perform our EEC dataLayer manipulation and prepare our EEC data structures to be sent to Google Analytics. To do this we will create a variety of Custom Javascript Variables and HTML Tags in GTM as well as Code Injections in SS. The structure will mirror the user journey by implementing our 5 funnel steps in chronological order.
+4.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-4-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLES,-HTML-TAGS,-AND-SS-CODE-INJECTIONS-TO-GENERATE-EEC-DATA-STRUCTURES)<br/>
+    This section is the bulk of the work where we perform our EEC dataLayer manipulation and prepare our EEC data structures to be sent to Google Analytics.<br/>
+    To do this we will create a variety of Custom Javascript Variables and Custom HTML Tags with Javascript code in GTM, AND a couple Code Injections in SS.<br/>
+    The order of our implementation will mirror the user journey through the 5 funnel steps.<br/>
     1.  Product Detail Views
         1.  push raw data to dataLayer from SS Code Injection
         2.  transform into `detail` EEC data structure in GTM
@@ -138,7 +141,7 @@ Next we will setup a bunch of other User-Defined variables that are pretty strai
 
 I'll provide a screenshot of the first one to show how to set them up and then rely on text for the rest.
 
-**Constant Variable**
+**Constant Variables**
 
 1.  Variable Name: `const - eec brand`<br/>
     Variable Type: Constant<br/>
@@ -146,79 +149,81 @@ I'll provide a screenshot of the first one to show how to set them up and then r
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06--variable_setup.png" height=300>
 
-**1st Party Cookie Variable**
+**1st Party Cookie Variables**
 
-2.  Variable Name: `Cookie - variantsAddedToCart`<br/>
+1.  Variable Name: `Cookie - variantsAddedToCart`<br/>
     Variable Type: 1st Party Cookie<br/>
     Cookie Name: `variantsAddedToCart`<br/>
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
 
-**Data Layer VERSION 1 Variable**
+**Data Layer VERSION 1 Variables**<br/>
+NOTE: It is imperative that this variable be setup as "VERSION 1", otherwise the cart modification functions won't work correctly<br>
+For more information on variable versions and recursive merge when pushing data to dataLayer, see [Simo Ahava's article on the subject](https://www.simoahava.com/gtm-tips/data-layer-variable-versions-explained/)
 
-3.  Variable Name: `DL - SS Raw Modify Cart`<br/>
+1.  Variable Name: `DL - SS Raw Modify Cart`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawModifyCart`<br/>
-    Data Layer Version: Version 1<br/>
+    **Data Layer Version: Version 1**<br/>
 
 **Data Layer VERSION 2 Variables**
 
-4.  Variable Name: `DL - SS Raw Product Detail`<br/>
+1.  Variable Name: `DL - SS Raw Product Detail`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawProductDetail`<br/>
     Data Layer Version: Version 2<br/>
     
-5.  Variable Name: `DL - EEC Detail - Product Name`<br/>
+2.  Variable Name: `DL - EEC Detail - Product Name`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawProductDetail.item.title`<br/>
     Data Layer Version: Version 2<br/>
 
-6.  Variable Name: `DL - SS Raw Add To Cart`<br/>
+3.  Variable Name: `DL - SS Raw Add To Cart`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawAddToCart`<br/>
     Data Layer Version: Version 2<br/>
 
-7.  Variable Name: `DL - EEC Add - Quantity Added`<br/>
+4.  Variable Name: `DL - EEC Add - Quantity Added`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawAddToCart.quantityAdded`<br/>
     Data Layer Version: Version 2<br/>
 
-8.  Variable Name: `DL - EEC Modify - action`<br/>
+5.  Variable Name: `DL - EEC Modify - action`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `modifyCartTagInfo.action`<br/>
     Data Layer Version: Version 2<br/>
 
-9.  Variable Name: `DL - EEC Modify - productName`<br/>
+6.  Variable Name: `DL - EEC Modify - productName`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `modifyCartTagInfo.productName`<br/>
     Data Layer Version: Version 2<br/>
 
-10. Variable Name: `DL - EEC Modify - quantity`<br/>
+7. Variable Name: `DL - EEC Modify - quantity`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `modifyCartTagInfo.quantity`<br/>
     Data Layer Version: Version 2<br/>
 
-11. Variable Name: `DL - EEC Purchase - Order ID`<br/>
+8. Variable Name: `DL - EEC Purchase - Order ID`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.orderNumber`<br/>
     Data Layer Version: Version 2<br/>
 
-12. Variable Name: `DL - EEC Purchase - Revenue`<br/>
+9. Variable Name: `DL - EEC Purchase - Revenue`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.grandTotal.decimalValue`<br/>
     Data Layer Version: Version 2<br/>
 
-13. Variable Name: `DL - EEC Purchase - SS Transaction ID`<br/>
+10. Variable Name: `DL - EEC Purchase - SS Transaction ID`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.id`<br/>
     Data Layer Version: Version 2<br/>
 
-14. Variable Name: `DL - SS Raw Transaction`<br/>
+11. Variable Name: `DL - SS Raw Transaction`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction`<br/>
     Data Layer Version: Version 2<br/>
 
-15. Variable Name: `name_here`<br/>
+12. Variable Name: `name_here`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `variable_here`<br/>
     Data Layer Version: Version 2<br/>
@@ -227,12 +232,75 @@ I'll provide a screenshot of the first one to show how to set them up and then r
 ---
 # SECTION 4 -- CONFIGURE CUSTOM JAVASCRIPT VARIABLES, HTML TAGS, AND SS CODE INJECTIONS TO GENERATE EEC DATA STRUCTURES
 
+
+
+
+
+
 ---
 # SECTION 5 -- CONFIGURE TAG FIRING TRIGGERS
 
 
+
+
+
+
 ---
 # SECTION 6 -- CONFIGURE EEC TAGS
+1. **Product Detail View**
+    * Category: `Ecommerce`
+    * Action: `Product Detail View`
+    * Label: `{{DL - EEC Detail - Product Name}}` (the name of the product)
+    * Non-Interactioin Hit: `True`
+    * More Settings -> Ecommerce: 
+        * Enable Enhanced Ecommerce Features: `True`
+        * Read Data from Variable: `{{JS - eec.detail}}`
+    * Trigger: `custom event - ssRawProductDetailPush`
+
+2. **Add To Cart**
+   * Category: `Ecommerce`
+   * Action: `Add To Cart`
+   * Label: `{{DL - EEC Detail - Product Name}}`
+   * Non-Interactioin Hit: `False`
+   * More Settings -> Ecommerce: 
+       * Enable Enhanced Ecommerce Features: `True`
+       * Read Data from Variable: `{{JS - eec.add}}`
+   * Trigger: `custom event - ssRawAddToCartPush`
+
+3. **Modify Cart** -- Sends either `add` or `remove` EEC Actions depending on the modification
+   * Category: `Ecommerce`
+   * Action: `Modify Cart`
+   * Label: `{{DL - EEC Modify - action}}: {{DL - EEC Modify - productName}}`
+   * Value: `{{DL - EEC Modify - quantity}}`
+   * Non-Interactioin Hit: `False`
+   * More Settings -> Ecommerce: 
+       * Enable Enhanced Ecommerce Features: `True`
+       * Read Data from Variable: `{{JS - eec.modify}}`
+   * Trigger: `custom event - fireModifyCartTag`
+
+4. **Checkout**
+   * Category: `Ecommerce`
+   * Action: `Checkout`
+   * Label: `Checkout {number of items} {value}`
+   * Non-Interactioin Hit: `False`
+   * More Settings -> Ecommerce: 
+       * Enable Enhanced Ecommerce Features: `True`
+       * Read Data from Variable: `{{JS - eec.checkout}}`
+   * Trigger: `click - CHECKOUT button`
+
+5. **Purchase**
+   * Category: `Ecommerce`
+   * Action: `Purchase`
+   * Label: `Order ID: {{DL - EEC Purchase - Order ID}}`
+   * Value: `{{DL - EEC Purchase - Revenue}}`
+   * Non-Interactioin Hit: `True`
+   * More Settings -> Ecommerce: 
+       * Enable Enhanced Ecommerce Features: `True`
+       * Read Data from Variable: `{{JS - eec.purchase}}`
+   * Trigger: `custom event - ssRawTransactionPush`
+
+
+
 
 
 
