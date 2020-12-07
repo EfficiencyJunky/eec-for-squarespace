@@ -36,7 +36,6 @@ In Google Analytics, go to settings, and choose the property that will be used f
     <img src="./media/tutorial_images/01--GA_Setup/01--Settings--Property--custom_dimensions.png" height=300>
 
 
-
 2.  Under "Custom Definitions" choose "Custom Metrics"
     
     We will need to setup 1 custom metric:
@@ -92,111 +91,112 @@ We will be using 4 built-in variables so we need to make sure they are configure
 This is where it starts to get fun. We will be needing a bunch of custom variables, but let's start with an easy one to ease into things shall we?
 
 1.  In the "User-Defined Variables" section, click "New" to start the custom variable creation process
-2.  Name the variable `URL Query - oid (for SS Transaction ID)` 
-
-    **NOTE: Naming variables exactly as they are listed in this guide is a crucial step in order for everything to work. Thankfully Google Tag Manager should complain if you accidentally name a variable incorrectly during the setup, but try not to do this. Once all of the code has been copied to the custom Javascript Variables later in this tutorial, you can re-name any of the variables to be whatever you want because GTM will update them anywhere they appear in the container. But I recommend just leaving them as-is.**
-
-3.  Choose the variable type "URL", set the "Component Type" to `Query` and the "Query Key" to `oid`. The point of this variable is to capture the Squarespace (SS) Transaction ID out of the URL Query Parameters whenever a customer finishes checkout and lands on the Checkout Complete page. Click save to complete the variable completion process.
+2.  Name the variable `URL Query - oid (for SS Transaction ID)`<br/>
+    Choose the variable type "URL"<br/>
+    Set the "Component Type" to `Query`
+    Set the "Query Key" to `oid`<br/>
+    The point of this variable is to capture the Squarespace (SS) Transaction ID out of the URL Query Parameters whenever a customer finishes checkout and lands on the Checkout Complete page. Click save to complete the variable completion process.
 
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/04--urlquery_variable.png" height=350>
 
 
-4.  Now go to "Tags" and open the Pageview tag that is firing on "All Pages".
-5.  Check the "Enable overriding settings in this tag" box
-6.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
-7.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in **SECTION 1: Step 1**
-8.  Set the "Dimension Value" to the variable we just created either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
+3.  Now go to "Tags" and open the Pageview tag that is firing on "All Pages".
+4.  Check the "Enable overriding settings in this tag" box
+5.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
+6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in **SECTION 1: Step 1**
+7.  Set the "Dimension Value" to the variable we just created either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
 
-9.  Don't forget to click the "save" button!
+8.  Don't forget to click the "save" button!
 
 
 
 # SECTION 5 -- SETUP THE OTHER SIMPLE USER-DEFINED VARIABLES
 Next we will setup a bunch of other User-Defined variables that are pretty straightforward. All of these variables will be created by clicking "New" in the "User-Defined Variables" section.
 
+**NOTE: Naming variables exactly as they are listed in this guide is a crucial step in order for everything to work. Thankfully Google Tag Manager should complain if you accidentally name a variable incorrectly during the setup, but try not to do this. Once all of the code has been copied to the custom Javascript Variables later in this tutorial, you can re-name any of the variables to be whatever you want because GTM will update them anywhere they appear in the container. But I recommend just leaving them as-is.**
+
 I'll provide a screenshot of the first one to show how to set them up and then rely on text for the rest.
 
-**Constant Variables**
-1.  Variable Name: `const - eec brand`
-    Variable Type: Constant
-    Value: "Your Brand Name"
+**Constant Variable**
+1.  Variable Name: `const - eec brand`<br/>
+    Variable Type: Constant<br/>
+    Value: "Your Brand Name"<br/>
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06--variable_setup.png" height=300>
 
-**1st Party Cookie Variables**
-1.  Variable Name: `Cookie - variantsAddedToCart`
-    Variable Type: 1st Party Cookie
-    Cookie Name: `variantsAddedToCart`
+**1st Party Cookie Variable**
+2.  Variable Name: `Cookie - variantsAddedToCart`<br/>
+    Variable Type: 1st Party Cookie<br/>
+    Cookie Name: `variantsAddedToCart`<br/>
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
 
-**Data Layer VERSION 1 Variables**
-1.  Variable Name: `DL - SS Raw Modify Cart`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawModifyCart`
-    Data Layer Version: Version 1
-
+**Data Layer VERSION 1 Variable**
+3.  Variable Name: `DL - SS Raw Modify Cart`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawModifyCart`<br/>
+    Data Layer Version: Version 1<br/>
 
 **Data Layer VERSION 2 Variables**
-4.  Variable Name: `DL - SS Raw Product Detail`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawProductDetail`
-    Data Layer Version: Version 2
+4.  Variable Name: `DL - SS Raw Product Detail`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawProductDetail`<br/>
+    Data Layer Version: Version 2<br/>
     
-5.  Variable Name: `DL - EEC Detail - Product Name`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawProductDetail.item.title`
-    Data Layer Version: Version 2
+5.  Variable Name: `DL - EEC Detail - Product Name`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawProductDetail.item.title`<br/>
+    Data Layer Version: Version 2<br/>
 
-6.  Variable Name: `DL - SS Raw Add To Cart`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawAddToCart`
-    Data Layer Version: Version 2
+6.  Variable Name: `DL - SS Raw Add To Cart`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawAddToCart`<br/>
+    Data Layer Version: Version 2<br/>
 
-7.  Variable Name: `DL - EEC Add - Quantity Added`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawAddToCart.quantityAdded`
-    Data Layer Version: Version 2
+7.  Variable Name: `DL - EEC Add - Quantity Added`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawAddToCart.quantityAdded`<br/>
+    Data Layer Version: Version 2<br/>
 
-8.  Variable Name: `DL - EEC Modify - action`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `modifyCartTagInfo.action`
-    Data Layer Version: Version 2
+8.  Variable Name: `DL - EEC Modify - action`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `modifyCartTagInfo.action`<br/>
+    Data Layer Version: Version 2<br/>
 
-9.  Variable Name: `DL - EEC Modify - productName`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `modifyCartTagInfo.productName`
-    Data Layer Version: Version 2
+9.  Variable Name: `DL - EEC Modify - productName`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `modifyCartTagInfo.productName`<br/>
+    Data Layer Version: Version 2<br/>
 
-10. Variable Name: `DL - EEC Modify - quantity`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `modifyCartTagInfo.quantity`
-    Data Layer Version: Version 2
+10. Variable Name: `DL - EEC Modify - quantity`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `modifyCartTagInfo.quantity`<br/>
+    Data Layer Version: Version 2<br/>
 
-11. Variable Name: `DL - EEC Purchase - Order ID`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawTransaction.orderNumber`
-    Data Layer Version: Version 2
+11. Variable Name: `DL - EEC Purchase - Order ID`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawTransaction.orderNumber`<br/>
+    Data Layer Version: Version 2<br/>
 
-12. Variable Name: `DL - EEC Purchase - Revenue`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawTransaction.grandTotal.decimalValue`
-    Data Layer Version: Version 2
+12. Variable Name: `DL - EEC Purchase - Revenue`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawTransaction.grandTotal.decimalValue`<br/>
+    Data Layer Version: Version 2<br/>
 
-13. Variable Name: `DL - EEC Purchase - SS Transaction ID`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawTransaction.id`
-    Data Layer Version: Version 2
+13. Variable Name: `DL - EEC Purchase - SS Transaction ID`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawTransaction.id`<br/>
+    Data Layer Version: Version 2<br/>
 
-14. Variable Name: `DL - SS Raw Transaction`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `ssRawTransaction`
-    Data Layer Version: Version 2
+14. Variable Name: `DL - SS Raw Transaction`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawTransaction`<br/>
+    Data Layer Version: Version 2<br/>
 
-15. Variable Name: `name_here`
-    Variable Type: Data Layer Variable
-    Data Layer Variable Name: `variable_here`
-    Data Layer Version: Version 2
+15. Variable Name: `name_here`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `variable_here`<br/>
+    Data Layer Version: Version 2<br/>
