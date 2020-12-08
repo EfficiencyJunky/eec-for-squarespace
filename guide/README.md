@@ -284,21 +284,10 @@ These are the most time consuming and complicated steps. They will require code 
 
 The subfolders for each step are linked below.
 
-## 1) Product Detail Views
-1.  push raw data to dataLayer (from SS Code Injection)
-2.  transform into `productJSON` data structure
-3.  generate `detail` EEC data structure
-
-
+## 1) [Product Detail Views](./02_detail/)
 ## 2) Add To Cart
-
-
 ## 3) Modify Cart (add/remove items on the /cart page)
-
-
 ## 4) Checkout
-
-
 ## 5) Purchase
 
 
