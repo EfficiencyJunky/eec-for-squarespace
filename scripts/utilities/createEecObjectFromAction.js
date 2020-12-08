@@ -35,9 +35,8 @@ function(){
                 'id': productJSON[j].productId,
                 'name': productJSON[j].productName,
                 'category': productJSON[j].productCategory,
-                //variant: 'xyz', // maybe use this for sku instead of dimension
-                //'brand': {{const - eec brand}},
-                'brand': 'brand placeholder'
+                //variant: 'xyz', // need to implement this although the SKU in dimension5 does sort of provide this information already
+                'brand': {{const - eec brand}}
             }
 
             // add variant details for the steps that actually have variants

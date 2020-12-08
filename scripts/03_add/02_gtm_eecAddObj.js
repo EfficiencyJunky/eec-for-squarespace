@@ -1,4 +1,4 @@
-// this function takes the raw Add To Cart info and converts it into a properly formatted Enhanced Ecommerce "add" object and the actionField 'list' if applicable
+// this function takes the raw Add To Cart info and converts it into a properly formatted Enhanced Ecommerce "add" object and adds the actionField 'list' if applicable
 function(){
 
   // grab a reference to the raw push

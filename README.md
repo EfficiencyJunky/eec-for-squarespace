@@ -123,9 +123,7 @@ The cookie's data structure will have the usual cookie keys:
 
 **Custom Javascript Variables**
 Variable Type: Custom Javascript
-* {{JS - eec.add}}
 * {{JS - eec.checkout}}
-* {{JS - eec.detail}}
 * {{JS - eec.modify}}
 * {{JS - eec.purchase}}
 

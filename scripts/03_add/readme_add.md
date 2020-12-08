@@ -1,96 +1,64 @@
-# EXECUTION PLAN
-For this step we need to do something totally different.
+# IMPLEMENTATION GUID FOR THE "ADD" EEC ACTION (ADDING FROM PRODUCT DETAIL PAGE)
+
+1. Setup a trigger that we will use to fire a custom HTML tag
+   1. In the GTM "Triggers" section create a new trigger and name it `Dom Ready - Store Pages`
+   2. For the "Trigger Configuration" choose "Dom Ready"
+   3. Now choose "Some DOM Ready Events"
+   4. Select "Page Path" in the first dropdown, "contains" in the second and then type in `/store/` to the text field
+   5. Save the trigger
+
+  <img src="../../media/tutorial_images/05_Main_Implementation/01--Add--Trigger--DomReady.png" height=300>
+
+2. Setup a custom HTML Tag to to push raw item added data to dataLayer
+  1. In the GTM "Tags" section, create a new tag name it `Custom HTML - Push ssRawAddToCart to DL`
+  2. For the "Tag Configuration" choose "Custom HTML"
+  3. Copy [this code][01_datalayer_push_code] to the "HTML" section
+  4. Now under "Triggering" choose the `Dom Ready - Store Pages` trigger we created in the previous step
+  5. Save the tag
+  6. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, and you should see the `ssRawAddToCartPush` event show up in the Summary tab. Click on this event and check the "Variables" tab. The `DL - SS Raw Add To Cart` variable should now be populated with a bunch of data.
 
 
-**GTM WORK**
-1. Setup a custom HTML Tag to fire on DOM Ready that that attaches an event Listener to the Squarespace Commerce Analytics event "commerce-item-added". 
-   
-   The reason we want to use this event is because it will only fire when the item is successfully added to cart. (there are situations where clicking the "Add To Cart" button might produce an error so we'll let Squarespace handle that for us ;)
-   
-   Whenever this event is successfully fired we will grab the `e.newlyAdded` object from the event as well as the value in the `Quantity` <input> box and push this raw data to dataLayer with event key `ssRawAddToCartJSONPushed_gtm`
-
-   *COOKIE LOGIC* -- We will also need to add the ID, Category, dimension6 and dimension7 to a cookie that the other steps in the process can access later
-
-2. create a DL variable to hold the variable pushed from our HTML tag -- `{{DL - SS Raw Add To Cart JSON}}`
-
-3. Write a script that takes this DL variable and generates a proper eec.add object and uses our utility to add the "actionField" with "list" if the referrer was one of the store lists
+3. Use a Custom Javascript Variable to transform the raw data into a `productJSON` and then generate our `add` EEC data structure (add the actionField with list name if applicable)
+  1. Create a Custom Javascript Variable and name it `JS - eec.add`
+  2. Copy [this code][02_eec_object_creation_code] to the "Custom JavaScript" section
+  3. Save the variable
+  4. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `JS - eec.add` variable should now be populated with a properly formatted EEC Object. See below for an example of what this looks like.
 
 
 
+**EEC ADD DATA STRUCTURE REFERENCE**<br/>
+This is an example of what an EEC data structure for action of type `add` looks like.
 
-
-<script>
-// Item that is IN STOCK and REGULAR PRICE
-{
-  itemDetails: {
-    id: '5fbf33439d7936484081fc71',
-    item: {price: {currency: 'USD', value: '6.00'}},
-    itemId: '5eba1a2b98f2a93833214793',
-    quantity: 1,
-    title: 'MOONFALL sticker',
-    purchasePriceCents: 600,
-    nonSalePriceCents: 600,
-    chosenVariant: {
-      optionValues: [
-        {optionName: 'category', value: 'stickers/individual'}
+```{
+  'ecommerce': {
+    'add': {
+      'products': [
+        {
+          'id': '399sdccsfjl8990933kkj3jkl3',
+          'name': 'product name',
+          'category': 'categoryA/categoryB',
+          'brand': 'Your Brand Name',
+          'metric1': 12,
+          'quantity': 2,
+          'dimension5': 'SQ1234567',
+          'price': '6.00',
+          'dimension6': 'In Stock',
+          'dimension7': 'On Sale'
+        }
       ],
-      id: 'b3b44c1f-ca26-4787-879e-e7da1a3e326e',
-      sku: 'SQ7959275',
-      price: 600,
-      salePrice: 0,
-      onSale: false,
-      unlimited: true,
-      qtyInStock: 0,
-      width: 0,
-      height: 0,
-      weight: 0,
-      len: 0
-    },
-    productType: 1,
-    subTotal: 600
-  },
-  quantityAdded: '1'
+      'actionField': {'list': 'The List Name'}
+    }
+  }
 }
-</script>
+```
+
+
+[01_datalayer_push_code]: ./01_gtm_rawAddToCartPush.html
+[02_eec_object_creation_code]: ./02_gtm_eecAddObj.js
 
 
 
-<script>
-// item that is IN STOCK and ON SALE
-{
-  itemDetails: {
-    id: '5fbf3499cb3e0f57714368bb',
-    item: {price: {currency: 'USD', value: '8.00'}},
-    itemId: '5e90c5a40e8c31732d17f46c',
-    quantity: 1,
-    title: 'soft girl creme',
-    purchasePriceCents: 600,
-    nonSalePriceCents: 800,
-    chosenVariant: {
-      optionValues: [
-        {optionName: 'category', value: 'prints/individual'}
-      ],
-      id: 'f85fb53b-01ea-441a-a023-7517c5480f5a',
-      sku: 'SQ2502768',
-      price: 800,
-      salePrice: 600,
-      onSale: true,
-      unlimited: false,
-      qtyInStock: 2,
-      width: 0,
-      height: 0,
-      weight: 0,
-      len: 0
-    },
-    productType: 1,
-    subTotal: 600
-  },
-  quantityAdded: '1'
-}
-</script>
-
-
-
+<!-- 
 <script>
 var productJSON = {
     'productId': newlyAdded.itemId,
@@ -106,17 +74,4 @@ var productJSON = {
     }]
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ -->

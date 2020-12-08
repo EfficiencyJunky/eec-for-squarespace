@@ -1,6 +1,6 @@
-# IMPLEMENTATION FOR "DETAIL" EEC ACTION
+# IMPLEMENTATION GUID FOR THE "DETAIL" EEC ACTION
 
-1. Implement a SS Code Injection script to push raw data to dataLayer
+1. Implement a SS Code Injection script to push raw item viewed data to dataLayer
   1. In Squarespace, navigate to "Settings -> Advanced -> Code Injection" 
   2. Copy [this code][01_datalayer_push_code] to the "Footer" section BELOW the GTM container snippet
   3. Find the line of code just below the opening `<script>` tag that looks like this `var storePageName = "store";`
@@ -10,11 +10,13 @@
 
 2. Use a Custom Javascript Variable to transform the raw data into a `productJSON` and then generate our `detail` EEC data structure (add the actionField with list name if applicable)
   1. Create a Custom Javascript Variable and name it `JS - eec.detail`
-  2. Copy [this code][02_eec_object_creation_code] to the "Custom JavaScript" section 
+  2. Copy [this code][02_eec_object_creation_code] to the "Custom JavaScript" section
+  3. Save the variable
+  4. To test this, re-start Preview mode in GTM and visit a product details page. Now we should see the `JS - eec.detail` variable populate with a properly formatted EEC Object. See below for an example of what this looks like.
 
 
 **EEC DETAIL DATA STRUCTURE REFERENCE**<br/>
-This is an example of what an EEC data structure for action of type `detail` looks like
+This is an example of what an EEC data structure for action of type `detail` looks like. Notice there's no SKU on the detail view because there may be more than one variant
 
 ```{
   'ecommerce': {
@@ -23,10 +25,9 @@ This is an example of what an EEC data structure for action of type `detail` loo
         {
           'id': '399sdccsfjl8990933kkj3jkl3',
           'name': 'product name',
-          'category': 'first/second',
+          'category': 'categoryA/categoryB',
           'brand': 'Your Brand Name',
           'price': '6.00',
-          'dimension5': 'SQ1234567',
           'dimension6': 'In Stock',
           'dimension7': 'On Sale'
         }
@@ -38,5 +39,5 @@ This is an example of what an EEC data structure for action of type `detail` loo
 ```
 
 
-[01_datalayer_push_code]: ./01_ss_rawProductDetailPush.html<br/>
+[01_datalayer_push_code]: ./01_ss_rawProductDetailPush.html
 [02_eec_object_creation_code]: ./02_gtm_eecDetailObj.js
