@@ -1,12 +1,42 @@
-# eec-for-squarespace
-This is a project where I learn how to integrate/implement Google Analytics Enhanced Ecommerce tracking into a Squarespace store using nothing but Squarespace Code Injections and Google Tag Manager
+# ENHANCED ECOMMERCE FOR SQUARESPACE
+## Welcome
+The Enhanced Ecommerce feature of Google Analytics is an incredibly powerful tool for tracking and analyzing customer behavior in online stores. And over the past decade has become the defacto tool for this purpose because it is very customizable and free to use. If set up correctly, it can provide a wealth of information on how your customers are progressing through the user journey from arrival to your store through purchase. That being said, it is NOT an "out-of-the-box" type of feature that you can just simply "turn-on". It requires a decent amount of planning, implementation, and customization to get it to function properly for your specific business needs no matter what ecommerce platform you use. Squarespace is no different. That's just the nature of anything worth doing!
 
-**RESOURCES**
+Thankfully we have some amazing tools like Google Tag Manager and Github to make this process as smooth as it can be. 
+
+## Why this repository exists
+The goal of this repository is three-fold:
+1. Provide a [complete guide](.) for setting up the most important functions of EEC on Squarespace
+2. Be an educational resource for anyone, regardless of their skill in coding OR marketing, to learn more about EEC and the tools available to implement it
+3. Provide a place for people to connect and discuss all things related to EEC on squarespace
+
+
+## Additional Resources
+**SIMO AHAVA**
+Simo Ahava is one of the world's leading experts (if not the leading one) on Google Tag Manager among other Google Properties. He's also a prolific blogger. We are very lucky to have him. If you are just getting started with GTM and EEC, I strongly encourage you read through as much of his blog as possible.
+
+Here are the most relevant of his articles:
 * [Simo Ahava: The difinitive Enhanced Ecommerce guide for Google Tag Manager](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/)
 * [Simo Ahava: Product scoped custom dimensions and metrics](https://www.simoahava.com/gtm-tips/product-scoped-custom-dimensions-and-metrics/)
 * [Simo Ahava: Two ways to persist data via Google Tag Manager](https://www.simoahava.com/analytics/two-ways-to-persist-data-via-google-tag-manager/)
+
+<br/>
+
+**MEASURESCHOOL AND MEASUREMENTMARKETING.IO**
+If you are looking to learn EVERYTHING there is to know about Google Analytics, Google Tag Manager, Google Data Studio, Google Search Console, Google Optimize, and in general become the best digital marketer possible, then you absolutely MUST check out Measure School and MeasurementMarketing.io. Both of them offer lots of free content but if you are serious about this profession you should give them all your money. It will be a great investment.<br>
+* Measure School with Julian Juenemann
+  * [Website](https://measureschool.com/)
+  * [YouTube](https://www.youtube.com/channel/UClgihdkPzNDtuoQy4xDw5mA)
+* MeasurementMarketing with Mercer
+  * [Website](https://measurementmarketing.io/)
+  * [YouTube](https://www.youtube.com/channel/UCNx2NLu6uo5LOgXh2qRAlhA)
+
+**OFFICIAL GOOGLE DEVELOPER DOCS**
+Official EEC Developer Docs from Google
 * [Official Google Tag Manager Developer Guide for Enhanced Ecommerce](https://developers.google.com/tag-manager/enhanced-ecommerce)
 * [Official Google Analytics Developer Guide for Enhanced Ecommerce](https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce)
+
+Other resources:
 * [How to scrape Squarespace Commerce Analytics data from <script> tags in an <html> document](https://stackoverflow.com/questions/58053572/scraping-information-from-a-script-tag-using-javascript/64887166#64887166)
 
 

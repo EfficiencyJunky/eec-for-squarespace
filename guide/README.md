@@ -1,12 +1,20 @@
-# SETTING UP GOOGLE ANALYTICS ENHANCED ECOMMERCE TRACKING ON SQUARESPACE
+# ENHANCED ECOMMERCE FOR SQUARESPACE
 ## Welcome
-In this guide I will go step by step through the solution I've come up with for setting up Google Analytics Enhanced Ecommerce (EEC) Tracking in Squarespace. Currently this solution is specific to Universal Analytics. But adding GA4 Ecommerce support is trivial so I'll add a section on that soon.
+In this guide I will go step by step through the solution I've come up with for setting up Google Analytics Enhanced Ecommerce (EEC) features in Squarespace. Currently this solution only covers the Universal Analytics implementation but I've structured the implementation in a way that makes it almost trivial to add GA4 ecommerce tags as Google continues to build out that functionality.
+
 
 ## DISCLAIMER
 **While I can say that I've written this guide after successfully setting up EEC Tracking on a couple different websites I manage, I cannot guarantee that all parts of this solution will function correctly for your specific Ecommerce Store on Squarespace. Considering the variety of store setups and templates that Squarespace offers, it's possible that some parts of this will not work. I want to make clear that setting up EEC is a somewhat complicated process no matter what platform it is being setup on and ideally requires an understanding of how to code with Javascript, and an understanding of how Google Tag Manager and the dataLayer function. If you are just getting started with either of these things, then perhaps this guide will act as a supplemental educational resource and provide a way to learn how these things work.**
 
+
+## KNOWN ISSUES
+Currently this implementation doesn't work with the "Quick View" feature in Squarespace Stores. So you will have to disable "Quick View" in Store Settings before following this guide. Personally I think "Quick View" is not unnecessary and the Squarespace implementation appears to have some issues.
+    <img src="../img/00--Getting_Started/disabling_quickview.png" height=200>
+
 ## Additional Resources
-If you are just getting started with GTM, I strongly encourage you read through [Simo Ahava's incredible guide to using Google Tag Manager to set-up Enhanced Ecommerce.](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/) Simo Ahava is one of the world's leading experts (if not the leading one) on Google Tag Manager and he's also a prolific blogger. We are very lucky to have him.
+Simo Ahava is one of the world's leading experts (if not the leading one) on Google Tag Manager and other Google Properties. He's also a prolific blogger. We are very lucky to have him. If you are just getting started with GTM, I strongly encourage you read through as much of his blog as possible.
+Here are the most relevant of his articles:
+* [Simo Ahava: The difinitive Enhanced Ecommerce guide for Google Tag Manager](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/)
 
 And without further ado, let's get started!
 CONFIGURE SS CODE INJECTIONS, HTML TAGS, AND CUSTOM JAVASCRIPT VARIABLES TO GENERATE EEC DATA STRUCTURES
@@ -280,9 +288,9 @@ Each code file is liberally commented to explain what it does.
 
 ---
 # SECTION 5 -- CONFIGURE SS CODE INJECTIONS, HTML TAGS, AND CUSTOM JAVASCRIPT VARIABLES TO GENERATE EEC DATA STRUCTURES
-These are the most time consuming and complicated steps. They will require code to be added to Code Injections in SS as well as Custom HTML Tags and Custom JavaScript Variables in GTM. Because these steps themselves broken into a few steps and contain more than one code file, I've broken them out into separate subfolders within this repository that contain the code and additional instructions.
+These are the most time consuming and complicated steps. They will require code to be added to Code Injections in SS as well as Custom HTML Tags and Custom JavaScript Variables in GTM. Because of the added complexity, I've broken them out into separate subfolders within this repository that contain the implementation instructions and code for each step.
 
-The subfolders for each step are linked below.
+Click on a step to visit that step's implementation guide:
 
 ### 1) [Product Detail Views](./02_detail/)
 ### 2) [Add To Cart](./03_add/)
