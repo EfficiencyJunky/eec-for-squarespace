@@ -29,7 +29,7 @@ This Guide is organized roughly in the following structure:
         2.  transform into `productJSON` data structure
         3.  update `variantsAddedToCart` cookie
         4.  generate `add` EEC data structure
-    3.  [Modify Cart (add/remove items on the "/cart" page)](#3-Modify-Cart-add/remove-items-on-the-"/cart"-page)
+    3.  [Modify Cart (add/remove items on the "/cart" page)](#3-Modify-Cart-addremove-items-on-the-"cart"-page)
         1.  scrape cart info from page and push initial cart state to dataLayer (Custom HTML Tag)
         2.  set-up a MutationObserver to monitor changes to cart and if the cart state changes:
             1.  re-scrape the page for new cart state

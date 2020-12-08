@@ -1,28 +1,28 @@
 # IMPLEMENTATION GUID FOR THE "ADD" EEC ACTION (ADDING FROM PRODUCT DETAIL PAGE)
 
 1. Setup a trigger that we will use to fire a custom HTML tag
-   1. In the GTM "Triggers" section create a new trigger and name it `Dom Ready - Store Pages`
-   2. For the "Trigger Configuration" choose "Dom Ready"
-   3. Now choose "Some DOM Ready Events"
-   4. Select "Page Path" in the first dropdown, "contains" in the second and then type in `/store/` to the text field
-   5. Save the trigger
+    1. In the GTM "Triggers" section create a new trigger and name it `Dom Ready - Store Pages`
+    2. For the "Trigger Configuration" choose "Dom Ready"
+    3. Now choose "Some DOM Ready Events"
+    4. Select "Page Path" in the first dropdown, "contains" in the second and then type in `/store/` to the text field
+    5. Save the trigger
 
   <img src="../../media/tutorial_images/05_Main_Implementation/01--Add--Trigger--DomReady.png" height=300>
 
 2. Setup a custom HTML Tag to to push raw item added data to dataLayer
-  1. In the GTM "Tags" section, create a new tag name it `Custom HTML - Push ssRawAddToCart to DL`
-  2. For the "Tag Configuration" choose "Custom HTML"
-  3. Copy [this code][01_datalayer_push_code] to the "HTML" section
-  4. Now under "Triggering" choose the `Dom Ready - Store Pages` trigger we created in the previous step
-  5. Save the tag
-  6. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, and you should see the `ssRawAddToCartPush` event show up in the Summary tab. Click on this event and check the "Variables" tab. The `DL - SS Raw Add To Cart` variable should now be populated with a bunch of data.
+    1. In the GTM "Tags" section, create a new tag name it `Custom HTML - Push ssRawAddToCart to DL`
+    2. For the "Tag Configuration" choose "Custom HTML"
+    3. Copy [this code][01_datalayer_push_code] to the "HTML" section
+    4. Now under "Triggering" choose the `Dom Ready - Store Pages` trigger we created in the previous step
+    5. Save the tag
+    6. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, and you should see the `ssRawAddToCartPush` event show up in the Summary tab. Click on this event and check the "Variables" tab. The `DL - SS Raw Add To Cart` variable should now be populated with a bunch of data.
 
 
 3. Use a Custom Javascript Variable to transform the raw data into a `productJSON` and then generate our `add` EEC data structure (add the actionField with list name if applicable)
-  1. Create a Custom Javascript Variable and name it `JS - eec.add`
-  2. Copy [this code][02_eec_object_creation_code] to the "Custom JavaScript" section
-  3. Save the variable
-  4. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `JS - eec.add` variable should now be populated with a properly formatted EEC Object. See below for an example of what this looks like.
+    1. Create a Custom Javascript Variable and name it `JS - eec.add`
+    2. Copy [this code][02_eec_object_creation_code] to the "Custom JavaScript" section
+    3. Save the variable
+    4. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `JS - eec.add` variable should now be populated with a properly formatted EEC Object. See below for an example of what this looks like.
 
 
 
