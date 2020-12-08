@@ -1,10 +1,10 @@
 # ENHANCED ECOMMERCE FOR SQUARESPACE
 ## Welcome
-The Enhanced Ecommerce feature of Google Analytics is an incredibly powerful tool for tracking and analyzing customer behavior in online stores. Over the past decade it has become the defacto tool for Ecommerce measurement because it is very customizable and free to use. If set up correctly, it can provide a wealth of information on how your customers are progressing through the user journey from arrival at your store through purchase. 
+The Enhanced Ecommerce (EEC) features of Google Analytics are an incredibly powerful set of tools for tracking and analyzing customer behavior in online stores. Over the past decade EEC has become the defacto tool for ecommerce measurement due to its comprehensive customization abilities and because it doesn't cost money. If set up correctly, it can provide a wealth of information on how your customers are progressing through the user journey from arrival at your store through purchase conversion and beyond.
 
-That being said, it is NOT an "out-of-the-box" type solution to all your ecommerce woes that you can simply just "turn-on" (although it appears this way in Google Analytics). It requires a decent amount of planning, implementation, and customization to set it up properly for your specific business no matter what ecommerce platform you use. Squarespace is no different. That's just the nature of anything worth doing!
+That being said, it is NOT an "out-of-the-box" type solution to all your ecommerce woes that you can simply just "turn-on" (although it seems this way in Google Analytics). It requires a decent amount of planning, implementation, and customization to set it up properly for your specific business no matter what ecommerce platform you use. Squarespace is no different. That's just the nature of anything worth doing!
 
-Thankfully we have some amazing tools like Google Tag Manager and Github to make this process as easy as possible. 
+Thankfully we have some amazing tools like Google Tag Manager and Github to make this process as easy as possible.
 
 ## Why this repository exists
 The goal of this repository is three-fold:
@@ -43,7 +43,38 @@ If you are looking to learn EVERYTHING there is to know about Google Analytics, 
 * [How to scrape Squarespace Commerce Analytics data from <script> tags in an <html> document](https://stackoverflow.com/questions/58053572/scraping-information-from-a-script-tag-using-javascript/64887166#64887166)
 
 
+---
+# THE GUIDE
+If you already understand how EEC works, are familiar with Google Tag Manager (GTM), and understand at least the basics of Javascript, or you just want to dive in, feel free to click the "GET STARTED" link below.
 
+If you are new to the world of Ecommerce, or any of the other things I just mentioned, consider reading further before jumping into the guide.
+
+## [GET STARTED](./guide/)
+
+
+---
+# HOW EEC WORKS IN GENERAL
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
 # THE GOOGLE ANALYTICS ENHANCED ECOMMERCE FUNNEL
 1. **Impressions** (not an EEC action)
 	*	When a customer sees a product either on a store page, or as a related item on another product page in the "YOU MIGHT ALSO LIKE" section.
