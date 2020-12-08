@@ -1,4 +1,4 @@
-# IMPLEMENTATION GUID FOR THE "ADD" EEC ACTION (ADDING FROM PRODUCT DETAIL PAGE)
+# IMPLEMENTATION GUIDE FOR THE CART MODIFICATION LOGIC (GENERATES "ADD" OR "REMOVE" EEC OBJECTS ACCORDING TO MODIFICATION TYPE)
 
 1. Setup a trigger that we will use to fire another custom HTML tag
     1. In the GTM "Triggers" section create a new trigger and name it `Dom Ready - Cart Page`
@@ -53,7 +53,7 @@ This is an example of what the EEC data structure for actions of type `add` and 
           'dimension6': 'In Stock',
           'dimension7': 'On Sale'
         }
-      ],
+      ]
     }
   }
 }
@@ -75,7 +75,7 @@ This is an example of what the EEC data structure for actions of type `add` and 
           'dimension6': 'In Stock',
           'dimension7': 'Regular Price'
         }
-      ],
+      ]
     }
   }
 }

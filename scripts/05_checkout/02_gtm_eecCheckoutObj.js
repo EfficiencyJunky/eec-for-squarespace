@@ -1,4 +1,5 @@
 // this function takes the raw Modify Cart JSON "initialCartItemsList" or "newCartItemsList" and turns it into an eecCheckout Action object
+// then adds the actionField with value set to {'step': 1} because we only know when the customer entered the cart at which point we lose visibility into their actions because SS doesn't allow access to the checkout process
 function(){
   
     // grab a reference

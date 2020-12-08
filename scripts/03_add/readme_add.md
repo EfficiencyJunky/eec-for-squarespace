@@ -1,4 +1,4 @@
-# IMPLEMENTATION GUID FOR THE "ADD" EEC ACTION (ADDING FROM PRODUCT DETAIL PAGE)
+# IMPLEMENTATION GUIDE FOR THE "ADD" EEC ACTION (WHEN ADDING FROM PRODUCT DETAIL PAGE)
 
 1. Setup a trigger that we will use to fire a custom HTML tag
     1. In the GTM "Triggers" section create a new trigger and name it `Dom Ready - Store Pages`
@@ -27,7 +27,8 @@
 
 
 4. Lastly, we should check to make sure the cookie was properly updated.
-    1. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `Cookie - variantsAddedToCart` variable should now be populated with an object who's first level keys are set to the SKUs of any products that have been added to cart so far. It should add a new object everytime a new product is added that has not been added before.
+    1. To test this, first remove all items from the cart, then re-start Preview mode in GTM, visit a product details page and add the product to cart. If we click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `Cookie - variantsAddedToCart` variable may be populated or it may appear to be empty. This is normal. Reload the product page, click on any event in the Summary tab after the page has reloaded and we should see the cookie has been populated with an object who's first level key is set to the SKUs of the product that we just added to cart. The cookie will add a new object everytime a new product is added that has not been added before.
+    Of course we may have to re-load the page to see it update. Again, this is normal and is just an idiosyncracy with the way Google Tag Manager displays information for each dataLayer event.
 
 
 **EEC ADD DATA STRUCTURE REFERENCE**<br/>
