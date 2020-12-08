@@ -29,7 +29,7 @@ This Guide is organized roughly in the following structure:
         2.  transform into `productJSON` data structure
         3.  update `variantsAddedToCart` cookie
         4.  generate `add` EEC data structure
-    3.  [Modify Cart (add/remove items on the "/cart" page)](#3-Modify-Cart-addremove-items-on-the-"cart"-page)
+    3.  [Modify Cart (add/remove items on the "/cart" page)](#3-Modify-Cart-addremove-items-on-the-cart-page)
         1.  scrape cart info from page and push initial cart state to dataLayer (Custom HTML Tag)
         2.  set-up a MutationObserver to monitor changes to cart and if the cart state changes:
             1.  re-scrape the page for new cart state
@@ -111,8 +111,8 @@ I'll assume you've already setup a Google Tag Manager account and know how to us
 ---
 # SECTION 3 -- CONFIGURE BASIC BUILT-IN AND USER-DEFINED VARIABLES
 ## Setup a few Built-in Variables
-We will be using 4 built-in variables so we need to make sure they are configured
-1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, and `Referrer` by checking the box next to them in the list.
+We need to make sure the Built-in variables we will be using are configured if they haven't been already
+1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, `Page Path`, `Page URL`, and `Referrer` by checking the box next to them in the list. If some or all have already been enabled then you don't need to do this step.
     When you're done you should see these variables available in the "Built-In Variables" list
 
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/03--builtin_variables.png">
@@ -293,7 +293,7 @@ The subfolders for each step are linked below.
 ## 2) Add To Cart
 
 
-## 3) Modify Cart (add/remove items on the "/cart" page)
+## 3) Modify Cart (add/remove items on the /cart page)
 
 
 ## 4) Checkout

@@ -1,4 +1,5 @@
-// this function takes the raw Modify Cart JSON, compares the old and new cart state, identifies what was added/removed and generates a properly formatted Enhanced Ecommerce "add" or "remove" object accordingly
+// this function takes the raw Modify Cart JSON, compares the old and new cart state, identifies what was added/removed and generates a properly formatted Enhanced Ecommerce "add" or "remove" object accordingly.
+// it also sets the values of the 'modifyCartTagInfo' dataLayer object to be used in our Tag later
 function(){
 
     // grab a reference to the dataLayer variable
@@ -8,7 +9,7 @@ function(){
     // if either of these is true, return undefined
     if( ssRawModifyCart == undefined || typeof(ssRawModifyCart.initialCartItemsList) != "undefined" ){
         //console.log("no cart available OR initial cart instance");
-        return undefined;    
+        return undefined;
     }
 
     // extract the old and new cart objects

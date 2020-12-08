@@ -117,14 +117,12 @@ The cookie's data structure will have the usual cookie keys:
 
 ## CUSTOM HTML TAGS
 *	{{Custom HTML - push ssModifyCartItems to DL}} -- Trigger: `Dom Ready - Cart Page`
-*	{{Custom HTML - Push ssRawAddToCart to DL}} -- Trigger: `Dom Ready - Store Pages`
 
 
 
 **Custom Javascript Variables**
 Variable Type: Custom Javascript
 * {{JS - eec.checkout}}
-* {{JS - eec.modify}}
 * {{JS - eec.purchase}}
 
 

@@ -9,6 +9,7 @@
 
   <img src="../../media/tutorial_images/05_Main_Implementation/01--Add--Trigger--DomReady.png" height=300>
 
+
 2. Setup a custom HTML Tag to to push raw item added data to dataLayer
     1. In the GTM "Tags" section, create a new tag name it `Custom HTML - Push ssRawAddToCart to DL`
     2. For the "Tag Configuration" choose "Custom HTML"
@@ -24,6 +25,9 @@
     3. Save the variable
     4. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `JS - eec.add` variable should now be populated with a properly formatted EEC Object. See below for an example of what this looks like.
 
+
+4. Lastly, we should check to make sure the cookie was properly updated.
+    1. To test this, re-start Preview mode in GTM, visit a product details page, add the product to cart, click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `Cookie - variantsAddedToCart` variable should now be populated with an object who's first level keys are set to the SKUs of any products that have been added to cart so far. It should add a new object everytime a new product is added that has not been added before.
 
 
 **EEC ADD DATA STRUCTURE REFERENCE**<br/>

@@ -1,5 +1,14 @@
 <script>
 
+    // this script grabs a reference to the items member of the cart object by scraping the HTML document for a script tag where Squarespace actually embeds the cart object
+    // upon initialization, the initial list of items in the cart is pushed to dataLayer with event key 'ssRawModifyCartPush'
+    // a second push initializes the information we will use in our Tag later on with event key 'initModifyCartTagInfo'
+    // then a MutationObserver is instantiated to monitor the cart page for changes to the subtotal, or if the cart is emptied
+    // when a change to the cart is detected, the MutationObserver's callback is invoked
+    // in the callback we send an XMLHttpRequest request that loads the updated version of the cart page, re-scrapes it for the latest cart object, and stores another reference to the updated items list
+    // then we push the oldCartItemsList (initial state) and newCartItemsList (updated state) to dataLayer again with event key 'ssRawModifyCartPush'
+    // following this we fire another event 'fireModifyCartTag', which ensures that all of our Custom JavaScript and associated Variables have completely resolved before we fire the actual Tag to Google Analytics
+
     var oldCartItemsList = {{JS Utility - get cartItemsList from script in document}}(document);
 
     // push the initial state of the cart to dataLayer
@@ -54,7 +63,7 @@
 
             if(cartChanged){
                 var httpRequest = new XMLHttpRequest();
-                var cartURL = "https://cachetattoo.com/cart";
+                var cartURL = {{Page URL}};
                 
                 httpRequest.open("GET", cartURL);
                 httpRequest.send();

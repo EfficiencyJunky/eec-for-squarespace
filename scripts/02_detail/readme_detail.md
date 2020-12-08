@@ -18,7 +18,8 @@
 **EEC DETAIL DATA STRUCTURE REFERENCE**<br/>
 This is an example of what an EEC data structure for action of type `detail` looks like. Notice there's no SKU on the detail view because there may be more than one variant
 
-```{
+```
+{
   'ecommerce': {
     'detail': {
       'products': [
