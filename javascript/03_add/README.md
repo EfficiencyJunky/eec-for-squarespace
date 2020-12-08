@@ -7,7 +7,7 @@
     4. Select "Page Path" in the first dropdown, "contains" in the second and then type in `/store/` to the text field
     5. Save the trigger
 
-  <img src="../../media/tutorial_images/05_Main_Implementation/01--Add--Trigger--DomReady.png" height=300>
+  <img src="../../img/05--Main_Implementation/01--Add--Trigger--DomReady.png" height=300>
 
 
 2. Setup a custom HTML Tag to to push raw item added data to dataLayer

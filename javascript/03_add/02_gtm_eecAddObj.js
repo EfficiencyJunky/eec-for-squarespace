@@ -13,14 +13,14 @@ function(){
   var productJSON = convertNewlyAddedtoProductJSON(ssRawAddToCart.newlyAdded);
 
   // update our "variantsAddedToCart" cookie with the information from the "productJSON"
-  {{JS Utility - Update cookie named variantsAddedToCart}}(productJSON);
+  {{JS Utility - updateVariantsAddedToCartCookie}}(productJSON);
 
   // create our basic eec object of type "add"
-  var eecAddObj = {{JS Utility - create eecObjectFromAction}}('add', productJSON, ssRawAddToCart.quantityAdded);
+  var eecAddObj = {{JS Utility - createEecObjectFromAction}}('add', productJSON, ssRawAddToCart.quantityAdded);
 
   // add the actionField with list key/value based on the referrer
   // this function will only add the list if the referrer was actualy one with a list
-  {{JS Utility - add list from referrer}}(eecAddObj, 'add', {{Referrer}});
+  {{JS Utility - addListFromReferrer}}(eecAddObj, 'add', {{Referrer}});
   
   
   // return our properly formatted enhanced ecommerce add event object

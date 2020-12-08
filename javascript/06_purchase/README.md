@@ -102,7 +102,7 @@ VERSION 1 -- Use Squarespace's Code Injection in the "Order Confirmation Page" s
 
 1. Create a dataLayer variable in GTM that exposes the pushed Raw Transaction object `{{DL - SS Raw Transaction JSON}}`
 
-2. Create a Custom Javascript variable in GTM that takes this JSON and converts it into the correct "purchase" object that Enhanced Ecommerce can use `{{JS Utility - createEECPurchaseObj from rawJSON}}`
+2. Create a Custom Javascript variable in GTM that takes this JSON and converts it into the correct "purchase" object that Enhanced Ecommerce can use `{{JS Utility - createEecObjectFromAction}}`
 
 3. Create 3 dataLayer variables
 	1. {{DL - Order ID}} -- grabs the order ID from `rawJSON.orderNumber`

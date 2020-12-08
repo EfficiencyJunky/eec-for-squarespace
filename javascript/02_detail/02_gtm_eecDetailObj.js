@@ -13,11 +13,11 @@ function(){
     var productJSON = convertSSRawProductDetailtoProductJSON(ssRawProductDetail);
 
     // create our base level eecCheckout object
-    var eecDetailObj = {{JS Utility - create eecObjectFromAction}}('detail', productJSON);
+    var eecDetailObj = {{JS Utility - createEecObjectFromAction}}('detail', productJSON);
 
     // add the actionField with 'list' key/value based on the referrer, who's query parameters should have the list's "category" in it
     // this function will only add the list if the referrer actually had this query parameter
-    {{JS Utility - add list from referrer}}(eecDetailObj, 'detail', {{Referrer}});        
+    {{JS Utility - addListFromReferrer}}(eecDetailObj, 'detail', {{Referrer}});        
     
     
     // return our properly formatted enhanced ecommerce detail event object

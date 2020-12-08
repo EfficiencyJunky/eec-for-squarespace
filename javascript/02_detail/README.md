@@ -9,7 +9,7 @@
     6. back in GTM, start Preview mode to test if it's working. Anytime we visit a product detail page, we should see the event `ssRawProductDetailPush` show up in the Summary tab and the DataLayer variable `DL - SS Raw Product Detail` we created previously should populate. This information is being pulled directly from the `Static.SQUARESPACE_CONTEXT` object which you can inspect using your browser's console.
     
     
-    <img src="../../media/tutorial_images/05_Main_Implementation/02--Add--Test--DL_push.png" height=350>
+    <img src="../../img/05--Main_Implementation/02--Add--Test--DL_push.png" height=350>
 
 
 
@@ -20,7 +20,7 @@
     4. To test this, re-start Preview mode in GTM and visit a product details page. Now we should see the `JS - eec.detail` variable populate with a properly formatted EEC Object. See below for an example of what this looks like.
 
 
-    <img src="../../media/tutorial_images/05_Main_Implementation/03--Add--Test--EecObjectPopulated.png" height=150>
+    <img src="../../img/05--Main_Implementation/03--Add--Test--EecObjectPopulated.png" height=150>
 
 <br/>
 <br/>

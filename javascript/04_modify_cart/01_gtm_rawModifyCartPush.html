@@ -9,7 +9,7 @@
     // then we push the oldCartItemsList (initial state) and newCartItemsList (updated state) to dataLayer again with event key 'ssRawModifyCartPush'
     // following this we fire another event 'fireModifyCartTag', which ensures that all of our Custom JavaScript and associated Variables have completely resolved before we fire the actual Tag to Google Analytics
 
-    var oldCartItemsList = {{JS Utility - get cartItemsList from script in document}}(document);
+    var oldCartItemsList = {{JS Utility - getCartItemsListFromScriptInDocument}}(document);
 
     // push the initial state of the cart to dataLayer
     window.dataLayer.push({
@@ -78,7 +78,7 @@
 
                     var httpResponse = domParser.parseFromString(httpRequest.responseText, "text/html");
               
-                    var newCartItemsList = {{JS Utility - get cartItemsList from script in document}}(httpResponse);
+                    var newCartItemsList = {{JS Utility - getCartItemsListFromScriptInDocument}}(httpResponse);
 
                     // create the raw modified cart object
                     // "oldCartItemsList" is the snapshot with all relevant items in the previous version of the cart

@@ -9,10 +9,10 @@ function(){
     }
   
     // convert the rawCartItemsList into an object with a list of productJSONs and a list of quantities
-    var currentCartItemsList = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( ssRawTransaction.items, 'cartItemsLists');
+    var currentCartItemsList = {{JS Utility - convertRawCartItemsListToProductJsonCollection}}( ssRawTransaction.items, 'cartItemsLists');
 
     // create our base level eecPurchase object with the products list
-    var eecPurchaseObj = {{JS Utility - create eecObjectFromAction}}('purchase', currentCartItemsList.productJSONList, currentCartItemsList.quantityList);
+    var eecPurchaseObj = {{JS Utility - createEecObjectFromAction}}('purchase', currentCartItemsList.productJSONList, currentCartItemsList.quantityList);
 
     // add the appropriate actionField object to indicate step 1 of checkout
     eecPurchaseObj.ecommerce.purchase['actionField'] = {

@@ -13,8 +13,8 @@ function(){
     }
 
     // extract the old and new cart objects
-    var oldCartItemsJSON = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( ssRawModifyCart.oldCartItemsList );
-    var newCartItemsJSON = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( ssRawModifyCart.newCartItemsList );
+    var oldCartItemsJSON = {{JS Utility - convertRawCartItemsListToProductJsonCollection}}( ssRawModifyCart.oldCartItemsList );
+    var newCartItemsJSON = {{JS Utility - convertRawCartItemsListToProductJsonCollection}}( ssRawModifyCart.newCartItemsList );
 
 
     // we'll reset these variables each time through the loop
@@ -49,7 +49,7 @@ function(){
             gtmDataLayerRef.set('modifyCartTagInfo.quantity', quantityDifference);
             gtmDataLayerRef.set('modifyCartTagInfo.productName', oldCartItem.productJSON.productName);
 
-            return {{JS Utility - create eecObjectFromAction}}(eecAction, oldCartItem.productJSON, quantityDifference);
+            return {{JS Utility - createEecObjectFromAction}}(eecAction, oldCartItem.productJSON, quantityDifference);
         }
 
     }
