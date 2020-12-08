@@ -1,9 +1,4 @@
-# EXECUTION PLAN
-
-[these are reference variables]: just so you know
-[01_datalayer_push_code]: ./01_ss_rawProductDetailPush.html
-[02_eec_object_creation_code]: ./02_gtm_eecDetailObj.js
-
+# IMPLEMENTATION FOR "DETAIL" EEC ACTION
 
 1. Implement a SS Code Injection script to push raw data to dataLayer
   1. In Squarespace, navigate to "Settings -> Advanced -> Code Injection" 
@@ -13,29 +8,15 @@
   5. click "save" to save the changes
   6. back in GTM, use Preview mode to test if it's working. Anytime we visit a product detail page, we should see the event `ssRawProductDetailPush` show up in the Summary tab and the DataLayer variable `DL - SS Raw Product Detail` we created previously should populate. This information is being pulled directly from the `Static.SQUARESPACE_CONTEXT` object which you can inspect using your browser's console.
 
-2. Create a Custom Javascript Variable to transform the raw data into a `productJSON` and generate `detail` EEC data structure
+2. Use a Custom Javascript Variable to transform the raw data into a `productJSON` and then generate our `detail` EEC data structure (add the actionField with list name if applicable)
   1. Create a Custom Javascript Variable and name it `JS - eec.detail`
-  1. Copy [this code][02_eec_object_creation_code] to the "Custom JavaScript" section 
+  2. Copy [this code][02_eec_object_creation_code] to the "Custom JavaScript" section 
 
 
+**EEC DETAIL DATA STRUCTURE REFERENCE**<br/>
+This is an example of what an EEC data structure for action of type `detail` looks like
 
-
-
-
-
-    1. grab a reference to the DL variable made in Step 1
-    2. pull out the relevant information to create a `productJSON` structure for the product being viewed
-        IMPORTANT NOTE: if more than one product variant is being offered, the `variants` array should be set to `[]` so that the variant information is only sent along when one has been chosen and added to cart
-    3. create a basic eec `detail` object using the `{{JS Utility - create eecObjectFromAction}}` function
-    4. Add the `actionField` with `list` key (refers to the product list that the user last viewed) using the `{{JS Utility - add list from referrer}}` function
-
-
-
-
-**EEC DETAIL OBJECT REFERENCE**
-<script>
-
-{
+```{
   'ecommerce': {
     'detail': {
       'products': [
@@ -50,21 +31,12 @@
           'dimension7': 'On Sale'
         }
       ],
-      actionField: {list: 'Camping'}
+      'actionField': {'list': 'The List Name'}
     }
   }
 }
-
-</script>
-
+```
 
 
-
-
-
-
-
-
-
-
-
+[01_datalayer_push_code]: ./01_ss_rawProductDetailPush.html<br/>
+[02_eec_object_creation_code]: ./02_gtm_eecDetailObj.js

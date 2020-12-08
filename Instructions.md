@@ -9,14 +9,14 @@ In this guide I will go step by step through the solution I've come up with for 
 If you are just getting started with GTM, I strongly encourage you read through [Simo Ahava's incredible guide to using Google Tag Manager to set-up Enhanced Ecommerce.](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/) Simo Ahava is one of the world's leading experts (if not the leading one) on Google Tag Manager and he's also a prolific blogger. We are very lucky to have him.
 
 And without further ado, let's get started!
-
+CONFIGURE SS CODE INJECTIONS, HTML TAGS, AND CUSTOM JAVASCRIPT VARIABLES TO GENERATE EEC DATA STRUCTURES
 ## Process
 This Guide is organized roughly in the following structure:
 1.  [Prepare Google Analytics Property and View Settings](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
 2.  [Install Google Tag Manager (GTM) container code snippet on Squarespace (SS)](#SECTION-2-\-\--INSTALL-GTM-CONTAINER-CODE-SNIPPET-ON-SS)
 3.  [Configure basic Built-In and User-Defined variables in GTM](#SECTION-3-\-\--CONFIGURE-BASIC-BUILT\-IN-AND-USER\-DEFINED-VARIABLES)
-4.  [Configure Custom JavaScript Variables to be used throughout our implementation](#SECTION-4-/-/--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLE-UTILITY-FUNCTIONS)
-5.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-5-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLES,-HTML-TAGS,-AND-SS-CODE-INJECTIONS-TO-GENERATE-EEC-DATA-STRUCTURES)<br/>
+4.  [Configure Custom JavaScript Variables to be used throughout our implementation](#SECTION-4-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLE-UTILITY-FUNCTIONS)
+5.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-5-\-\--CONFIGURE-SS-CODE-INJECTIONS-HTML-TAGS-AND-CUSTOM-JAVASCRIPT-VARIABLES-TO-GENERATE-EEC-DATA-STRUCTURES)<br/>
     This section is the bulk of the work where we perform our EEC dataLayer manipulation and prepare our EEC data structures to be sent to Google Analytics.<br/>
     To do this we will create a variety of Custom JavaScript Variables and Custom HTML Tags with Javascript code in GTM, AND a couple Code Injections in SS.<br/>
     The order of our implementation will mirror the user journey through the 5 funnel steps.<br/>
@@ -279,10 +279,10 @@ Each code file is liberally commented to explain what it does.
 
 
 ---
-# SECTION 5 -- CONFIGURE CUSTOM JAVASCRIPT VARIABLES, HTML TAGS, AND SS CODE INJECTIONS TO GENERATE EEC DATA STRUCTURES
-These are the most time consuming and complicated steps that require code to be added to Custom JavaScript Variables and Custom HTML Tags in GTM as well as Code Injections in SS. Because of the complexity, the code and more detailed instructions for each step is contained in a subfolder of this repository. 
+# SECTION 5 -- CONFIGURE SS CODE INJECTIONS, HTML TAGS, AND CUSTOM JAVASCRIPT VARIABLES TO GENERATE EEC DATA STRUCTURES
+These are the most time consuming and complicated steps. They will require code to be added to Code Injections in SS as well as Custom HTML Tags and Custom JavaScript Variables in GTM. Because these steps themselves broken into a few steps and contain more than one code file, I've broken them out into separate subfolders within this repository that contain the code and additional instructions.
 
-The instructions for each step are linked below.
+The subfolders for each step are linked below.
 
 ## 1) Product Detail Views
 1.  push raw data to dataLayer (from SS Code Injection)

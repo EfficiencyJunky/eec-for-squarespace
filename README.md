@@ -134,7 +134,6 @@ Variable Type: Custom Javascript
 
 
 # UTILITY FUNCTIONS
-* {{}}
 
 
 ---
