@@ -1,4 +1,4 @@
-// this function takes the ssRawTransaction and converts it into a properly formatted eec purchase object
+// this function takes the ssRawTransaction and converts it into a properly formatted eec purchase object with an actionField object that gives a summary of the transaction
 function(){
   
     var ssRawTransaction = {{DL - SS Raw Transaction}};  
@@ -19,9 +19,11 @@ function(){
         // Transaction ID. Required for purchases and refunds.
         'id': ssRawTransaction.orderNumber,
         // extra details about where the purchase happened
-        'affiliation': 'Cache\'s Store',
+        'affiliation': {{const - eec brand}} + ' Store',
         // Total transaction value (incl. tax and shipping)
         'revenue': ssRawTransaction.grandTotal.decimalValue,
+        // comment out the line above and uncomment the line below this line to change revenue to only track the subtotal of the products in the cart without tax and shipping
+        //'revenue': ssRawTransaction.subtotal.decimalValue,
         'tax': ssRawTransaction.taxTotal.decimalValue,
         'shipping': ssRawTransaction.shippingTotal.decimalValue
         //'coupon': 'SUMMER_SALE'
@@ -31,8 +33,3 @@ function(){
     return eecPurchaseObj;
 
 }
-
-
-
-
-

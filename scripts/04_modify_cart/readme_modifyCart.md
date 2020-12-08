@@ -33,7 +33,7 @@
 
 
 
-**EEC ADD DATA STRUCTURE REFERENCE**<br/>
+**EEC ADD AND REMOVE DATA STRUCTURE REFERENCE**<br/>
 This is an example of what the EEC data structure for actions of type `add` and `remove` look like.
 
 ```
