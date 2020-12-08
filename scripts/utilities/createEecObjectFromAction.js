@@ -1,3 +1,12 @@
+/**
+ * A Utility function that does the job of converting a productJSON object or a list of productJSON objects and (optional quantity or list of quantities) into a properly formatted EEC object
+ * 
+ * @param {String} eecAction the type of EEC object we want to create. can be "detail", "add", "remove", "checkout", or "purchase"
+ * @param {Object} productJSON an individual productJSON object for any eecAction involving a single product ("detail", "add", "remove") or list of productJSON objects for any eecAction involving a list of products ("checkout", "purchase")
+ * @param {Number} quantity a single number or list of numbers relating to the quantity of products to be considered for the corresponding productJSON object or list. only required for eecActions of type "add", "remove", "checkout", and "purchase"
+ * @returns {Object} the properly formated EEC object
+ */
+
 function(){
 
     return function(eecAction, productJSON, quantity){
@@ -9,7 +18,7 @@ function(){
         // initialize our ecommerce object
         var ecommerceObj = {};
 
-        // create our properly formatted enhanced ecommerce object with empty prodcts list
+        // create our properly formatted enhanced ecommerce object with empty product list
         ecommerceObj[eecAction] = {
             'products': []
         }
@@ -54,6 +63,7 @@ function(){
                 }
             }
 
+            // push each formatted product object to the list of products
             ecommerceObj[eecAction].products.push(eecProduct);
         }
 

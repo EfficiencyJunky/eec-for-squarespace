@@ -1,9 +1,17 @@
 <script>
     
-  	// this will match any product detail page
-    // the regex makes sure that "/store/" plus at least one character is in the URL
-    // if you're store is not named store, you will need to replace the word "store" with the URL path of your store
-    if(document.URL.match(/\/store\/./)){
+    // CHANGE THE WORD BETWEEN THE QUOTES BELOW TO THE PATH NAME OF YOUR STORE PAGE
+    // make sure to use the correct case
+    var storePageName = "store";
+    
+
+  	
+    // create a regex using the variable above that will be formatted like this: /\/store\/./
+    // the regex makes sure that "/store/" plus at least one character is in the text it's trying to match
+    var storePageRegEx = new RegExp('\/' + storePageName + '\/.')
+    
+    // so if we try to match it against the current page URL, we should get a positive match if we're on a product page
+    if(document.URL.match(storePageRegEx)){
 
         var ssContextObject;
 

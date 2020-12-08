@@ -1,14 +1,17 @@
+/**
+ * A Utility function that takes the information about a product variant stored in a "productJSON" and saves a subset of that information in the "variantsAddedToCart" cookie, using the variant's SKU as primary key to access the variant information. 
+ * We will be using this cookie thoughout the funnel to form our other productJSON objects when the data we need for them is missing
+ * 
+ * @param {Object} productJSON a productJSON object
+ * @returns nothing
+ */
+
 function(){
-    // *******************************************************************************
-    // This function takes the relevant details from "productJSON"
-    // and saves them in the "variantsAddedToCart" cookie
-    // we will use this thoughout the funnel to form our other productJSON objects
-    // *******************************************************************************
     return function(productJSON){
 
         var variantAdded = productJSON.variants[0];
 
-        // #1 create the updated cookie object for this variant
+        // #1 create the variant specific object we will used to update the cookie
         var variantDetails = {
             'pid': productJSON.productId,
             'cat': productJSON.productCategory,

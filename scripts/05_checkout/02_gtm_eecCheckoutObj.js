@@ -19,7 +19,7 @@ function(){
     }
 
     // convert the rawCartItemsList into an object with a list of productJSONs and a list of quantities
-    var currentCartItemsJSON = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( currentCartItemsList, 'cartItemsList');
+    var currentCartItemsJSON = {{JS Utility - convert rawCartItemsList to cartItemsJSON}}( currentCartItemsList, 'cartItemsLists');
 
     // create our base level eecCheckout object with the products list
     var eecCheckoutObj = {{JS Utility - create eecObjectFromAction}}('checkout', currentCartItemsJSON.productJSONList, currentCartItemsJSON.quantityList);

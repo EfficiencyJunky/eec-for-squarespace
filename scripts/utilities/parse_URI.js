@@ -1,12 +1,16 @@
-// UTILITY NAME: {{JS Utility - parseURI}}
-
-
-
-// parseUri 1.2.2
-// (c) Steven Levithan <stevenlevithan.com>
-// MIT License
-
-// this code is a very slightly adapted version of code being used courtesy of steven leviathan. More information can be found here: http://blog.stevenlevithan.com/archives/parseuri
+/**
+ * A Utility function that takes a URI string with any number of query parameters and parses it into a set of key/value pairs given in the "keys" list of the "options" object. The most intersting key is "query", which itself contains an object who's key/value pairs are set to the query/value pairs from the URI
+ * 
+ * This code is a very slightly adapted version of steven leviathan's original function.
+ * More information can be found here: http://blog.stevenlevithan.com/archives/parseuri
+ * 
+ * parseUri 1.2.2
+ * (c) Steven Levithan <stevenlevithan.com>
+ * MIT License
+ * 
+ * @param {String} str
+ * @returns {Object} an object who's keys correspond to those listed in the options.key list
+ */
 
 function(){
   
@@ -40,9 +44,7 @@ function(){
     };
     
     
-    
-    // FUNCTION - returns a uri object broken into the keys available in the options above. 
-    //          - The most intersting is the key "query" which is a list of the uri query parameter key/values
+    // ACTUAL FUNCTION TO BE RETURNED
     return function(str){
       
       var	o   = options,

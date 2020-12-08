@@ -115,6 +115,11 @@ The cookie's data structure will have the usual cookie keys:
 
 # VARIABLES
 
+## CUSTOM HTML TAGS
+*	{{Custom HTML - push ssModifyCartItems to DL}} -- Trigger: `Dom Ready - Cart Page`
+*	{{Custom HTML - Push ssRawAddToCart to DL}} -- Trigger: `Dom Ready - Store Pages`
+
+
 
 **Custom Javascript Variables**
 Variable Type: Custom Javascript
@@ -129,15 +134,7 @@ Variable Type: Custom Javascript
 
 
 # UTILITY FUNCTIONS
-A `utility function` is a Custom Javascript Variable that returns a function that can be called by other Custom Javascript Variables. There are a few utility functions that will need to be implemented along with the main Custom Javascript Variables.
-
-* {{JS Utility - add list from referrer}}
-* {{JS Utility - convert rawCartItemsList to cartItemsJSON}}
-* {{JS Utility - create eecObjectFromAction}}
-* {{JS Utility - get cartItemsList from script in document}}
-* {{JS Utility - parseURI}}
-* {{JS Utility - setCookie}}
-* {{JS Utility - Update cookie named variantsAddedToCart}}
+* {{}}
 
 
 ---
@@ -168,9 +165,6 @@ A `utility function` is a Custom Javascript Variable that returns a function tha
 
 
 
-## CUSTOM HTML TAGS
-*	{{Custom HTML - push ssModifyCartItems to DL}} -- Trigger: `Dom Ready - Cart Page`
-*	{{Custom HTML - Push ssRawAddToCart to DL}} -- Trigger: `Dom Ready - Store Pages`
 
 
 

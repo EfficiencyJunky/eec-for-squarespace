@@ -8,36 +8,46 @@ In this guide I will go step by step through the solution I've come up with for 
 ## Additional Resources
 If you are just getting started with GTM, I strongly encourage you read through [Simo Ahava's incredible guide to using Google Tag Manager to set-up Enhanced Ecommerce.](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/) Simo Ahava is one of the world's leading experts (if not the leading one) on Google Tag Manager and he's also a prolific blogger. We are very lucky to have him.
 
-And without further adoo, let's get started!
+And without further ado, let's get started!
 
 ## Process
 This Guide is organized roughly in the following structure:
 1.  [Prepare Google Analytics Property and View Settings](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
 2.  [Install Google Tag Manager (GTM) container code snippet on Squarespace (SS)](#SECTION-2-\-\--INSTALL-GTM-CONTAINER-CODE-SNIPPET-ON-SS)
 3.  [Configure basic Built-In and User-Defined variables in GTM](#SECTION-3-\-\--CONFIGURE-BASIC-BUILT\-IN-AND-USER\-DEFINED-VARIABLES)
-4.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-4-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLES,-HTML-TAGS,-AND-SS-CODE-INJECTIONS-TO-GENERATE-EEC-DATA-STRUCTURES)<br/>
+4.  [Configure Custom JavaScript Variables to be used throughout our implementation](#SECTION-4-/-/--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLE-UTILITY-FUNCTIONS)
+5.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-5-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLES,-HTML-TAGS,-AND-SS-CODE-INJECTIONS-TO-GENERATE-EEC-DATA-STRUCTURES)<br/>
     This section is the bulk of the work where we perform our EEC dataLayer manipulation and prepare our EEC data structures to be sent to Google Analytics.<br/>
-    To do this we will create a variety of Custom Javascript Variables and Custom HTML Tags with Javascript code in GTM, AND a couple Code Injections in SS.<br/>
+    To do this we will create a variety of Custom JavaScript Variables and Custom HTML Tags with Javascript code in GTM, AND a couple Code Injections in SS.<br/>
     The order of our implementation will mirror the user journey through the 5 funnel steps.<br/>
-    1.  Product Detail Views
-        1.  push raw data to dataLayer from SS Code Injection
-        2.  transform into `detail` EEC data structure in GTM
-    2.  Add To Cart
-        1.  push raw data to dataLayer from SS "Add To Cart" event listener
-        2.  transform into `add` EEC data structure
+    1.  [Product Detail Views](#1-Product-Detail-Views)
+        1.  push raw data to dataLayer (from SS Code Injection)
+        2.  transform into `productJSON` data structure
+        3.  generate `detail` EEC data structure
+    2.  [Add To Cart](#2-Add-To-Cart)
+        1.  push raw data to dataLayer (from SS "Add To Cart" event listener in Custom HTML Tag)
+        2.  transform into `productJSON` data structure
         3.  update `variantsAddedToCart` cookie
-    3.  Modify Cart (add/remove items on the "/cart" page)
-        1.  scrape cart info from page and push initial state to dataLayer
-        2.  transform into `checkout` EEC data structure (if they don't modify the cart, the next step is checkout)
-        3.  add MutationObserver to monitor changes to cart, if the cart state changes then re-scrape page for new cart state, compare old cart to new cart to identify which items were added or removed, transform into `add` or `remove` EEC data structure accordingly, and update our `checkout` EEC data structure
-    4.  Checkout
-        1.  setup trigger
-    5.  Purchase
-        1.  push to dataLayer from SS Code Injection
-        2.  transform into `purchase` EEC data structure in GTM
-5.  [Configure tag firing triggers](#SECTION-5-\-\--CONFIGURE-TAG-FIRING-TRIGGERS)
-6.  [Configure EEC tags](#SECTION-6-\-\--CONFIGURE-EEC-TAGS)
-7.  TEST IT THOROUGHLY
+        4.  generate `add` EEC data structure
+    3.  [Modify Cart (add/remove items on the "/cart" page)](#3-Modify-Cart-add/remove-items-on-the-"/cart"-page)
+        1.  scrape cart info from page and push initial cart state to dataLayer (Custom HTML Tag)
+        2.  set-up a MutationObserver to monitor changes to cart and if the cart state changes:
+            1.  re-scrape the page for new cart state
+            2.  transform the lists of oldCartItems (original cart state) and newCartItems (updated cart state) into two objects with references to a `productJSON` data structure for each product present in the cart
+            3.  identify which products were added or removed by comparing the two sets
+            4.  generate `add` or `remove` EEC data structure accordingly
+    4.  [Checkout](#4-Checkout)
+        1.  transform the raw cart state from the dataLayer push of the previous step into a list of `productJSON` data structures
+        2.  generate `checkout` EEC data structure
+    5.  [Purchase](#5-Purchase)
+        1.  push raw data to dataLayer (from SS Code Injection)
+        2.  transform into `productJSON` data structure
+        3.  generate `purchase` EEC data structure
+6.  [Configure tag firing triggers](#SECTION-6-\-\--CONFIGURE-TAG-FIRING-TRIGGERS)
+7.  [Configure EEC tags](#SECTION-7-\-\--CONFIGURE-EEC-TAGS)
+8.  TEST IT THOROUGHLY
+
+
 
 
 ---
@@ -100,7 +110,7 @@ I'll assume you've already setup a Google Tag Manager account and know how to us
 
 ---
 # SECTION 3 -- CONFIGURE BASIC BUILT-IN AND USER-DEFINED VARIABLES
-## A) Setup a few Built-in Variables
+## Setup a few Built-in Variables
 We will be using 4 built-in variables so we need to make sure they are configured
 1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, and `Referrer` by checking the box next to them in the list.
     When you're done you should see these variables available in the "Built-In Variables" list
@@ -108,7 +118,7 @@ We will be using 4 built-in variables so we need to make sure they are configure
     <img src="./media/tutorial_images/02--GTM_and_Squarespace_Setup/03--builtin_variables.png">
 
 
-## B) Setup the first User-Defined Variable and modify our Pageview Tag
+## Setup the first User-Defined Variable and modify our Pageview Tag
 This is where it starts to get fun. We will be needing a bunch of custom variables, but let's start with an easy one to ease into things shall we?
 
 1.  In the "User-Defined Variables" section, click "New" to start the custom variable creation process
@@ -134,10 +144,10 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
 
 
 
-## C) Setup the other basic User-Defined Variables
+## Setup the other basic User-Defined Variables
 Next we will setup a bunch of other User-Defined variables that are pretty straightforward. All of these variables will be created by clicking "New" in the "User-Defined Variables" section.
 
-**NOTE: Naming variables exactly as they are listed in this guide is a crucial step in order for everything to work. Thankfully Google Tag Manager should complain if you accidentally name a variable incorrectly during the setup, but try not to do this. Once all of the code has been copied to the custom Javascript Variables later in this tutorial, you can re-name any of the variables to be whatever you want because GTM will update them anywhere they appear in the container. But I recommend just leaving them as-is.**
+**NOTE: Naming variables exactly as they are listed in this guide is a crucial step in order for everything to work. Thankfully Google Tag Manager should complain if you accidentally name a variable incorrectly during the setup, but try not to do this. Once all of the code has been copied to the Custom JavaScript Variables later in this tutorial, you can re-name any of the variables to be whatever you want because GTM will update them anywhere they appear in the container. But I recommend just leaving them as-is.**
 
 I'll provide a screenshot of the first one to show how to set them up and then rely on text for the rest.
 
@@ -228,9 +238,98 @@ For more information on variable versions and recursive merge when pushing data 
     Data Layer Variable Name: `variable_here`<br/>
     Data Layer Version: Version 2<br/>
 
+---
+# SECTION 4 -- CONFIGURE CUSTOM JAVASCRIPT VARIABLE UTILITY FUNCTIONS
+Now we will start playing with code. YAY FINALLY!!!<br/>
+
+The purpose of this section is to set up a few Custom JavaScript Utilites. A Utility is just what we call a Custom JavaScript Variable that returns a function. This allows us to call the function from other Custom JavaScript Variables or Custom HTML Tags.
+
+The process for each of these will be the same:<br/>
+
+1.  create a new variable of type "Custom JavaScript", 
+2.  give it the name specified by "Variable Name"
+3.  copy and paste in the code from the file specified by "Code"
+
+Each code file is liberally commented to explain what it does.
+
+**Custom JavaScript Variables**
+
+1.  Variable Name: `JS Utility - setCookie`<br/>
+    Code: [setCookie.js](./scripts/utilities/setCookie.js)<br/>
+
+2.  Variable Name: `JS Utility - Update cookie named variantsAddedToCart`<br/>
+    Code: [update_cookie_named_variantsAddedToCart.js](./scripts/utilities/update_cookie_named_variantsAddedToCart.js)<br/>
+
+3.  Variable Name: `JS Utility - parseURI`<br/>
+    Code: [parse_URI.js](./scripts/utilities/parse_URI.js)<br/>
+
+4.  Variable Name: `JS Utility - get cartItemsList from script in document`<br/>
+    Code: [get_cartItemsList_from_script_in_document.js](./scripts/utilities/get_cartItemsList_from_script_in_document.js)<br/>
+
+5.  Variable Name: `JS Utility - convert rawCartItemsList to cartItemsJSON`<br/>
+    Code: [convert_rawCartItemsList_to_cartItemsJSON.js](./scripts/utilities/convert_rawCartItemsList_to_cartItemsJSON.js)<br/>
+
+6.  Variable Name: `JS Utility - create eecObjectFromAction`<br/>
+    Code: [createEecObjectFromAction.js](./scripts/utilities/createEecObjectFromAction.js)<br/>
+
+7.  Variable Name: `JS Utility - add list from referrer`<br/>
+    Code: [add_list_from_referrer.js](./scripts/utilities/add_list_from_referrer.js)<br/>
+
+
+
 
 ---
-# SECTION 4 -- CONFIGURE CUSTOM JAVASCRIPT VARIABLES, HTML TAGS, AND SS CODE INJECTIONS TO GENERATE EEC DATA STRUCTURES
+# SECTION 5 -- CONFIGURE CUSTOM JAVASCRIPT VARIABLES, HTML TAGS, AND SS CODE INJECTIONS TO GENERATE EEC DATA STRUCTURES
+These are the most time consuming and complicated steps that require code to be added to Custom JavaScript Variables and Custom HTML Tags in GTM as well as Code Injections in SS. Because of the complexity, the code and more detailed instructions for each step is contained in a subfolder of this repository. 
+
+The instructions for each step are linked below.
+
+## 1) Product Detail Views
+1.  push raw data to dataLayer (from SS Code Injection)
+2.  transform into `productJSON` data structure
+3.  generate `detail` EEC data structure
+
+
+## 2) Add To Cart
+
+
+## 3) Modify Cart (add/remove items on the "/cart" page)
+
+
+## 4) Checkout
+
+
+## 5) Purchase
+
+
+
+
+
+
+    1.  [Product Detail Views](#1-Product-Detail-Views)
+        1.  push raw data to dataLayer (from SS Code Injection)
+        2.  transform into `productJSON` data structure
+        3.  generate `detail` EEC data structure
+    2.  [Add To Cart](#2-Add-To-Cart)
+        1.  push raw data to dataLayer (from SS "Add To Cart" event listener in Custom HTML Tag)
+        2.  transform into `productJSON` data structure
+        3.  update `variantsAddedToCart` cookie
+        4.  generate `add` EEC data structure
+    3.  [Modify Cart (add/remove items on the "/cart" page)](#3-Modify-Cart-add/remove-items-on-the-"/cart"-page)
+        1.  scrape cart info from page and push initial cart state to dataLayer (Custom HTML Tag)
+        2.  set-up a MutationObserver to monitor changes to cart and if the cart state changes:
+            1.  re-scrape the page for new cart state
+            2.  transform the lists of oldCartItems (original cart state) and newCartItems (updated cart state) into two objects with references to a `productJSON` data structure for each product present in the cart
+            3.  identify which products were added or removed by comparing the two sets
+            4.  generate `add` or `remove` EEC data structure accordingly
+    4.  [Checkout](#4-Checkout)
+        1.  transform the raw cart state from the dataLayer push of the previous step into a list of `productJSON` data structures
+        2.  generate `checkout` EEC data structure
+    5.  [Purchase](#5-Purchase)
+        1.  push raw data to dataLayer (from SS Code Injection)
+        2.  transform into `productJSON` data structure
+        3.  generate `purchase` EEC data structure
+
 
 
 
@@ -238,7 +337,7 @@ For more information on variable versions and recursive merge when pushing data 
 
 
 ---
-# SECTION 5 -- CONFIGURE TAG FIRING TRIGGERS
+# SECTION 6 -- CONFIGURE TAG FIRING TRIGGERS
 
 
 
@@ -246,7 +345,7 @@ For more information on variable versions and recursive merge when pushing data 
 
 
 ---
-# SECTION 6 -- CONFIGURE EEC TAGS
+# SECTION 7 -- CONFIGURE EEC TAGS
 1. **Product Detail View**
     * Category: `Ecommerce`
     * Action: `Product Detail View`
