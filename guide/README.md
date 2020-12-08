@@ -255,25 +255,25 @@ Each code file is liberally commented to explain what it does.
 **Custom JavaScript Variables**
 
 1.  Variable Name: `JS Utility - setCookie`<br/>
-    Code: [setCookie.js](./javascript/utilities/setCookie.js)<br/>
+    Code: [setCookie.js](./guide/utilities/setCookie.js)<br/>
 
 2.  Variable Name: `JS Utility - updateVariantsAddedToCartCookie`<br/>
-    Code: [updateVariantsAddedToCartCookie.js](./javascript/utilities/updateVariantsAddedToCartCookie.js)<br/>
+    Code: [updateVariantsAddedToCartCookie.js](./guide/utilities/updateVariantsAddedToCartCookie.js)<br/>
 
 3.  Variable Name: `JS Utility - parseURI`<br/>
-    Code: [parseURI.js](./javascript/utilities/parseURI.js)<br/>
+    Code: [parseURI.js](./guide/utilities/parseURI.js)<br/>
 
 4.  Variable Name: `JS Utility - getCartItemsListFromScriptInDocument`<br/>
-    Code: [getCartItemsListFromScriptInDocument.js](./javascript/utilities/getCartItemsListFromScriptInDocument.js)<br/>
+    Code: [getCartItemsListFromScriptInDocument.js](./guide/utilities/getCartItemsListFromScriptInDocument.js)<br/>
 
 5.  Variable Name: `JS Utility - convertRawCartItemsListToProductJsonCollection`<br/>
-    Code: [convertRawCartItemsListToProductJsonCollection.js](./javascript/utilities/convertRawCartItemsListToProductJsonCollection.js)<br/>
+    Code: [convertRawCartItemsListToProductJsonCollection.js](./guide/utilities/convertRawCartItemsListToProductJsonCollection.js)<br/>
 
 6.  Variable Name: `JS Utility - createEecObjectFromAction`<br/>
-    Code: [createEecObjectFromAction.js](./javascript/utilities/createEecObjectFromAction.js)<br/>
+    Code: [createEecObjectFromAction.js](./guide/utilities/createEecObjectFromAction.js)<br/>
 
 7.  Variable Name: `JS Utility - addListFromReferrer`<br/>
-    Code: [addListFromReferrer.js](./javascript/utilities/addListFromReferrer.js)<br/>
+    Code: [addListFromReferrer.js](./guide/utilities/addListFromReferrer.js)<br/>
 
 
 
