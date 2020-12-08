@@ -63,7 +63,7 @@ In Google Analytics, go to settings, and choose the property that will be used f
     *	`SS Availability`   - Product Scoped - Value will be either 'In Stock' or 'Sold Out'
     *	`SS Sale Status`    - Product Scoped - Value will be either 'On Sale' or 'Regular Price'
 
-    <img src="./img/01--GA_Setup/01--Settings--Property--custom_dimensions.png" height=300>
+    <img src="../img/01--GA_Setup/01--Settings--Property--custom_dimensions.png" height=300>
 
 
 2.  Under "Custom Definitions" choose "Custom Metrics"
@@ -71,20 +71,20 @@ In Google Analytics, go to settings, and choose the property that will be used f
     We will need to setup 1 custom metric:
     *	`Cart Value` - Product Scoped - Currency (Decimal) - This will provide the combined value of products added or removed from cart
 
-    <img src="./img/01--GA_Setup/02--Settings--Property--custom_metrics.png">
+    <img src="../img/01--GA_Setup/02--Settings--Property--custom_metrics.png">
 
 ## View Settings
 Now for the view settings. Repeat the following steps for each view that we want to enable EEC tracking on.
     
 1.  Choose "View Settings" and under "Exclude URL Query Parameters" add `oid,authCode`
     
-    <img src="./img/01--GA_Setup/04--Settings--View--exclude_query_params.png">
+    <img src="../img/01--GA_Setup/04--Settings--View--exclude_query_params.png">
 
 
 
 2.  Choose "Ecommerce Settings" and turn on both "Enable Ecommerce" and "Enable Enhanced Ecommerce Reporting". Don't worry about "Checkout Labeling" as we will not be able to do this anyways.
     
-    <img src="./img/01--GA_Setup/05--Settings--View--enable_eec.png" height=400>
+    <img src="../img/01--GA_Setup/05--Settings--View--enable_eec.png" height=400>
 
 
 **That's it for Google Analytics. The rest of the work will happen in Google Tag Manager (GTM) and Squarespace (SS)**
@@ -96,12 +96,12 @@ I'll assume you've already setup a Google Tag Manager account and know how to us
 
 1.  In GTM, click on your container ID to open up the "Install Google Tag Manager" window
 
-    <img src="./img/02--GTM_and_Squarespace_Setup/01--get_GTM_tracking_code.png" height=350>
+    <img src="../img/02--GTM_and_Squarespace_Setup/01--get_GTM_tracking_code.png" height=350>
 
 2.  Leave this window open and in a new window open up Squarespace and go to "Settings -> Advanced -> Code Injection". Copy the code from the top box in GTM to the "Header" section in Squarespace and the code from the bottom box in GTM to the "Footer" section in Squarespace. Make sure to save changes in Squarespace
 
 
-    <img src="./img/02--GTM_and_Squarespace_Setup/02--copy_code_to_ss.png">
+    <img src="../img/02--GTM_and_Squarespace_Setup/02--copy_code_to_ss.png">
 
 
 3.  If you haven't already, setup a pageview tag in Google Tag Manager to fire on an "All Pages" trigger
@@ -115,7 +115,7 @@ We need to make sure the Built-in variables we will be using are configured if t
 1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, `Page Path`, `Page URL`, and `Referrer` by checking the box next to them in the list. If some or all have already been enabled then you don't need to do this step.
     When you're done you should see these variables available in the "Built-In Variables" list
 
-    <img src="./img/02--GTM_and_Squarespace_Setup/03--builtin_variables.png">
+    <img src="../img/02--GTM_and_Squarespace_Setup/03--builtin_variables.png">
 
 
 ## Setup the first User-Defined Variable and modify our Pageview Tag
@@ -129,7 +129,7 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
     The point of this variable is to capture the Squarespace (SS) Transaction ID out of the URL Query Parameters whenever a customer finishes checkout and lands on the Checkout Complete page. Click save to complete the variable completion process.
 
 
-    <img src="./img/02--GTM_and_Squarespace_Setup/04--urlquery_variable.png" height=350>
+    <img src="../img/02--GTM_and_Squarespace_Setup/04--urlquery_variable.png" height=350>
 
 
 3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages" (if you don't have one yet you should create one)
@@ -138,7 +138,7 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
 6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
 7.  Set the "Dimension Value" to the variable we created in step 2 either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
 
-    <img src="./img/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
+    <img src="../img/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
 
 8.  Don't forget to click the "save" button!
 
@@ -157,7 +157,7 @@ I'll provide a screenshot of the first one to show how to set them up and then r
     Variable Type: Constant<br/>
     Value: "Your Brand Name"<br/>
 
-    <img src="./img/02--GTM_and_Squarespace_Setup/06--variable_setup.png" height=300>
+    <img src="../img/02--GTM_and_Squarespace_Setup/06--variable_setup.png" height=300>
 
 **1st Party Cookie Variables**
 
@@ -165,7 +165,7 @@ I'll provide a screenshot of the first one to show how to set them up and then r
     Variable Type: 1st Party Cookie<br/>
     Cookie Name: `variantsAddedToCart`<br/>
 
-    <img src="./img/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
+    <img src="../img/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
 
 **Data Layer VERSION 1 Variables**<br/>
 NOTE: It is imperative that this variable be setup as "VERSION 1", otherwise the cart modification functions won't work correctly<br>
@@ -284,13 +284,11 @@ These are the most time consuming and complicated steps. They will require code 
 
 The subfolders for each step are linked below.
 
-## 1) [Product Detail Views](./02_detail/)
-## 2) Add To Cart
-## 3) Modify Cart (add/remove items on the /cart page)
-## 4) Checkout
-## 5) Purchase
-
-
+### 1) [Product Detail Views](./02_detail/)
+### 2) [Add To Cart](./03_add/)
+### 3) [Modify Cart](./04_modify_cart/) (add/remove items on the /cart page)
+### 4) [Checkout](./05_checkout/)
+### 5) [Purchase](./06_purchase/)
 
 
 
