@@ -19,8 +19,7 @@ Here are the most relevant of his articles:
 And without further ado, let's dive in!
 
 
-# SECTION 0 -- OVERVIEW
-## What we will implement:
+# OVERVIEW
 Before we get started it is important to point out exactly which parts of the EEC specification are going to be implemented, and which parts are not. I think you'll find that the majority of what you want is covered in this guide and the parts that are not covered are a LOT more effort than they are likely worth.
 
 ### Enhanced Ecommerce features we will be implementing:
@@ -31,27 +30,25 @@ Before we get started it is important to point out exactly which parts of the EE
 4. Checkout Step 1 (when a customer clicks the "CHECKOUT" button)
 5. Purchase
 
-**PRODUCT DATA**
-We will be sending the following Product Data along with each of the above actions (when applicable):
+**PRODUCT DATA**<br/>
+The following Product Data will be sent (when applicable) along with each of the above actions:
 * ID
 * Name
 * Category
-* Brand
 * Price
 * Quantity
 
-**CUSTOM DIMENSIONS**
-We will implement the following custom Dimensions:
-* Squarespace Transaction ID - purchase only
+**CUSTOM DIMENSIONS**<br/>
+* Squarespace Transaction ID - purchase only (this is different from the Order ID which we will be sending as the ID of the EEC Purchase object's "actionField")
 * Product Variant Sku - add/remove, checkout, purchase
-* Product Availability - "In Stock" or "Out Of Stock" (really only relevant to Product Detail Views)
+* Product Availability - all actions although it's really only super useful for Product Detail Views. value will be "In Stock" or "Out Of Stock" 
 * Product On Sale or Not - all actions
 
-**CUSTOM METRIC**
-* Total Cart Value - allows for comparison of the total value of products added to cart vs. actual product revenue
+**CUSTOM METRIC**<br/>
+* Total Cart Value - allows for comparison of the total value of products added to cart vs. actual product revenue. Check out [Simo Ahava's blog post](https://www.simoahava.com/analytics/measure-cart-value-in-enhanced-ecommerce/) on the subject if you're curious why we all should be doing this.
 
 
-### Enhanced Ecommerce Actions we will NOT be implementing:
+### Enhanced Ecommerce features we will NOT be implementing:
 1. Product Impressions
 2. Product Clicks
 3. Promotion Impressions
@@ -59,19 +56,18 @@ We will implement the following custom Dimensions:
 5. Coupon Codes
 6. Refunds
 
-Again. The way Squarespace is set up and the way we are implementing EEC does not really allow for tracking these steps. If you figure out how to implement these I would LOVE if you shared what you did in the [Discussion section of this repository!](https://github.com/EfficiencyJunky/eec-for-squarespace/discussions)
+The way Squarespace is set up and the way we are implementing EEC makes it difficult to implement these features. If you figure out how to do it though I would LOVE for you to share your solution in the [discussion section of this repository!](https://github.com/EfficiencyJunky/eec-for-squarespace/discussions)
 
 
 
 ## Table of Contents
-This Guide is organized roughly in the following structure:
 1.  [Prepare Google Analytics Property and View Settings](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
 2.  [Install Google Tag Manager (GTM) container code snippet on Squarespace (SS)](#SECTION-2-\-\--INSTALL-GTM-CONTAINER-CODE-SNIPPET-ON-SS)
 3.  [Configure basic Built-In and User-Defined variables in GTM](#SECTION-3-\-\--CONFIGURE-BASIC-BUILT\-IN-AND-USER\-DEFINED-VARIABLES)
-4.  [Configure Custom JavaScript Variables to be used throughout our implementation](#SECTION-4-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLE-UTILITY-FUNCTIONS)
-5.  [Configure Custom JS Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-5-\-\--CONFIGURE-SS-CODE-INJECTIONS-HTML-TAGS-AND-CUSTOM-JAVASCRIPT-VARIABLES-TO-GENERATE-EEC-DATA-STRUCTURES)<br/>
+4.  [Configure Custom JavaScript Variable Utilities to be used throughout our implementation](#SECTION-4-\-\--CONFIGURE-CUSTOM-JAVASCRIPT-VARIABLE-UTILITY-FUNCTIONS)
+5.  [Configure Custom JavaScript Variables, HTML Tags, and SS Code Injections to generate EEC data structures](#SECTION-5-\-\--CONFIGURE-SS-CODE-INJECTIONS-HTML-TAGS-AND-CUSTOM-JAVASCRIPT-VARIABLES-TO-GENERATE-EEC-DATA-STRUCTURES)<br/>
     This section is the bulk of the work where we perform our EEC dataLayer manipulation and prepare our EEC data structures to be sent to Google Analytics.<br/>
-    To do this we will create a variety of Custom JavaScript Variables and Custom HTML Tags with Javascript code in GTM, AND a couple Code Injections in SS.<br/>
+    To do this we will create a variety of Custom JavaScript Variables and Custom HTML Tags (with Javascript code) in GTM, AND a couple Code Injections in SS.<br/>
     The order of our implementation will mirror the user journey through the 5 funnel steps.<br/>
     1.  [Product Detail Views](#1-Product-Detail-Views)
         1.  push raw data to dataLayer (from SS Code Injection)
@@ -111,10 +107,10 @@ In Google Analytics, go to settings, and choose the property that will be used f
 1.  Under "Custom Definitions" choose "Custom Dimensions"
 
     We will need to setup 4 custom dimensions **(Don't worry if the indexes aren't the same as in the pictures):**
-    *	`SS Transaction ID` - Hit Scoped - Value will be the Squarespace given transaction ID
-    *	`SS Variant SKU`    - Product Scoped - Value will be the Squarespace given variant SKU
-    *	`SS Availability`   - Product Scoped - Value will be either 'In Stock' or 'Sold Out'
-    *	`SS Sale Status`    - Product Scoped - Value will be either 'On Sale' or 'Regular Price'
+    *	`SS Transaction ID` - Hit Scoped - Value set to the Squarespace alphanumeric transaction ID
+    *	`SS Variant SKU`    - Product Scoped - Value set to the Squarespace variant SKU
+    *	`SS Availability`   - Product Scoped - Value set to either 'In Stock' or 'Sold Out'
+    *	`SS Sale Status`    - Product Scoped - Value set to either 'On Sale' or 'Regular Price'
 
     <img src="../img/01--GA_Setup/01--Settings--Property--custom_dimensions.png" height=300>
 
@@ -122,7 +118,7 @@ In Google Analytics, go to settings, and choose the property that will be used f
 2.  Under "Custom Definitions" choose "Custom Metrics"
     
     We will need to setup 1 custom metric:
-    *	`Cart Value` - Product Scoped - Currency (Decimal) - This will provide the combined value of products added or removed from cart
+    *	`Cart Value` - Product Scoped - Currency (Decimal)
 
     <img src="../img/01--GA_Setup/02--Settings--Property--custom_metrics.png">
 
@@ -156,54 +152,56 @@ I'll assume you've already setup a Google Tag Manager account and know how to us
 
     <img src="../img/02--GTM_and_Squarespace_Setup/02--copy_code_to_ss.png">
 
-
 3.  If you haven't already, setup a pageview tag in Google Tag Manager to fire on an "All Pages" trigger
-4.  Make sure to test that the integration is working.
+4.  Now put GTM into Preview Mode to test your changes. If everything is working, you should see pageviews firing in Google Analytics Realtime Reports when you visit your website. If you are new to Google Tag Manager then be warned that only YOU will be able to trigger pageviews until you Submit the changes in GTM.
 
 
 ---
 # SECTION 3 -- CONFIGURE BASIC BUILT-IN AND USER-DEFINED VARIABLES
-## Setup a few Built-in Variables
+## Built-in Variables
 We need to make sure the Built-in variables we will be using are configured if they haven't been already
-1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, `Page Path`, `Page URL`, `Referrer`, and `Click Text` by checking the box next to them in the list. If these variables are already enabled then you don't need to do this step.
-    When you're done you should see these variables available in the "Built-In Variables" list
+
+1.  Go to the variables section of GTM, in the "Built-In Variables" section click "Configure" and enable `Container ID`, `Event`, `Page Hostname`, `Page Path`, `Page URL`, `Referrer`, and `Click Text` by checking the box next to them in the list.<br/>
+    If these variables are already enabled then you don't need to do this step.<br/>
+    When you're done you should see the variables available in the "Built-In Variables" list
 
     <img src="../img/02--GTM_and_Squarespace_Setup/03--builtin_variables.png">
 
 
-## Setup the first User-Defined Variable and modify our Pageview Tag
-This is where it starts to get fun. We will be needing a bunch of custom variables, but let's start with an easy one to ease into things shall we?
+## Setup a User-Defined Variable and modify the Pageview Tag
+This is where it starts to get fun. We will require a bunch of custom variables, but let's start with an easy one to get our feet wet.
 
 1.  In the "User-Defined Variables" section, click "New" to start the custom variable creation process
 2.  Name the variable `URL Query - oid (for SS Transaction ID)`<br/>
     Choose the variable type "URL"<br/>
     Set the "Component Type" to `Query`<br/>
     Set the "Query Key" to `oid`<br/>
-    The point of this variable is to capture the Squarespace (SS) Transaction ID out of the URL Query Parameters whenever a customer finishes checkout and lands on the Checkout Complete page. Click save to complete the variable completion process.
+    The point of this variable is to capture the Squarespace (SS) Transaction ID out of the URL Query Parameters whenever a customer finishes checkout and lands on the Checkout Complete page. Click save to complete the variable creation process.
 
 
     <img src="../img/02--GTM_and_Squarespace_Setup/04--urlquery_variable.png" height=350>
 
 
-3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages" (if you don't have one yet you should create one)
-4.  Check the "Enable overriding settings in this tag" box
+3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages"
+4.  Check the box labeled "Enable overriding settings in this tag"
 5.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
-6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS) (in all of the examples this code is referencing this is `dimension4`. If you are also using `dimension4` then you would put `4` in the index section)
-7.  Set the "Dimension Value" to the variable we created in step 2 either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
+6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)<br/>
+(in all of the examples throughout this guide we are using `dimension4` for the SS Transaction ID. If you are also using `dimension4` then you would put `4` in the index section)
+7.  Set the "Dimension Value" to the variable we created in step 2 either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or by clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
 
     <img src="../img/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
 
 8.  Don't forget to click the "save" button!
-9.  Now when someone completes a checkout, our dataLayer vairable will grab the Squarespace Transaction ID from the `oid` query parameter (which should only actually appear on pages who's path is `/checkout/order-confirmed`), and set dimension4 to this value for the pageview hit.
+9.  Now when someone completes a checkout, our dataLayer variable will be populated with the Squarespace Transaction ID from the `oid` query parameter (which should only actually appear on pages who's path is `/checkout/order-confirmed`), and this will be sent along with the pageview hit as custom dimension4. Of course in Google Analytics Reports it will show up as "SS Transaction ID" under Custom Dimensions.
 
 
 
 ## Setup the other basic User-Defined Variables
 Next we will setup a bunch of other User-Defined variables that are pretty straightforward. All of these variables will be created by clicking "New" in the "User-Defined Variables" section.
 
-**NOTE: Naming variables exactly as they are listed in this guide is a crucial step in order for everything to work. Thankfully Google Tag Manager should complain if you accidentally name a variable incorrectly during the setup, but try not to do this. Once all of the code has been copied to the Custom JavaScript Variables later in this tutorial, you can re-name any of the variables to be whatever you want because GTM will update them anywhere they appear in the container. But I recommend just leaving them as-is.**
+**NOTE: Naming variables exactly as they are listed in this guide is a crucial step in order for everything to work. Google Tag Manager may or may not complain if you accidentally name a variable incorrectly during the setup, but no guarantees. Once all of the code has been copied to the Custom JavaScript Variables later in this tutorial, you can re-name any of the variables to be whatever you want because GTM will update them anywhere they appear in the container. But I recommend just leaving them as-is.**
 
-I'll provide a screenshot of the first one to show how to set them up and then rely on text for the rest.
+I'll provide a screenshot of the first one to show how to set them up.
 
 **Constant Variables**
 
@@ -221,9 +219,9 @@ I'll provide a screenshot of the first one to show how to set them up and then r
 
     <img src="../img/02--GTM_and_Squarespace_Setup/06_2--variable_setup.png" height=300>
 
-**Data Layer VERSION 1 Variables**<br/>
+**Data Layer VERSION 1 Variable**<br/>
 NOTE: It is imperative that this variable be setup as "VERSION 1", otherwise the cart modification functions won't work correctly<br>
-For more information on variable versions and recursive merge when pushing data to dataLayer, see [Simo Ahava's article on the subject](https://www.simoahava.com/gtm-tips/data-layer-variable-versions-explained/)
+For more information on variable versions and recursive merge when pushing to dataLayer, see [Simo Ahava's article on the subject](https://www.simoahava.com/gtm-tips/data-layer-variable-versions-explained/)
 
 1.  Variable Name: `DL - SS Raw Modify Cart`<br/>
     Variable Type: Data Layer Variable<br/>
@@ -302,16 +300,11 @@ For more information on variable versions and recursive merge when pushing data 
     Data Layer Variable Name: `ssRawTransaction`<br/>
     Data Layer Version: Version 2<br/>
 
-15. Variable Name: `name_here`<br/>
-    Variable Type: Data Layer Variable<br/>
-    Data Layer Variable Name: `variable_here`<br/>
-    Data Layer Version: Version 2<br/>
-
 ---
 # SECTION 4 -- CONFIGURE CUSTOM JAVASCRIPT VARIABLE UTILITY FUNCTIONS
 Now we will start playing with code. YAY FINALLY!!!<br/>
 
-The purpose of this section is to set up a few Custom JavaScript Utilites. A Utility is just what we call a Custom JavaScript Variable that returns a function. This allows us to call the function from other Custom JavaScript Variables or Custom HTML Tags.
+The purpose of this section is to set up a few Custom JavaScript Variables we will label as Utilites. A Utility is just what we call a Custom JavaScript Variable that returns a function instead of a value. This allows us to call the function from other Custom JavaScript Variables or Custom HTML Tags in Google Tag Manager.
 
 The process for each of these will be the same:<br/>
 
@@ -352,9 +345,9 @@ Each code file is liberally commented to explain what it does.
 
 ---
 # SECTION 5 -- CONFIGURE SS CODE INJECTIONS, HTML TAGS, AND CUSTOM JAVASCRIPT VARIABLES TO GENERATE EEC DATA STRUCTURES
-These are the most time consuming and complicated steps. They will require code to be added to Code Injections in SS as well as Custom HTML Tags and Custom JavaScript Variables in GTM. Because of the added complexity, I've broken them out into separate subfolders within this repository that contain the implementation instructions and code for each step.
+These are the most time consuming and complicated steps. They will require code to be added to Code Injections in SS as well as Custom HTML Tags and Custom JavaScript Variables in GTM. Because of the added complexity, I've broken them out into separate subfolders that contain the implementation instructions and code for each step.
 
-Click on a step to visit that step's implementation guide:
+Click on a step to visit that step's subfolder:
 
 ### 1) [Product Detail Views](./02_detail/)
 ### 2) [Add To Cart](./03_add/)
@@ -373,33 +366,33 @@ The process for each of these will be the same:<br/>
 2.  give it the name specified by "Trigger Name"
 3.  choose the trigger type indicated by "Trigger Type"
 4.  fill in the trigger parameter fields as indicated by "Trigger Parameters"
-5.  leave the "This trigger fires on"
+5.  Choose the radio button indicated by "This trigger fires on"
 
 **Triggers**
 1. **Product Detail View TRIGGER**
    * Trigger Name: `custom event - ssRawProductDetailPush`
-   * Trigger Type: `Custom Event`
+   * Trigger Type: Custom Event
    * Trigger Parameters
      * Event Name: `ssRawProductDetailPush`
      * This trigger fires on: `All Custom Events`
 
 2. **Add To Cart TRIGGER**
    * Trigger Name: `custom event - ssRawAddToCartPush`
-   * Trigger Type: `Custom Event`
+   * Trigger Type: Custom Event
    * Trigger Parameters
      * Event Name: `ssRawAddToCartPush`
      * This trigger fires on: `All Custom Events`
 
 3. **Modify Cart TRIGGER**
    * Trigger Name: `custom event - fireModifyCartTag`
-   * Trigger Type: `Custom Event`
+   * Trigger Type: Custom Event
    * Trigger Parameters
      * Event Name: `fireModifyCartTag`
      * This trigger fires on: `All Custom Events`
 
 4. **Checkout TRIGGER**
    * Trigger Name: `click - CHECKOUT button`
-   * Trigger Type: `Click - All Elements`
+   * Trigger Type: Click - All Elements
    * Trigger Parameters
      * This trigger fires on: `Some Clicks`
      * Condition 1: Select "Page Path" in the first dropdown, "contains" in the second, type `/cart` into the text field and then click the "+" button to the right of the text field
@@ -408,7 +401,7 @@ The process for each of these will be the same:<br/>
 
 5. **Purchase TRIGGER**
    * Trigger Name: `custom event - ssRawTransactionPush`
-   * Trigger Type: `Custom Event`
+   * Trigger Type: Custom Event
    * Trigger Parameters
      * Event Name: `ssRawTransactionPush`
      * This trigger fires on: `All Custom Events`
@@ -445,7 +438,7 @@ The process for each of these will be the same:<br/>
       * Event Tracking Parameters
         * Category: `Ecommerce`
         * Action: `Product Detail View`
-        * Label: `{{DL - EEC Detail - Product Name}}` (the name of the product)
+        * Label: `{{DL - EEC Detail - Product Name}}`
         * Non-Interactioin Hit: `True`
       * More Settings -> Ecommerce: 
           * Enable Enhanced Ecommerce Features: `True`
@@ -465,7 +458,7 @@ The process for each of these will be the same:<br/>
          * Read Data from Variable: `{{JS - eec.add}}`
    * Trigger: `custom event - ssRawAddToCartPush`
 
-3. **Modify Cart TAG** -- Sends either `add` or `remove` EEC Actions depending on the modification
+3. **Modify Cart TAG** -- Sends either `add` or `remove` EEC Actions depending on the cart modifications made
    * Tag Name: `GA - Event - EEC Modify Cart`
    * Tag Configuration
      * Event Tracking Parameters

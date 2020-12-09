@@ -26,7 +26,7 @@ This is an example of what the EEC data structure for action of type `purchase` 
 ```
 {
   'ecommerce': {
-    'checkout': {
+    'purchase': {
       'products': [
         {
           'id': '399sdccsfjl8990933kkj3jkl3',
@@ -41,10 +41,10 @@ This is an example of what the EEC data structure for action of type `purchase` 
         },
         {
           'id': '44222adf0989dfdfdf9992kjkljkj',
-          'name': 'removed product name',
+          'name': 'another added product name',
           'category': 'categoryC/categoryD',
           'brand': 'Your Brand Name',
-          'quantity': 3,
+          'quantity': 4,
           'dimension5': 'SQ7654321',
           'price': '10.00',
           'dimension6': 'In Stock',
@@ -68,7 +68,7 @@ This is an example of what the EEC data structure for action of type `purchase` 
 [02_eec_object_creation_code]: ./02_gtm_eecPurchaseObj.js
 
 
-
+<!--
 <script>
 OTHER DETAILS
 1. Create a trigger that fires when the Squarespace event key in step 1 is detected in the dataLayer
@@ -79,6 +79,7 @@ OTHER DETAILS
 
 <!--REFERENCE OBJECT PUSH-->
 <!--DO NOT USE THIS CODE IN SQUARESPACE -- IT IS JUST FOR REFERENCE-->
+<!--
 <script>
 
 dataLayer.push({
@@ -117,6 +118,6 @@ dataLayer.push({
   })
 
 </script>
-
+-->
 <!--REFERENCE OBJECT PUSH-->
 <!--DO NOT USE THIS CODE IN SQUARESPACE -- IT IS JUST FOR REFERENCE-->

@@ -30,10 +30,10 @@ This is an example of what the EEC data structure for action of type `checkout` 
         },
         {
           'id': '44222adf0989dfdfdf9992kjkljkj',
-          'name': 'removed product name',
+          'name': 'another added product name',
           'category': 'categoryC/categoryD',
           'brand': 'Your Brand Name',
-          'quantity': 3,
+          'quantity': 4,
           'dimension5': 'SQ7654321',
           'price': '10.00',
           'dimension6': 'In Stock',
