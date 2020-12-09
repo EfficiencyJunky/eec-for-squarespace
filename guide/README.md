@@ -23,14 +23,16 @@ And without further ado, let's dive in!
 ## What we will implement:
 Before we get started it is important to point out exactly which parts of the EEC specification are going to be implemented, and which parts are not. I think you'll find that the majority of what you want is covered in this guide and the parts that are not covered are a LOT more effort than they are likely worth.
 
-### Enhanced Ecommerce Actions we will be implementing:
+### Enhanced Ecommerce features we will be implementing:
+**ACTIONS**
 1. Product Detail Views
 2. Add To Cart (from product detail page)
 3. Add/Remove from cart (when customers make modifications to the cart)
 4. Checkout Step 1 (when a customer clicks the "CHECKOUT" button)
 5. Purchase
 
-For each of these Actions we will be sending the following Product Data when applicable:
+**PRODUCT DATA**
+We will be sending the following Product Data along with each of the above actions (when applicable):
 * ID
 * Name
 * Category
@@ -38,13 +40,14 @@ For each of these Actions we will be sending the following Product Data when app
 * Price
 * Quantity
 
+**CUSTOM DIMENSIONS**
 We will implement the following custom Dimensions:
 * Squarespace Transaction ID - purchase only
 * Product Variant Sku - add/remove, checkout, purchase
 * Product Availability - "In Stock" or "Out Of Stock" (really only relevant to Product Detail Views)
 * Product On Sale or Not - all actions
 
-And one custom Metric:
+**CUSTOM METRIC**
 * Total Cart Value - allows for comparison of the total value of products added to cart vs. actual product revenue
 
 
@@ -374,41 +377,41 @@ The process for each of these will be the same:<br/>
 
 **Triggers**
 1. **Product Detail View TRIGGER**
-   * Trigger Name: `custom event - ssRawProductDetailPush`<br/>
-   * Trigger Type: `Custom Event`<br/>
-   * Trigger Parameters<br/>
-     * Event Name: `ssRawProductDetailPush`<br/>
-     * This trigger fires on: `All Custom Events`<br/>
+   * Trigger Name: `custom event - ssRawProductDetailPush`
+   * Trigger Type: `Custom Event`
+   * Trigger Parameters
+     * Event Name: `ssRawProductDetailPush`
+     * This trigger fires on: `All Custom Events`
 
 2. **Add To Cart TRIGGER**
-   * Trigger Name: `custom event - ssRawAddToCartPush`<br/>
-   * Trigger Type: `Custom Event`<br/>
-   * Trigger Parameters<br/>
-     * Event Name: `ssRawAddToCartPush`<br/>
-     * This trigger fires on: `All Custom Events`<br/>
+   * Trigger Name: `custom event - ssRawAddToCartPush`
+   * Trigger Type: `Custom Event`
+   * Trigger Parameters
+     * Event Name: `ssRawAddToCartPush`
+     * This trigger fires on: `All Custom Events`
 
 3. **Modify Cart TRIGGER**
-   * Trigger Name: `custom event - fireModifyCartTag`<br/>
-   * Trigger Type: `Custom Event`<br/>
-   * Trigger Parameters<br/>
-     * Event Name: `fireModifyCartTag`<br/>
-     * This trigger fires on: `All Custom Events`<br/>
+   * Trigger Name: `custom event - fireModifyCartTag`
+   * Trigger Type: `Custom Event`
+   * Trigger Parameters
+     * Event Name: `fireModifyCartTag`
+     * This trigger fires on: `All Custom Events`
 
 4. **Checkout TRIGGER**
-   * Trigger Name: `click - CHECKOUT button`<br/>
-   * Trigger Type: `Click - All Elements`<br/>
-   * Trigger Parameters<br/>
-     * This trigger fires on: `Some Clicks`<br/>
+   * Trigger Name: `click - CHECKOUT button`
+   * Trigger Type: `Click - All Elements`
+   * Trigger Parameters
+     * This trigger fires on: `Some Clicks`
      * Condition 1: Select "Page Path" in the first dropdown, "contains" in the second, type `/cart` into the text field and then click the "+" button to the right of the text field
      * Condition 2: Select "Click Text" in the first dropdown, "contains" in the second and then type `CHECKOUT` into the text field. 
-     **NOTE: If your button is in another language or says something other than "CHECKOUT" you will need to type that into the text box instead.**
+     **NOTE: If your CHECKOUT button is in another language or says something other than "CHECKOUT" you will need to type that into the text box instead**
 
 5. **Purchase TRIGGER**
-   * Trigger Name: `custom event - ssRawTransactionPush`<br/>
-   * Trigger Type: `Custom Event`<br/>
-   * Trigger Parameters<br/>
-     * Event Name: `ssRawTransactionPush`<br/><br/>
-     * This trigger fires on: `All Custom Events`<br/>
+   * Trigger Name: `custom event - ssRawTransactionPush`
+   * Trigger Type: `Custom Event`
+   * Trigger Parameters
+     * Event Name: `ssRawTransactionPush`
+     * This trigger fires on: `All Custom Events`
 
 
 
