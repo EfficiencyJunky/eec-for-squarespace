@@ -8,7 +8,7 @@ In this guide I will go step by step through the solution I've come up with for 
 
 
 ## KNOWN ISSUES
-Currently this implementation doesn't work with the "Quick View" feature in Squarespace Stores. So you will have to disable "Quick View" in Store Settings before following this guide. Personally I think "Quick View" is not unnecessary and the Squarespace implementation appears to have some issues.<br/>
+Currently this implementation doesn't work with the "Quick View" feature in Squarespace Stores. So you will have to disable "Quick View" in Store Settings before following this guide. Personally I think "Quick View" is not the greatest feature and I've noticed Squarespace's implementation appears to have some bugs.<br/>
     <img src="../img/00--Getting_Started/disabling_quickview.png" height=200>
 
 ## Additional Resources
@@ -16,9 +16,51 @@ Simo Ahava is one of the world's leading experts (if not the leading one) on Goo
 Here are the most relevant of his articles:
 * [Simo Ahava: The difinitive Enhanced Ecommerce guide for Google Tag Manager](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/)
 
-And without further ado, let's get started!
-CONFIGURE SS CODE INJECTIONS, HTML TAGS, AND CUSTOM JAVASCRIPT VARIABLES TO GENERATE EEC DATA STRUCTURES
-## Process
+And without further ado, let's dive in!
+
+
+# SECTION 0 -- OVERVIEW
+## What we will implement:
+Before we get started it is important to point out exactly which parts of the EEC specification are going to be implemented, and which parts are not. I think you'll find that the majority of what you want is covered in this guide and the parts that are not covered are a LOT more effort than they are likely worth.
+
+### Enhanced Ecommerce Actions we will be implementing:
+1. Product Detail Views
+2. Add To Cart (from product detail page)
+3. Add/Remove from cart (when customers make modifications to the cart)
+4. Checkout Step 1 (when a customer clicks the "CHECKOUT" button)
+5. Purchase
+
+For each of these Actions we will be sending the following Product Data when applicable:
+* ID
+* Name
+* Category
+* Brand
+* Price
+* Quantity
+
+We will implement the following custom Dimensions:
+* Squarespace Transaction ID - purchase only
+* Product Variant Sku - add/remove, checkout, purchase
+* Product Availability - "In Stock" or "Out Of Stock" (really only relevant to Product Detail Views)
+* Product On Sale or Not - all actions
+
+And one custom Metric:
+* Total Cart Value - allows for comparison of the total value of products added to cart vs. actual product revenue
+
+
+### Enhanced Ecommerce Actions we will NOT be implementing:
+1. Product Impressions
+2. Product Clicks
+3. Promotion Impressions
+4. Promotion Clicks
+5. Coupon Codes
+6. Refunds
+
+Again. The way Squarespace is set up and the way we are implementing EEC does not really allow for tracking these steps. If you figure out how to implement these I would LOVE if you shared what you did in the [Discussion section of this repository!](https://github.com/EfficiencyJunky/eec-for-squarespace/discussions)
+
+
+
+## Table of Contents
 This Guide is organized roughly in the following structure:
 1.  [Prepare Google Analytics Property and View Settings](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
 2.  [Install Google Tag Manager (GTM) container code snippet on Squarespace (SS)](#SECTION-2-\-\--INSTALL-GTM-CONTAINER-CODE-SNIPPET-ON-SS)
@@ -318,34 +360,6 @@ Click on a step to visit that step's implementation guide:
 ### 5) [Purchase](./06_purchase/)
 
 
-
-
-    1.  [Product Detail Views](#1-Product-Detail-Views)
-        1.  push raw data to dataLayer (from SS Code Injection)
-        2.  transform into `productJSON` data structure
-        3.  generate `detail` EEC data structure
-    2.  [Add To Cart](#2-Add-To-Cart)
-        1.  push raw data to dataLayer (from SS "Add To Cart" event listener in Custom HTML Tag)
-        2.  transform into `productJSON` data structure
-        3.  update `variantsAddedToCart` cookie
-        4.  generate `add` EEC data structure
-    3.  [Modify Cart (add/remove items on the "/cart" page)](#3-Modify-Cart-add/remove-items-on-the-"/cart"-page)
-        1.  scrape cart info from page and push initial cart state to dataLayer (Custom HTML Tag)
-        2.  set-up a MutationObserver to monitor changes to cart and if the cart state changes:
-            1.  re-scrape the page for new cart state
-            2.  transform the lists of oldCartItems (original cart state) and newCartItems (updated cart state) into two objects with references to a `productJSON` data structure for each product present in the cart
-            3.  identify which products were added or removed by comparing the two sets
-            4.  generate `add` or `remove` EEC data structure accordingly
-    4.  [Checkout](#4-Checkout)
-        1.  transform the raw cart state from the dataLayer push of the previous step into a list of `productJSON` data structures
-        2.  generate `checkout` EEC data structure
-    5.  [Purchase](#5-Purchase)
-        1.  push raw data to dataLayer (from SS Code Injection)
-        2.  transform into `productJSON` data structure
-        3.  generate `purchase` EEC data structure
-
-
-
 ---
 # SECTION 6 -- CONFIGURE TAG FIRING TRIGGERS
 Before we complete the final step of setting up our tags, we need to configure the triggers that will actually cause the tags to fire. Luckily, all but one of our triggers is based on an event we are pushing to dataLayer so this is a super easy process.
@@ -359,43 +373,48 @@ The process for each of these will be the same:<br/>
 5.  leave the "This trigger fires on"
 
 **Triggers**
-1.  Trigger Name: `custom event - ssRawProductDetailPush`<br/>
-    Trigger Type: `Custom Event`<br/>
-    Trigger Parameters<br/>
-        Event Name: `ssRawProductDetailPush`<br/>
-        This trigger fires on: `All Custom Events`<br/>
+1. **Product Detail View TRIGGER**
+   * Trigger Name: `custom event - ssRawProductDetailPush`<br/>
+   * Trigger Type: `Custom Event`<br/>
+   * Trigger Parameters<br/>
+     * Event Name: `ssRawProductDetailPush`<br/>
+     * This trigger fires on: `All Custom Events`<br/>
 
+2. **Add To Cart TRIGGER**
+   * Trigger Name: `custom event - ssRawAddToCartPush`<br/>
+   * Trigger Type: `Custom Event`<br/>
+   * Trigger Parameters<br/>
+     * Event Name: `ssRawAddToCartPush`<br/>
+     * This trigger fires on: `All Custom Events`<br/>
 
-2.  Trigger Name: `custom event - ssRawAddToCartPush`<br/>
-    Trigger Type: `Custom Event`<br/>
-    Trigger Parameters<br/>
-        Event Name: `ssRawAddToCartPush`<br/>
-        This trigger fires on: `All Custom Events`<br/>
+3. **Modify Cart TRIGGER**
+   * Trigger Name: `custom event - fireModifyCartTag`<br/>
+   * Trigger Type: `Custom Event`<br/>
+   * Trigger Parameters<br/>
+     * Event Name: `fireModifyCartTag`<br/>
+     * This trigger fires on: `All Custom Events`<br/>
 
-3.  Trigger Name: `custom event - fireModifyCartTag`<br/>
-    Trigger Type: `Custom Event`<br/>
-    Trigger Parameters<br/>
-        Event Name: `fireModifyCartTag`<br/>
-        This trigger fires on: `All Custom Events`<br/>
+4. **Checkout TRIGGER**
+   * Trigger Name: `click - CHECKOUT button`<br/>
+   * Trigger Type: `Click - All Elements`<br/>
+   * Trigger Parameters<br/>
+     * This trigger fires on: `Some Clicks`<br/>
+     * Condition 1: Select "Page Path" in the first dropdown, "contains" in the second, type `/cart` into the text field and then click the "+" button to the right of the text field
+     * Condition 2: Select "Click Text" in the first dropdown, "contains" in the second and then type `CHECKOUT` into the text field. 
+     **NOTE: If your button is in another language or says something other than "CHECKOUT" you will need to type that into the text box instead.**
 
-4.  Trigger Name: `click - CHECKOUT button`<br/>
-    Trigger Type: `Click - All Elements`<br/>
-    Trigger Parameters<br/>
-        This trigger fires on: `Some Clicks`<br/>
-        Condition 1: Select "Page Path" in the first dropdown, "contains" in the second, type `/cart` into the text field and then click the "+" button to the right of the text field
-        Condition 2: Select "Click Text" in the first dropdown, "contains" in the second and then type `CHECKOUT` into the text field. **NOTE: If your button is in another language or says something other than "CHECKOUT" you will need to type that into the text box instead.**
-
-5. Trigger Name: `custom event - ssRawTransactionPush`<br/>
-    Trigger Type: `Custom Event`<br/>
-    Trigger Parameters<br/>
-        Event Name: `ssRawTransactionPush`<br/><br/>
-        This trigger fires on: `All Custom Events`<br/>
+5. **Purchase TRIGGER**
+   * Trigger Name: `custom event - ssRawTransactionPush`<br/>
+   * Trigger Type: `Custom Event`<br/>
+   * Trigger Parameters<br/>
+     * Event Name: `ssRawTransactionPush`<br/><br/>
+     * This trigger fires on: `All Custom Events`<br/>
 
 
 
 ---
 # SECTION 7 -- CONFIGURE EEC TAGS
-HORRAYYYY!!! We finally made it to the last step in the process! Now we get to configure all of our awesome event tags that will send the actual Enhanced Ecommerce data streaming into our Google Analytics views.
+HORRAYYYY!!! We finally made it to the last step in the process! Now we get to configure all of our awesome event tags that will send the actual Enhanced Ecommerce data streaming into our Google Analytics views. Don't rush the tag setup though. There's a lot of little details that are easy to miss if the process is rushed.
 
 A quick note before getting started. The tag configuration I've outlined below is based on what works for me. Feel free to change the Category, Action, and Label fields to fit your needs and add any other custom dimensions or metrics you normally would add so long as they don't conflict with the ones being sent in the EEC Object.
 
@@ -417,7 +436,7 @@ The process for each of these will be the same:<br/>
 
 
 **Tags**
-1. **Product Detail View**
+1. **Product Detail View TAG**
     * Tag Name: `GA - Event - EEC Product Detail View`
     * Tag Configuration
       * Event Tracking Parameters
@@ -430,7 +449,7 @@ The process for each of these will be the same:<br/>
           * Read Data from Variable: `{{JS - eec.detail}}`
     * Trigger: `custom event - ssRawProductDetailPush`
 
-2. **Add To Cart**
+2. **Add To Cart TAG**
    * Tag Name: `GA - Event - EEC Add To Cart`
    * Tag Configuration
      * Event Tracking Parameters
@@ -443,7 +462,7 @@ The process for each of these will be the same:<br/>
          * Read Data from Variable: `{{JS - eec.add}}`
    * Trigger: `custom event - ssRawAddToCartPush`
 
-3. **Modify Cart** -- Sends either `add` or `remove` EEC Actions depending on the modification
+3. **Modify Cart TAG** -- Sends either `add` or `remove` EEC Actions depending on the modification
    * Tag Name: `GA - Event - EEC Modify Cart`
    * Tag Configuration
      * Event Tracking Parameters
@@ -457,7 +476,7 @@ The process for each of these will be the same:<br/>
          * Read Data from Variable: `{{JS - eec.modify}}`
    * Trigger: `custom event - fireModifyCartTag`
 
-4. **Checkout**
+4. **Checkout TAG**
    * Tag Name: `GA - Event - EEC Checkout`
    * Tag Configuration
      * Event Tracking Parameters
@@ -470,7 +489,7 @@ The process for each of these will be the same:<br/>
          * Read Data from Variable: `{{JS - eec.checkout}}`
    * Trigger: `click - CHECKOUT button`
 
-5. **Purchase**
+5. **Purchase TAG**
    * Tag Name: `GA - Event - EEC Purchase`
    * Tag Configuration
      * Event Tracking Parameters
