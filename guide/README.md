@@ -1,4 +1,4 @@
-# ENHANCED ECOMMERCE FOR SQUARESPACE
+# GUIDE: ENHANCED ECOMMERCE FOR SQUARESPACE
 ## Welcome
 In this guide I will go step by step through the solution I've come up with for setting up Google Analytics Enhanced Ecommerce (EEC) features in Squarespace. Currently this solution only covers the Universal Analytics implementation but I've structured the implementation in a way that makes it almost trivial to add GA4 ecommerce tags as Google continues to build out that functionality.
 
@@ -143,12 +143,13 @@ This is where it starts to get fun. We will be needing a bunch of custom variabl
 3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages" (if you don't have one yet you should create one)
 4.  Check the "Enable overriding settings in this tag" box
 5.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
-6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
+6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS) (in all of the examples this code is referencing this is `dimension4`. If you are also using `dimension4` then you would put `4` in the index section)
 7.  Set the "Dimension Value" to the variable we created in step 2 either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
 
     <img src="../img/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
 
 8.  Don't forget to click the "save" button!
+9.  Now when someone completes a checkout, our dataLayer vairable will grab the Squarespace Transaction ID from the `oid` query parameter (which should only actually appear on pages who's path is `/checkout/order-confirmed`), and set dimension4 to this value for the pageview hit.
 
 
 
@@ -327,13 +328,16 @@ Click on a step to visit that step's implementation guide:
 
 
 
-
-
-
-
 ---
 # SECTION 6 -- CONFIGURE TAG FIRING TRIGGERS
+**Click - All Elements - Some Clicks**
+* {{click - CHECKOUT button}} -- Page Path contains `/cart` AND Click Text contains `CHECKOUT`
 
+**Custom Event**
+* {{custom event - fireModifyCartTag}} -- Event Name: `fireModifyCartTag`
+* {{custom event - ssRawAddToCartPush}} -- Event Name: `ssRawAddToCartPush`
+* {{custom event - ssRawProductDetailPush}} -- Event Name: `ssRawProductDetailPush`
+* {{custom event - ssRawTransactionPush}} -- Event Name: `ssRawTransactionPush`
 
 
 
@@ -396,6 +400,28 @@ Click on a step to visit that step's implementation guide:
 
 
 
+
+
+
+
+---
+## UPDATE EXISTING TAG
+*	Google Analytics Pageview Tag - Assuming you've already setup the basic pageview tag that fires on all pages of your website, you will need to add a custom dimension to this tag by checking the `Enable overriding settings in this tag` box and then adding the Custom Dimension in the `Custom Dimensions` section, 
+	Set the `Index` value to the number associated with the custom dimension that you've defined for the `SS Transaction ID` 
+	Set the value for the dimension to the `URL Query - oid (for SS Transaction ID)` variable. 
+
+
+
+
+3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages" (if you don't have one yet you should create one)
+4.  Check the "Enable overriding settings in this tag" box
+5.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
+6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
+7.  Set the "Dimension Value" to the variable we created in step 2 either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
+
+    <img src="../img/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
+
+8.  Don't forget to click the "save" button!
 
 
 

@@ -47,33 +47,19 @@ If you are looking to learn EVERYTHING there is to know about Google Analytics, 
 # THE GUIDE
 If you already understand how EEC works, are familiar with Google Tag Manager (GTM), and understand at least the basics of Javascript, or you just want to dive in, feel free to click the "GET STARTED" link below.
 
-If you are new to the world of Ecommerce, or any of the other things I just mentioned, consider reading further before jumping into the guide.
+If you are new to the world of Ecommerce, or any of the other things I just mentioned, you might consider reading further before jumping into the guide.
+
+Of course if you do end up making it through this guide I would love to hear your thoughts on how it went or what could be improved. please post on the [discussion board](https://github.com/EfficiencyJunky/eec-for-squarespace/discussions) and let me know!
 
 ## [GET STARTED](./guide/)
 
 
 ---
-# HOW EEC WORKS IN GENERAL
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
+---
+# EVERYTHING BELOW THIS LINE IS STILL ACTIVELY BEING WRITTEN. EXCUSE THE MESS!
+---
+---
 ---
 # THE GOOGLE ANALYTICS ENHANCED ECOMMERCE FUNNEL
 1. **Impressions** (not an EEC action)
@@ -101,7 +87,6 @@ If you are new to the world of Ecommerce, or any of the other things I just ment
 	*	When a customer completes a transaction and lands on the "Order Complete" page
 
 ---
----
 ## CUSTOM DIMENSIONS AND METRICS
 *	dimension4 	- SS Transaction ID
 *	dimension5 	- SS SKU
@@ -110,12 +95,8 @@ If you are new to the world of Ecommerce, or any of the other things I just ment
 *	metric1 	- Cart Value - The combined value of products added or removed from cart - Scope: Product -- Type: Currency (Decimal)
 
 
+
 ---
----
-
-
-
-
 # DATA STRUCTURES
 ## productJSON -- Contains Product and Product Variant information
 
@@ -126,7 +107,7 @@ If you are new to the world of Ecommerce, or any of the other things I just ment
   * 1 VARIANT: In any case where it is feasible (any action in the funnel after Product Click), the variants list should contain one variant. In the case of a Product Detail View, we could leave the variants list set to `[]` since the Product Detail View describes a product that may contain multiple variants. But we can also send a single variant to describe the displayed characteristics of the product. To do this, we will set the `sku` == "not_added" and will have to figure out the proper values for `price`, `unlimited`, `qtyInStock` and `onSale` in order to create an `eec.detail` object that will send along the displayed characteristics of the product.
   * MULTIPLE VARIANTS: At this point in time there doesn't seem to be a case where a product would be sent with multiple variants but it's possible there will be a case for this in the future
 
-<script>
+```
 var productJSON = {
 	'productId': alphanumeric String,
 	'productName': String,
@@ -141,7 +122,7 @@ var productJSON = {
 		'onSale': Boolean
 	}]
 }
-</script>
+```
 
 
 	
@@ -162,7 +143,7 @@ The cookie's data structure will have the usual cookie keys:
 
 
 **COOKIE VALUE EXAMPLE**
-<script>
+```
 {
 	'abc123' : { // this key is set to the `sku` of one of the variants that's been added to cart
 		'pid': string, // the productId
@@ -172,59 +153,6 @@ The cookie's data structure will have the usual cookie keys:
 		'sal': true/false // the variant's `onSale` value -- helps calculate dimension7
 	}
 }
-</script>
+```
 
 
-
-
-# VARIABLES
-
-## CUSTOM HTML TAGS
-*	{{Custom HTML - push ssModifyCartItems to DL}} -- Trigger: `Dom Ready - Cart Page`
-
-
-
-**Custom Javascript Variables**
-Variable Type: Custom Javascript
-* {{JS - eec.purchase}}
-
-
-
-
-
-# UTILITY FUNCTIONS
-
-
----
----
-# TRIGGERS
-**Click - All Elements - Some Clicks**
-* {{click - CHECKOUT button}} -- Page Path contains `/cart` AND Click Text contains `CHECKOUT`
-
-**Custom Event**
-* {{custom event - fireModifyCartTag}} -- Event Name: `fireModifyCartTag`
-* {{custom event - ssRawAddToCartPush}} -- Event Name: `ssRawAddToCartPush`
-* {{custom event - ssRawProductDetailPush}} -- Event Name: `ssRawProductDetailPush`
-* {{custom event - ssRawTransactionPush}} -- Event Name: `ssRawTransactionPush`
-
-**DOM Ready - Some DOM Ready Events**
-* {{Dom Ready - Cart Page}} -- Page Path contains `/cart`
-* {{Dom Ready - Store Pages}} -- Page Path contains `/store/`
-
-
----
----
-# TAGS
-## UPDATE EXISTING TAG
-*	Google Analytics Pageview Tag - Assuming you've already setup the basic pageview tag that fires on all pages of your website, you will need to add a custom dimension to this tag by checking the `Enable overriding settings in this tag` box and then adding the Custom Dimension in the `Custom Dimensions` section, 
-	Set the `Index` value to the number associated with the custom dimension that you've defined for the `SS Transaction ID` (in all of the examples this code is referencing this is `dimension4` so you would put `4` in the index section). 
-	Set the value for the dimension to the `URL Query - oid (for SS Transaction ID)` variable. This will grab the Squarespace Transaction ID from the url of pages with the `oid` query parameter (which should only actually appear on pages who's path is `/checkout/order-confirmed`), and set dimension4 to this value for the pageview hit.
-
-
-
-
-
-
-
-
-## EEC EVENT TAGS
