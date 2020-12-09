@@ -8,7 +8,7 @@ In this guide I will go step by step through the solution I've come up with for 
 
 
 ## KNOWN ISSUES
-Currently this implementation doesn't work with the "Quick View" feature in Squarespace Stores. So you will have to disable "Quick View" in Store Settings before following this guide. Personally I think "Quick View" is not unnecessary and the Squarespace implementation appears to have some issues.
+Currently this implementation doesn't work with the "Quick View" feature in Squarespace Stores. So you will have to disable "Quick View" in Store Settings before following this guide. Personally I think "Quick View" is not unnecessary and the Squarespace implementation appears to have some issues.<br/>
     <img src="../img/00--Getting_Started/disabling_quickview.png" height=200>
 
 ## Additional Resources
@@ -120,7 +120,7 @@ I'll assume you've already setup a Google Tag Manager account and know how to us
 # SECTION 3 -- CONFIGURE BASIC BUILT-IN AND USER-DEFINED VARIABLES
 ## Setup a few Built-in Variables
 We need to make sure the Built-in variables we will be using are configured if they haven't been already
-1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, `Page Path`, `Page URL`, and `Referrer` by checking the box next to them in the list. If some or all have already been enabled then you don't need to do this step.
+1.  Go to the variables sectoin of GTM, click "Configure" in the "Built-In Variables" section, and enable `Container ID`, `Event`, `Page Hostname`, `Page Path`, `Page URL`, `Referrer`, and `Click Text` by checking the box next to them in the list. If these variables are already enabled then you don't need to do this step.
     When you're done you should see these variables available in the "Built-In Variables" list
 
     <img src="../img/02--GTM_and_Squarespace_Setup/03--builtin_variables.png">
@@ -222,27 +222,42 @@ For more information on variable versions and recursive merge when pushing data 
     Data Layer Variable Name: `modifyCartTagInfo.quantity`<br/>
     Data Layer Version: Version 2<br/>
 
-8. Variable Name: `DL - EEC Purchase - Order ID`<br/>
+8. Variable Name: `DL - EEC Checkout - uniqueProductCount`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `checkoutTagInfo.uniqueProductCount`<br/>
+    Data Layer Version: Version 2<br/>
+
+9. Variable Name: `DL - EEC Checkout - totalProductCount`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `checkoutTagInfo.totalProductCount`<br/>
+    Data Layer Version: Version 2<br/>
+
+10. Variable Name: `DL - EEC Checkout - totalValue`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `checkoutTagInfo.totalValue`<br/>
+    Data Layer Version: Version 2<br/>
+
+11. Variable Name: `DL - EEC Purchase - Order ID`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.orderNumber`<br/>
     Data Layer Version: Version 2<br/>
 
-9. Variable Name: `DL - EEC Purchase - Revenue`<br/>
+12. Variable Name: `DL - EEC Purchase - Revenue`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.grandTotal.decimalValue`<br/>
     Data Layer Version: Version 2<br/>
 
-10. Variable Name: `DL - EEC Purchase - SS Transaction ID`<br/>
+13. Variable Name: `DL - EEC Purchase - SS Transaction ID`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.id`<br/>
     Data Layer Version: Version 2<br/>
 
-11. Variable Name: `DL - SS Raw Transaction`<br/>
+14. Variable Name: `DL - SS Raw Transaction`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction`<br/>
     Data Layer Version: Version 2<br/>
 
-12. Variable Name: `name_here`<br/>
+15. Variable Name: `name_here`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `variable_here`<br/>
     Data Layer Version: Version 2<br/>
@@ -269,19 +284,22 @@ Each code file is liberally commented to explain what it does.
 2.  Variable Name: `JS Utility - updateVariantsAddedToCartCookie`<br/>
     Code: [updateVariantsAddedToCartCookie.js](./guide/utilities/updateVariantsAddedToCartCookie.js)<br/>
 
-3.  Variable Name: `JS Utility - parseURI`<br/>
+3.  Variable Name: `JS Utility - setDataLayerVariable`<br/>
+    Code: [setDataLayerVariable.js](./guide/utilities/setDataLayerVariable.js)<br/>
+
+4.  Variable Name: `JS Utility - parseURI`<br/>
     Code: [parseURI.js](./guide/utilities/parseURI.js)<br/>
 
-4.  Variable Name: `JS Utility - getCartItemsListFromScriptInDocument`<br/>
+5.  Variable Name: `JS Utility - getCartItemsListFromScriptInDocument`<br/>
     Code: [getCartItemsListFromScriptInDocument.js](./guide/utilities/getCartItemsListFromScriptInDocument.js)<br/>
 
-5.  Variable Name: `JS Utility - convertRawCartItemsListToProductJsonCollection`<br/>
+6.  Variable Name: `JS Utility - convertRawCartItemsListToProductJsonCollection`<br/>
     Code: [convertRawCartItemsListToProductJsonCollection.js](./guide/utilities/convertRawCartItemsListToProductJsonCollection.js)<br/>
 
-6.  Variable Name: `JS Utility - createEecObjectFromAction`<br/>
+7.  Variable Name: `JS Utility - createEecObjectFromAction`<br/>
     Code: [createEecObjectFromAction.js](./guide/utilities/createEecObjectFromAction.js)<br/>
 
-7.  Variable Name: `JS Utility - addListFromReferrer`<br/>
+8.  Variable Name: `JS Utility - addListFromReferrer`<br/>
     Code: [addListFromReferrer.js](./guide/utilities/addListFromReferrer.js)<br/>
 
 
@@ -330,99 +348,139 @@ Click on a step to visit that step's implementation guide:
 
 ---
 # SECTION 6 -- CONFIGURE TAG FIRING TRIGGERS
-**Click - All Elements - Some Clicks**
-* {{click - CHECKOUT button}} -- Page Path contains `/cart` AND Click Text contains `CHECKOUT`
+Before we complete the final step of setting up our tags, we need to configure the triggers that will actually cause the tags to fire. Luckily, all but one of our triggers is based on an event we are pushing to dataLayer so this is a super easy process.
 
-**Custom Event**
-* {{custom event - fireModifyCartTag}} -- Event Name: `fireModifyCartTag`
-* {{custom event - ssRawAddToCartPush}} -- Event Name: `ssRawAddToCartPush`
-* {{custom event - ssRawProductDetailPush}} -- Event Name: `ssRawProductDetailPush`
-* {{custom event - ssRawTransactionPush}} -- Event Name: `ssRawTransactionPush`
+The process for each of these will be the same:<br/>
+
+1.  from the "Triggers" page in GTM choose "New" 
+2.  give it the name specified by "Trigger Name"
+3.  choose the trigger type indicated by "Trigger Type"
+4.  fill in the trigger parameter fields as indicated by "Trigger Parameters"
+5.  leave the "This trigger fires on"
+
+**Triggers**
+1.  Trigger Name: `custom event - ssRawProductDetailPush`<br/>
+    Trigger Type: `Custom Event`<br/>
+    Trigger Parameters<br/>
+        Event Name: `ssRawProductDetailPush`<br/>
+        This trigger fires on: `All Custom Events`<br/>
 
 
+2.  Trigger Name: `custom event - ssRawAddToCartPush`<br/>
+    Trigger Type: `Custom Event`<br/>
+    Trigger Parameters<br/>
+        Event Name: `ssRawAddToCartPush`<br/>
+        This trigger fires on: `All Custom Events`<br/>
+
+3.  Trigger Name: `custom event - fireModifyCartTag`<br/>
+    Trigger Type: `Custom Event`<br/>
+    Trigger Parameters<br/>
+        Event Name: `fireModifyCartTag`<br/>
+        This trigger fires on: `All Custom Events`<br/>
+
+4.  Trigger Name: `click - CHECKOUT button`<br/>
+    Trigger Type: `Click - All Elements`<br/>
+    Trigger Parameters<br/>
+        This trigger fires on: `Some Clicks`<br/>
+        Condition 1: Select "Page Path" in the first dropdown, "contains" in the second, type `/cart` into the text field and then click the "+" button to the right of the text field
+        Condition 2: Select "Click Text" in the first dropdown, "contains" in the second and then type `CHECKOUT` into the text field. **NOTE: If your button is in another language or says something other than "CHECKOUT" you will need to type that into the text box instead.**
+
+5. Trigger Name: `custom event - ssRawTransactionPush`<br/>
+    Trigger Type: `Custom Event`<br/>
+    Trigger Parameters<br/>
+        Event Name: `ssRawTransactionPush`<br/><br/>
+        This trigger fires on: `All Custom Events`<br/>
 
 
 
 ---
 # SECTION 7 -- CONFIGURE EEC TAGS
+HORRAYYYY!!! We finally made it to the last step in the process! Now we get to configure all of our awesome event tags that will send the actual Enhanced Ecommerce data streaming into our Google Analytics views.
+
+A quick note before getting started. The tag configuration I've outlined below is based on what works for me. Feel free to change the Category, Action, and Label fields to fit your needs and add any other custom dimensions or metrics you normally would add so long as they don't conflict with the ones being sent in the EEC Object.
+
+The parts that actually HAVE to be followed exactly are: "Enhanced Ecommerce Features" needs to be set to true, "Read Data from Variable" needs to be set to the variable indicated, amd the "Trigger" needs to be choosen as indicated.
+
+The process for each of these will be the same:<br/>
+
+1.  from the "Tags" page in GTM choose "New" 
+2.  give it the name specified by "Tag Name"
+3.  set the "Tag Type" to `Google Analytics: Universal Analytics`
+4.  set the "Track Type" to `Event`
+5.  choose the trigger type indicated by "Trigger Type"
+6.  fill in the "Event Tracking Parameters"
+7.  choose your Google Analytics Settings Variable (same one you use for your pageview tag)
+8.  check the "Enable overriding settings in this tag" box
+9.  under "More Settings -> Ecommerce" set the options as indicated
+10. select the "Trigger"
+11. click "Save"
+
+
+**Tags**
 1. **Product Detail View**
-    * Category: `Ecommerce`
-    * Action: `Product Detail View`
-    * Label: `{{DL - EEC Detail - Product Name}}` (the name of the product)
-    * Non-Interactioin Hit: `True`
-    * More Settings -> Ecommerce: 
-        * Enable Enhanced Ecommerce Features: `True`
-        * Read Data from Variable: `{{JS - eec.detail}}`
+    * Tag Name: `GA - Event - EEC Product Detail View`
+    * Tag Configuration
+      * Event Tracking Parameters
+        * Category: `Ecommerce`
+        * Action: `Product Detail View`
+        * Label: `{{DL - EEC Detail - Product Name}}` (the name of the product)
+        * Non-Interactioin Hit: `True`
+      * More Settings -> Ecommerce: 
+          * Enable Enhanced Ecommerce Features: `True`
+          * Read Data from Variable: `{{JS - eec.detail}}`
     * Trigger: `custom event - ssRawProductDetailPush`
 
 2. **Add To Cart**
-   * Category: `Ecommerce`
-   * Action: `Add To Cart`
-   * Label: `{{DL - EEC Detail - Product Name}}`
-   * Non-Interactioin Hit: `False`
-   * More Settings -> Ecommerce: 
-       * Enable Enhanced Ecommerce Features: `True`
-       * Read Data from Variable: `{{JS - eec.add}}`
+   * Tag Name: `GA - Event - EEC Add To Cart`
+   * Tag Configuration
+     * Event Tracking Parameters
+       * Category: `Ecommerce`
+       * Action: `Add To Cart`
+       * Label: `{{DL - EEC Detail - Product Name}}`
+       * Non-Interactioin Hit: `False`
+     * More Settings -> Ecommerce: 
+         * Enable Enhanced Ecommerce Features: `True`
+         * Read Data from Variable: `{{JS - eec.add}}`
    * Trigger: `custom event - ssRawAddToCartPush`
 
 3. **Modify Cart** -- Sends either `add` or `remove` EEC Actions depending on the modification
-   * Category: `Ecommerce`
-   * Action: `Modify Cart`
-   * Label: `{{DL - EEC Modify - action}}: {{DL - EEC Modify - productName}}`
-   * Value: `{{DL - EEC Modify - quantity}}`
-   * Non-Interactioin Hit: `False`
-   * More Settings -> Ecommerce: 
-       * Enable Enhanced Ecommerce Features: `True`
-       * Read Data from Variable: `{{JS - eec.modify}}`
+   * Tag Name: `GA - Event - EEC Modify Cart`
+   * Tag Configuration
+     * Event Tracking Parameters
+       * Category: `Ecommerce`
+       * Action: `Modify Cart`
+       * Label: `{{DL - EEC Modify - action}}: {{DL - EEC Modify - productName}}`
+       * Value: `{{DL - EEC Modify - quantity}}`
+       * Non-Interactioin Hit: `False`
+     * More Settings -> Ecommerce: 
+         * Enable Enhanced Ecommerce Features: `True`
+         * Read Data from Variable: `{{JS - eec.modify}}`
    * Trigger: `custom event - fireModifyCartTag`
 
 4. **Checkout**
-   * Category: `Ecommerce`
-   * Action: `Checkout`
-   * Label: `Checkout {number of items} {value}`
-   * Non-Interactioin Hit: `False`
-   * More Settings -> Ecommerce: 
-       * Enable Enhanced Ecommerce Features: `True`
-       * Read Data from Variable: `{{JS - eec.checkout}}`
+   * Tag Name: `GA - Event - EEC Checkout`
+   * Tag Configuration
+     * Event Tracking Parameters
+       * Category: `Ecommerce`
+       * Action: `Checkout`
+       * Label: `Value: {{DL - EEC Checkout - totalValue}} Items: {{DL - EEC Checkout - totalProductCount}}`
+       * Non-Interactioin Hit: `False`
+     * More Settings -> Ecommerce: 
+         * Enable Enhanced Ecommerce Features: `True`
+         * Read Data from Variable: `{{JS - eec.checkout}}`
    * Trigger: `click - CHECKOUT button`
 
 5. **Purchase**
-   * Category: `Ecommerce`
-   * Action: `Purchase`
-   * Label: `Order ID: {{DL - EEC Purchase - Order ID}}`
-   * Value: `{{DL - EEC Purchase - Revenue}}`
-   * Non-Interactioin Hit: `True`
-   * More Settings -> Ecommerce: 
-       * Enable Enhanced Ecommerce Features: `True`
-       * Read Data from Variable: `{{JS - eec.purchase}}`
+   * Tag Name: `GA - Event - EEC Purchase`
+   * Tag Configuration
+     * Event Tracking Parameters
+       * Category: `Ecommerce`
+       * Action: `Purchase`
+       * Label: `Order ID: {{DL - EEC Purchase - Order ID}}`
+       * Value: `{{DL - EEC Purchase - Revenue}}`
+       * Non-Interactioin Hit: `True`
+     * Enable overriding settings in this tag
+     * More Settings -> Ecommerce: 
+         * Enable Enhanced Ecommerce Features: `True`
+         * Read Data from Variable: `{{JS - eec.purchase}}`
    * Trigger: `custom event - ssRawTransactionPush`
-
-
-
-
-
-
-
-
----
-## UPDATE EXISTING TAG
-*	Google Analytics Pageview Tag - Assuming you've already setup the basic pageview tag that fires on all pages of your website, you will need to add a custom dimension to this tag by checking the `Enable overriding settings in this tag` box and then adding the Custom Dimension in the `Custom Dimensions` section, 
-	Set the `Index` value to the number associated with the custom dimension that you've defined for the `SS Transaction ID` 
-	Set the value for the dimension to the `URL Query - oid (for SS Transaction ID)` variable. 
-
-
-
-
-3.  Now go to "Tags" and open the obligatory Pageview tag that is firing on "All Pages" (if you don't have one yet you should create one)
-4.  Check the "Enable overriding settings in this tag" box
-5.  Under "More Settings -> Custom Dimensions", choose "Add Custom Dimension"
-6.  Set the Index to the same index as was generated for the custom dimension named `SS Transaction ID` that we created at the beginning of this tutorial in [**SECTION 1: Step 1**](#SECTION-1-PREPARE-GOOGLE-ANALYTICS-PROPERTY-AND-VIEW-SETTINGS)
-7.  Set the "Dimension Value" to the variable we created in step 2 either by copying and pasting this exact text `{{URL Query - oid (for SS Transaction ID)}}` or clicking the icon next to the text box (looks like a lego block with a plus sign on it) and choosing the variable from the list.
-
-    <img src="../img/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
-
-8.  Don't forget to click the "save" button!
-
-
-
-

@@ -44,10 +44,13 @@ function(){
         if(quantityDifference != 0){
             eecAction = (quantityDifference > 0 ) ? 'add' : 'remove';
 
-            var gtmDataLayerRef = window.google_tag_manager[{{Container ID}}].dataLayer;
-            gtmDataLayerRef.set('modifyCartTagInfo.action', eecAction);
-            gtmDataLayerRef.set('modifyCartTagInfo.quantity', quantityDifference);
-            gtmDataLayerRef.set('modifyCartTagInfo.productName', oldCartItem.productJSON.productName);
+            var modifyCartTagInfo = {
+                'action': eecAction,
+                'quantity': quantityDifference,
+                'productName': oldCartItem.productJSON.productName
+            }
+
+            {{JS Utility - setDataLayerVariable}}('modifyCartTagInfo', modifyCartTagInfo);
 
             return {{JS Utility - createEecObjectFromAction}}(eecAction, oldCartItem.productJSON, quantityDifference);
         }

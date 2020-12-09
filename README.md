@@ -107,7 +107,7 @@ Of course if you do end up making it through this guide I would love to hear you
   * 1 VARIANT: In any case where it is feasible (any action in the funnel after Product Click), the variants list should contain one variant. In the case of a Product Detail View, we could leave the variants list set to `[]` since the Product Detail View describes a product that may contain multiple variants. But we can also send a single variant to describe the displayed characteristics of the product. To do this, we will set the `sku` == "not_added" and will have to figure out the proper values for `price`, `unlimited`, `qtyInStock` and `onSale` in order to create an `eec.detail` object that will send along the displayed characteristics of the product.
   * MULTIPLE VARIANTS: At this point in time there doesn't seem to be a case where a product would be sent with multiple variants but it's possible there will be a case for this in the future
 
-```
+<script>
 var productJSON = {
 	'productId': alphanumeric String,
 	'productName': String,
@@ -122,7 +122,7 @@ var productJSON = {
 		'onSale': Boolean
 	}]
 }
-```
+</script>
 
 
 	

@@ -11,22 +11,27 @@
 
     var oldCartItemsList = {{JS Utility - getCartItemsListFromScriptInDocument}}(document);
 
+    // initialize the DL variable we will use to populate "Event Tracking Parameters" in our tags when they fire
+    // these variables will be set in the eec.modify and eec.checkout Javascript code
+    window.dataLayer.push({
+        'event' : 'initModifyCartAndCheckoutTagInfo',
+        'modifyCartTagInfo':{
+            'action': 'not_set',
+            'quantity': '0',
+            'productName': 'not_set'
+        },
+        'checkoutTagInfo':{
+            'uniqueProductCount': 0,
+            'totalProductCount': 0,
+            'totalValue': '0.00'
+        }        
+    });
+
     // push the initial state of the cart to dataLayer
     window.dataLayer.push({
         'event' : 'ssRawModifyCartPush',
         'ssRawModifyCart': { 
             'initialCartItemsList': oldCartItemsList 
-        }
-    });
-
-    // initialize the DL variable we will use to identify the action taken when our tag fires
-    // this variable will be set with 'add' or 'remove' whenever the 'ssRawModifyCartPush' DL Push event occurs
-    window.dataLayer.push({
-        'event' : 'initModifyCartTagInfo',
-        'modifyCartTagInfo':{
-            'action': 'not_set',
-            'quantity': '0',
-            'productName': 'not_set'
         }
     });
 

@@ -28,6 +28,34 @@ function(){
     // add the appropriate actionField object to indicate step 1 of checkout
     eecCheckoutObj.ecommerce.checkout['actionField'] = {'step': 1};
 
+    // update the dataLayer variable we will use for our checkout tag
+    updateCartTagDLVars(currentCartItemsJSON.productJSONList, currentCartItemsJSON.quantityList);
+
     // return our finished object
     return eecCheckoutObj;
+
+
+    // This helper function calculates a few bits of aggregate information about our cart and stores them in a dataLayer variable we will use to send this information in our checkout tag
+    // the count of unique products
+    // the total count products
+    // the total value of the cart
+    function updateCartTagDLVars(productJSONList, quantityList){
+
+        var uniqueProductCount = 0, totalProductCount = 0, totalValue = 0;
+
+        for(var j=0; j < productJSONList.length; j++){
+            totalProductCount = totalProductCount + quantityList[j];
+            uniqueProductCount = uniqueProductCount + 1;
+            totalValue = totalValue + (productJSONList[j].variants[0].price * quantityList[j]);
+        }
+
+        var checkoutTagInfo = {
+            'uniqueProductCount': uniqueProductCount,
+            'totalProductCount': totalProductCount,
+            'totalValue': totalValue.toFixed(2)
+        }
+    
+        {{JS Utility - setDataLayerVariable}}('checkoutTagInfo', checkoutTagInfo);
+
+    }
 }
