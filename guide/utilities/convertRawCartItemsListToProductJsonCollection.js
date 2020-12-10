@@ -45,6 +45,7 @@ function(){
                 'variants': 
                 [{
                     'sku': rawItem.sku,
+                    'options': variantCookieData.opt,
                     'price': rawItem.unitPrice.decimalValue,
                     'unlimited': variantCookieData.unl,
                     'qtyInStock': variantCookieData.qty,

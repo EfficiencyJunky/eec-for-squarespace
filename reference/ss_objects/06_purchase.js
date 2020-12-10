@@ -2,6 +2,44 @@
 // we can also access this variable AFTER DOM.Ready simply by accessing:
 //    Y.Squarespace.CommerceAnalytics._yuievt.events["commerceTrack:commerce-checkout-confirmed"].details[0]
 
+
+var purchaseCompletePageScriptContents = {
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 var purchaseCompletePageScriptContents = {
     id: '5fb734bc1b54d22df157f49a',
     orderNumber: '12439',

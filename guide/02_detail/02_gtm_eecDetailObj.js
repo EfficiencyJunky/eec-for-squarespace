@@ -62,6 +62,7 @@ function(){
             // may want to add 'productPrice' but this is TBD
             'variants': [{
                 'sku': 'not_added',
+                'options': 'not_added',
                 'price': price,
                 'unlimited': unlimited,
                 'qtyInStock': qtyInStock, // can be 0 if unlimited is true

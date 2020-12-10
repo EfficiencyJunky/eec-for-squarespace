@@ -37,6 +37,14 @@ function(){
                           variantAdded.salePrice 
                         ) / 100;
 
+    var variantOptions = "not_added";
+    for(var j=0; j < variantAdded.optionValues.length; j++){
+
+      variantOptions = (j == 0) ? "" : variantOptions + "|";
+
+      variantOptions = variantOptions + variantAdded.optionValues[j].value;
+    }
+
     var productJSON = {
         'productId': newlyAdded.itemId,
         'productName': newlyAdded.title,
@@ -45,6 +53,7 @@ function(){
         'variants':
         [{
             'sku': variantAdded.sku,
+            'options': variantOptions,
             'price': variantPrice.toFixed(2),
             'unlimited': variantAdded.unlimited,
             'qtyInStock': variantAdded.qtyInStock, // can be 0 if unlimited is true

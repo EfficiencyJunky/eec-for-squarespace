@@ -15,6 +15,7 @@ function(){
         var variantDetails = {
             'pid': productJSON.productId,
             'cat': productJSON.productCategory,
+            'opt': variantAdded.options,
             'unl': variantAdded.unlimited,
             'qty': variantAdded.qtyInStock,
             'sal': variantAdded.onSale

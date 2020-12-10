@@ -35,7 +35,6 @@ function(){
                 'id': productJSON[j].productId,
                 'name': productJSON[j].productName,
                 'category': productJSON[j].productCategory,
-                //variant: 'xyz', // need to implement this although the SKU in dimension5 does sort of provide this information already
                 'brand': {{const - eec brand}}
             }
 
@@ -49,7 +48,8 @@ function(){
                     case "remove":
                         eecProduct['metric1'] = Number(variant.price) * quantity;
                     case "checkout":
-                    case "purchase":    
+                    case "purchase":
+                        eecProduct['variant'] = variant.options;
                         eecProduct['quantity'] = Math.abs(quantity[j]);
                         eecProduct['dimension5'] = variant.sku;
                     case "detail":
