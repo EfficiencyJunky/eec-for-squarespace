@@ -54,7 +54,6 @@ function(){
 
             return {{JS Utility - createEecObjectFromAction}}(eecAction, oldCartItem.productJSON, quantityDifference);
         }
-
     }
-
 }
+

@@ -15,9 +15,9 @@
     4. Now under "Triggering" choose the `Dom Ready - Cart Page` trigger we created in the previous step
     5. Save the tag
     6. To test this, re-start Preview mode in GTM, add a product to cart, and then visit the cart page. <br/>
-    You should see the `ssRawModifyCartPush` event show up in the Summary tab. Click on this event and check the "Variables" tab. The `DL - SS Raw Modify Cart` variable should now be populated with a bunch of data.<br/>
-    You should ALSO see the `initModifyCartTagInfo` event show up in the Summary tab. Click on this event and check the "Variables" tab. The `DL - EEC Modify - action`, `DL - EEC Modify - productName`, and `DL - EEC Modify - quantity` variables should now be initialized with "not_set", "not_set", and 0.<br/>
-    If you change the quantity of one of the items in the cart, or remove it from the cart entirely, you should see two more events appear in the summary tab: `ssRawModifyCartPush` and `fireModifyCartTag`. we will use these in the next step.
+    We should see the `ssRawModifyCartPush` event show up in the Summary tab. Click on this event and check the "Variables" tab. The `DL - SS Raw Modify Cart` variable should now be populated with a bunch of data.<br/>
+    We should ALSO see the `initModifyCartTagInfo` event show up in the Summary tab. Click on this event and check the "Variables" tab. The `DL - EEC Modify - action`, `DL - EEC Modify - productName`, and `DL - EEC Modify - quantity` variables should now be initialized with "not_set", "not_set", and 0.<br/>
+    If we change the quantity of one of the items in the cart, or remove it from the cart entirely, we should see two more events appear in the summary tab: `ssRawModifyCartPush` and `fireModifyCartTag`. we will use these in the next step.
 
 
 
@@ -47,6 +47,7 @@ This is an example of what the EEC data structure for actions of type `add` and 
           'category': 'categoryA/categoryB',
           'brand': 'Your Brand Name',
           'metric1': 12,
+          'variant': 'option1|option2',
           'quantity': 2,
           'dimension5': 'SQ1234567',
           'price': '6.00',
@@ -69,6 +70,7 @@ This is an example of what the EEC data structure for actions of type `add` and 
           'category': 'categoryC/categoryD',
           'brand': 'Your Brand Name',
           'metric1': -30,
+          'variant': 'option1|option2',
           'quantity': 3,
           'dimension5': 'SQ7654321',
           'price': '10.00',

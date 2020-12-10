@@ -4,7 +4,7 @@
     1. In Squarespace, navigate to "Settings -> Advanced -> Code Injection" 
     2. Copy [this code][01_datalayer_push_code] into the "ORDER CONFIRMATION PAGE" section at the very bottom
     3. click "save" to save the changes. (NOTE: in some cases after clicking save, the contents of the code injection box disappear. This is a bug in Squarespace. Just reload the page and it will re-appear)
-    4. To test this, we will have to actually make a purchase. Back in GTM, start or restart Preview mode, add a product to cart, visit the cart page, and click checkout. If the checkout page is hosted on "secure.squarespace.com" then GTM may complain that it has lost the connection. Disregard this complaint, complete the checkout, and you should be re-directed to the URL Path "/checkout/order-confirmed" (it will have some query parameters in it as well)
+    4. To test this, we will have to actually make a purchase. Back in GTM, start or restart Preview mode, add a product to cart, visit the cart page, and click checkout. If the checkout page is hosted on "secure.squarespace.com" then GTM may complain that it has lost the connection. Disregard this complaint, complete the checkout, and we should be re-directed to the URL Path "/checkout/order-confirmed" (it will have some query parameters in it as well)
     The `ssRawTransactionPush` event should show up in the Summary tab. Click on this event and check to make sure the `DL - SS Raw Transaction` and `URL Query - oid (for SS Transaction ID)` variables have been populated.
 
 
@@ -33,6 +33,7 @@ This is an example of what the EEC data structure for action of type `purchase` 
           'name': 'added product name',
           'category': 'categoryA/categoryB',
           'brand': 'Your Brand Name',
+          'variant': 'option1|option2',
           'quantity': 2,
           'dimension5': 'SQ1234567',
           'price': '6.00',
@@ -44,6 +45,7 @@ This is an example of what the EEC data structure for action of type `purchase` 
           'name': 'another added product name',
           'category': 'categoryC/categoryD',
           'brand': 'Your Brand Name',
+          'variant': 'option1|option2',
           'quantity': 4,
           'dimension5': 'SQ7654321',
           'price': '10.00',
@@ -66,58 +68,3 @@ This is an example of what the EEC data structure for action of type `purchase` 
 
 [01_datalayer_push_code]: ./01_ss_rawTransactionPush.html
 [02_eec_object_creation_code]: ./02_gtm_eecPurchaseObj.js
-
-
-<!--
-<script>
-OTHER DETAILS
-1. Create a trigger that fires when the Squarespace event key in step 1 is detected in the dataLayer
-
-2. Create a tag that fires on this trigger and sends an event hit to GA with custom dimension for SS Transaction ID and Enhanced Ecommerce enabled with data from custom Javascript in Step 2
-</script>
-
-
-<!--REFERENCE OBJECT PUSH-->
-<!--DO NOT USE THIS CODE IN SQUARESPACE -- IT IS JUST FOR REFERENCE-->
-<!--
-<script>
-
-dataLayer.push({
-	event: 'ssRawTransactionJSONPushed_ss',
-	ssCommerceScriptJSON: {
-	  id: '5fb734bc1b54d22df157f49a', // the squarespace transaction ID
-	  orderNumber: '12439',
-	  websiteId: '5db646aa924a603ce094fb9b',
-	  purchasedCartId: '5fb73476da47fc7bdff15746',
-	  testMode: true,
-	  grandTotal: {currencyCode: 'USD', value: 1100, decimalValue: '11.00', fractionalDigits: 2},
-	  grandTotalFormatted: '$11.00',
-	  subtotal: {currencyCode: 'USD', value: 1000, decimalValue: '10.00', fractionalDigits: 2},
-	  subtotalFormatted: '$10.00',
-	  taxTotal: {currencyCode: 'USD', value: 0, decimalValue: '0.00', fractionalDigits: 2},
-	  taxTotalFormatted: '$0.00',
-	  shippingTotal: {currencyCode: 'USD', value: 100, decimalValue: '1.00', fractionalDigits: 2},
-	  shippingTotalFormatted: '$1.00',
-	  billingDetails: {customer: ''},
-	  items: [
-		{
-		  sku: 'SQ4897009',
-		  productName: 'MARE LUNE sticker',
-		  unitPrice: {currencyCode: 'USD', value: 500, decimalValue: '5.00', fractionalDigits: 2},
-		  quantity: 1
-		},
-		{
-		  sku: 'SQ7346474',
-		  productName: 'YOUR HEART sticker',
-		  unitPrice: {currencyCode: 'USD', value: 500, decimalValue: '5.00', fractionalDigits: 2},
-		  quantity: 1
-		}
-	  ]
-	},
-	gtm.uniqueEventId: 6
-  })
-
-</script>
--->
-<!--REFERENCE OBJECT PUSH-->
-<!--DO NOT USE THIS CODE IN SQUARESPACE -- IT IS JUST FOR REFERENCE-->

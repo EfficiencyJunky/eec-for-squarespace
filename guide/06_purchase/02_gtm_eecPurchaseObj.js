@@ -31,5 +31,4 @@ function(){
 
     // return our finished object
     return eecPurchaseObj;
-
 }

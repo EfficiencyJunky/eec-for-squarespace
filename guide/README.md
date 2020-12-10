@@ -192,7 +192,8 @@ This is where it starts to get fun. We will require a bunch of custom variables,
     <img src="../img/02--GTM_and_Squarespace_Setup/05--modify_pageview_tag.png" height=500>
 
 8.  Don't forget to click the "save" button!
-9.  Now when someone completes a checkout, our dataLayer variable will be populated with the Squarespace Transaction ID from the `oid` query parameter (which should only actually appear on pages who's path is `/checkout/order-confirmed`), and this will be sent along with the pageview hit as custom dimension4. Of course in Google Analytics Reports it will show up as "SS Transaction ID" under Custom Dimensions.
+
+Now when someone completes a checkout, our dataLayer variable will be populated with the Squarespace Transaction ID from the `oid` query parameter (which should only actually appear on pages who's path is `/checkout/order-confirmed`), and this will be sent along with the pageview hit as custom dimension4. Of course in Google Analytics Reports it will show up as "SS Transaction ID" under Custom Dimensions.
 
 
 
@@ -317,28 +318,28 @@ Each code file is liberally commented to explain what it does.
 **Custom JavaScript Variables**
 
 1.  Variable Name: `JS Utility - setCookie`<br/>
-    Code: [setCookie.js](./guide/utilities/setCookie.js)<br/>
+    Code: [setCookie.js](./utilities/setCookie.js)<br/>
 
 2.  Variable Name: `JS Utility - updateVariantsAddedToCartCookie`<br/>
-    Code: [updateVariantsAddedToCartCookie.js](./guide/utilities/updateVariantsAddedToCartCookie.js)<br/>
+    Code: [updateVariantsAddedToCartCookie.js](./utilities/updateVariantsAddedToCartCookie.js)<br/>
 
 3.  Variable Name: `JS Utility - setDataLayerVariable`<br/>
-    Code: [setDataLayerVariable.js](./guide/utilities/setDataLayerVariable.js)<br/>
+    Code: [setDataLayerVariable.js](./utilities/setDataLayerVariable.js)<br/>
 
 4.  Variable Name: `JS Utility - parseURI`<br/>
-    Code: [parseURI.js](./guide/utilities/parseURI.js)<br/>
+    Code: [parseURI.js](./utilities/parseURI.js)<br/>
 
 5.  Variable Name: `JS Utility - getCartItemsListFromScriptInDocument`<br/>
-    Code: [getCartItemsListFromScriptInDocument.js](./guide/utilities/getCartItemsListFromScriptInDocument.js)<br/>
+    Code: [getCartItemsListFromScriptInDocument.js](./utilities/getCartItemsListFromScriptInDocument.js)<br/>
 
 6.  Variable Name: `JS Utility - convertRawCartItemsListToProductJsonCollection`<br/>
-    Code: [convertRawCartItemsListToProductJsonCollection.js](./guide/utilities/convertRawCartItemsListToProductJsonCollection.js)<br/>
+    Code: [convertRawCartItemsListToProductJsonCollection.js](./utilities/convertRawCartItemsListToProductJsonCollection.js)<br/>
 
 7.  Variable Name: `JS Utility - createEecObjectFromAction`<br/>
-    Code: [createEecObjectFromAction.js](./guide/utilities/createEecObjectFromAction.js)<br/>
+    Code: [createEecObjectFromAction.js](./utilities/createEecObjectFromAction.js)<br/>
 
 8.  Variable Name: `JS Utility - addListFromReferrer`<br/>
-    Code: [addListFromReferrer.js](./guide/utilities/addListFromReferrer.js)<br/>
+    Code: [addListFromReferrer.js](./utilities/addListFromReferrer.js)<br/>
 
 
 
@@ -414,7 +415,7 @@ HORRAYYYY!!! We finally made it to the last step in the process! Now we get to c
 
 A quick note before getting started. The tag configuration I've outlined below is based on what works for me. Feel free to change the Category, Action, and Label fields to fit your needs and add any other custom dimensions or metrics you normally would add so long as they don't conflict with the ones being sent in the EEC Object.
 
-The parts that actually HAVE to be followed exactly are: "Enhanced Ecommerce Features" needs to be set to true, "Read Data from Variable" needs to be set to the variable indicated, amd the "Trigger" needs to be choosen as indicated.
+The parts that actually HAVE to be followed exactly are: "Enhanced Ecommerce Features" needs to be set to true, "Read Data from Variable" needs to be set to the variable indicated, and the "Trigger" needs to be choosen as indicated.
 
 The process for each of these will be the same:<br/>
 
@@ -499,3 +500,28 @@ The process for each of these will be the same:<br/>
          * Enable Enhanced Ecommerce Features: `True`
          * Read Data from Variable: `{{JS - eec.purchase}}`
    * Trigger: `custom event - ssRawTransactionPush`
+
+
+
+
+
+---
+# SECTION 8 -- CELEBRATE...NO WAIT...TEST A BUNCH FIRST!!!
+Congratulations on making it through. Now the entire implementation needs to be tested. Go through the entire user journey and make sure to trigger each Tag. The testing process should be something like this
+
+1. Complete the customer action that should trigger the tag being tested (like view a products details page)
+2. Click on the event in the "Summary" tab that is supposed to trigger that tag (in our example this would be `ssRawProductDetailPush`)
+3. Check to make sure the tag fired (it will show up in the "Tags Fired" section of the "Tags" tab)<br/>
+    <br/>
+    <img src="../img/06--Testing/01_tag_fired_verification.png" height=350>
+    <br/>
+4. Click on the tag itself, choose "Show More" to see all the details of the tag, and set the radio button in the upper right corner to "Values"
+5. Now verify that all of the information and tag fields are correct
+6. Repeat these steps for all of the tags
+    <br/>
+    <img src="../img/06--Testing/02_tag_data_verification.png" height=800>
+    <br/>
+
+
+
+

@@ -7,7 +7,7 @@
     4. Select "Page Path" in the first dropdown, "contains" in the second and then type in `/store/` to the text field
     5. Save the trigger
 
-  <img src="../../img/05--Main_Implementation/01--Add--Trigger--DomReady.png" height=300>
+  <img src="../../img/05--Main_Implementation/add--01--Trigger--DomReady.png" height=300>
 
 
 2. Setup a custom HTML Tag to to push raw item added data to dataLayer
@@ -27,8 +27,14 @@
 
 
 4. Lastly, we should check to make sure the cookie was properly updated.
-    1. To test this, first remove all items from the cart, then re-start Preview mode in GTM, visit a product details page and add the product to cart. If we click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `Cookie - variantsAddedToCart` variable may be populated or it may appear to be empty. This is normal. Reload the product page, click on any event in the Summary tab after the page has reloaded and we should see the cookie has been populated with an object who's first level key is set to the SKUs of the product that we just added to cart. The cookie will add a new object everytime a new product is added that has not been added before.
-    Of course we may have to re-load the page to see it update. Again, this is normal and is just an idiosyncracy with the way Google Tag Manager displays information for each dataLayer event.
+    1. To test this, click on the `ssRawAddToCartPush` event in the Summary tab and check the "Variables" tab. The `Cookie - variantsAddedToCart` variable may be populated or it may appear to be "undefined". This is normal. Reload the product page, click on any event in the Summary tab *after* the page has reloaded (like "Container Loaded") and the cookie should now appear populated with an object who's first level key is set to the SKUs of the product that we just added to cart. The cookie will update everytime a new product is added that has not been added before.
+    Of course we may have to re-load the page to see it update. Again, this is normal and is just an idiosyncracy with the way Google Tag Manager displays information for each dataLayer event. Below is an example of what I'm talking about.
+<br/>
+Before page reload, cookie appears not to be populated (but it actually is):<br/>
+<img src="../../img/05--Main_Implementation/add--02--cookie_verification.png"><br/>
+<br/>
+After page reload, cookie appears populated:<br/>
+<img src="../../img/05--Main_Implementation/add--03--cookie_verification2.png"><br/>
 
 
 **EEC ADD DATA STRUCTURE REFERENCE**<br/>
@@ -44,6 +50,7 @@ This is an example of what an EEC data structure for action of type `add` looks 
           'category': 'categoryA/categoryB',
           'brand': 'Your Brand Name',
           'metric1': 12,
+          'variant': 'option1|option2',
           'quantity': 2,
           'dimension5': 'SQ1234567',
           'price': '6.00',

@@ -63,7 +63,4 @@ function(){
 
     return productJSON;
   }
-
-
-
 }

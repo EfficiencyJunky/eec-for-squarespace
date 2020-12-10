@@ -1,5 +1,5 @@
-<script>
 
+<script>
     // this script adds an event listener to the squarespace CommerceAnalytics object that fires when the object reports a successful add to cart event
     // when this fires, we can grab the information on the product added from the "newlyAdded" member of the event object as well as the quantity added (which we get from the value in the quantity input box on the page)
     // then we push that information to dataLayer with event name "ssRawAddToCartPush"
@@ -32,7 +32,5 @@
       console.error('trying to attach listener to "commerce-item-added" event');
       console.error(error);
     }
-
-
-
 </script>
+
