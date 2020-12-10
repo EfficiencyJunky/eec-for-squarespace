@@ -107,19 +107,22 @@ In Google Analytics, go to settings, and choose the property that will be used f
    
 1.  Under "Custom Definitions" choose "Custom Dimensions"
 
-    We will need to setup 4 custom dimensions **(Don't worry if the indexes aren't the same as in the pictures):**
+    We will need to setup these custom dimensions **(Don't worry if the indexes aren't the same as in the pictures):**
     *	`SS Transaction ID` - Hit Scoped - Value set to the Squarespace alphanumeric transaction ID
     *	`SS Variant SKU`    - Product Scoped - Value set to the Squarespace variant SKU
     *	`SS Availability`   - Product Scoped - Value set to either 'In Stock' or 'Sold Out'
     *	`SS Sale Status`    - Product Scoped - Value set to either 'On Sale' or 'Regular Price'
+    *	`Order Discount Status`    - Hit Scoped - Value set to either 'Discount Applied' or 'No Discount'
+    *	`Free Shipping`  - Hit Scoped - Value set to either 'Yes' or 'No'
 
     <img src="../img/01--GA_Setup/01--Settings--Property--custom_dimensions.png" height=300>
 
 
 2.  Under "Custom Definitions" choose "Custom Metrics"
     
-    We will need to setup 1 custom metric:
+    We will need to setup these custom metrics:
     *	`Cart Value` - Product Scoped - Currency (Decimal)
+    *	`Order Discount Amount` - Hit Scoped - Currency (Decimal)
 
     <img src="../img/01--GA_Setup/02--Settings--Property--custom_metrics.png">
 
@@ -282,24 +285,39 @@ For more information on variable versions and recursive merge when pushing to da
     Data Layer Variable Name: `checkoutTagInfo.totalValue`<br/>
     Data Layer Version: Version 2<br/>
 
-11. Variable Name: `DL - EEC Purchase - Order ID`<br/>
+11. Variable Name: `DL - SS Raw Transaction`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `ssRawTransaction`<br/>
+    Data Layer Version: Version 2<br/>
+
+12. Variable Name: `DL - EEC Purchase - Order ID`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.orderNumber`<br/>
     Data Layer Version: Version 2<br/>
 
-12. Variable Name: `DL - EEC Purchase - Revenue`<br/>
+13. Variable Name: `DL - EEC Purchase - Revenue`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.grandTotal.decimalValue`<br/>
     Data Layer Version: Version 2<br/>
 
-13. Variable Name: `DL - EEC Purchase - SS Transaction ID`<br/>
+14. Variable Name: `DL - EEC Purchase - SS Transaction ID`<br/>
     Variable Type: Data Layer Variable<br/>
     Data Layer Variable Name: `ssRawTransaction.id`<br/>
     Data Layer Version: Version 2<br/>
 
-14. Variable Name: `DL - SS Raw Transaction`<br/>
+15. Variable Name: `DL - EEC Purchase - Discount Status`<br/>
     Variable Type: Data Layer Variable<br/>
-    Data Layer Variable Name: `ssRawTransaction`<br/>
+    Data Layer Variable Name: `discount.status`<br/>
+    Data Layer Version: Version 2<br/>
+
+16. Variable Name: `DL - EEC Purchase - Discount Amount`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `discount.amount`<br/>
+    Data Layer Version: Version 2<br/>
+
+17. Variable Name: `DL - EEC Purchase - Free Shipping`<br/>
+    Variable Type: Data Layer Variable<br/>
+    Data Layer Variable Name: `discount.freeShipping`<br/>
     Data Layer Version: Version 2<br/>
 
 ---
@@ -418,7 +436,7 @@ A quick note before getting started. The tag configuration I've outlined below i
 
 The parts that actually HAVE to be followed exactly are: "Enhanced Ecommerce Features" needs to be set to true, "Read Data from Variable" needs to be set to the variable indicated, and the "Trigger" needs to be choosen as indicated.
 
-The process for each of these will be the same:<br/>
+The process for each of these will be the same **EXCEPT FOR THE "PURCHASE" TAG WHICH HAS ADDITIONAL CUSTOM DIMENSIONS AND METRICS**<br/>
 
 1.  from the "Tags" page in GTM choose "New" 
 2.  give it the name specified by "Tag Name"
@@ -497,12 +515,16 @@ The process for each of these will be the same:<br/>
        * Value: `{{DL - EEC Purchase - Revenue}}`
        * Non-Interactioin Hit: `True`
      * Enable overriding settings in this tag
+     * Custom Dimensions:
+         * Index `4` - Dimension Value: `{{DL - EEC Purchase - SS Transaction ID}}`
+         * Index `8` - Dimension Value: `{{DL - EEC Purchase - Discount Status}}`
+         * Index `9` - Dimension Value: `{{DL - EEC Purchase - Free Shipping}}`
+     * Custom Metrics:
+         * Index `2` - Metric Value: `{{DL - EEC Purchase - Discount Amount}}`
      * More Settings -> Ecommerce: 
          * Enable Enhanced Ecommerce Features: `True`
          * Read Data from Variable: `{{JS - eec.purchase}}`
    * Trigger: `custom event - ssRawTransactionPush`
-
-
 
 
 
@@ -526,3 +548,34 @@ Congratulations on making it through. Now the entire implementation needs to be 
 
 
 
+
+
+<!-- 
+
+ADD ONS
+
+GOOGLE ANALYTICS CUSTOM DIMENSIONS / METRICS
+Dimensions:
+* Order Discount Status
+* Free Shipping
+
+Metrics:
+* Order Discount Amount
+
+RAW TRANSACTION DATALAYER PUSH
+var discount = {
+    'status': "not_set",
+    'amount': 0,
+    'freeShipping': "not_set"
+}
+
+GTM DL VARIABLES
+DL - EEC Purchase - Discount Status -> discount.status
+DL - EEC Purchase - Discount Amount -> discount.amount
+DL - EEC Purchase - Free Shipping -> discount.freeShipping
+
+
+TAG MODIFICATION
+Add Custom Dimensions / Metric to Purchase tag
+
+ -->

@@ -19,15 +19,43 @@
       
     // remove any potential PII before pushing to dataLayer
   	// if the "customer" field exists, reset it to an empty string
-    if(typeof(ssRawTransaction.billingDetails.customer) != "undefined"){
-    	ssRawTransaction.billingDetails.customer = "";
+    if(typeof(ssRawTransaction.billingDetails) != "undefined"){
+    	ssRawTransaction.billingDetails["customer"] = "";
 	}  
+
+
+	var discount = {
+		'status': "not_set",
+		'amount': 0,
+		'freeShipping': "not_set"
+	}
+
+	// to figure out if a discount was applied and how much we do the following
+	// subtract tax, shipping, and subtotal from the grandTotal to get transactionSubtotal
+	// if the result is less than 0 then a discount was applied
+	if(typeof(ssRawTransaction.grandTotal) != "undefined"){
+
+		var cartSubtotal = ssRawTransaction.subtotal.value
+		var shippingTotal = ssRawTransaction.shippingTotal.value;
+		var discountAmount =  ssRawTransaction.grandTotal.value
+							- ssRawTransaction.taxTotal.value
+							- shippingTotal
+							- cartSubtotal;
+
+		discount = {
+			'status': (discountAmount < 0) ? "Discount Applied" : "No Discount",
+			'amount': (discountAmount < 0) ? discountAmount / 100 : 0,
+			'freeShipping': (shippingTotal == 0) ? "Yes" : "No"
+		}
+	}
+
 
     // push the anonymous transaction information to the dataLayer
 	window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
 		'event' : 'ssRawTransactionPush',
-        'ssRawTransaction': ssRawTransaction
+		'ssRawTransaction': ssRawTransaction,
+		'discount': discount
     });
 
 </script>
