@@ -35,6 +35,7 @@ The following Product Data will be sent (when applicable) along with each of the
 * ID
 * Name
 * Category
+* Variant
 * Price
 * Quantity
 
@@ -94,7 +95,7 @@ The way Squarespace is set up and the way we are implementing EEC makes it diffi
         3.  generate `purchase` EEC data structure
 6.  [Configure tag firing triggers](#SECTION-6-\-\--CONFIGURE-TAG-FIRING-TRIGGERS)
 7.  [Configure EEC tags](#SECTION-7-\-\--CONFIGURE-EEC-TAGS)
-8.  TEST IT THOROUGHLY
+8.  [TEST IT THOROUGHLY](#SECTION-8-\-\--CELEBRATENO-WAITTEST-EVERYTHING-FIRST)
 
 
 
@@ -506,7 +507,7 @@ The process for each of these will be the same:<br/>
 
 
 ---
-# SECTION 8 -- CELEBRATE...NO WAIT...TEST A BUNCH FIRST!!!
+# SECTION 8 -- CELEBRATE...NO WAIT...TEST EVERYTHING FIRST!!!
 Congratulations on making it through. Now the entire implementation needs to be tested. Go through the entire user journey and make sure to trigger each Tag. The testing process should be something like this
 
 1. Complete the customer action that should trigger the tag being tested (like view a products details page)
