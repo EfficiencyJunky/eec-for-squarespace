@@ -21,66 +21,66 @@
         // look for the one that has the checkout information we need
         for (var scriptIndex = 0; scriptIndex < ssAllScripts.length; scriptIndex++) {
             // the .match method returns 'null' if it doesn't find a match
-            var ssContextObjectScriptHTML = ssAllScripts[scriptIndex].innerHTML.match(/Static\.SQUARESPACE_CONTEXT = (.+?)\};/);
+            var ssContextObjectScriptHTML = ssAllScripts[scriptIndex].innerHTML.match(/Static\.SQUARESPACE_CONTEXT = (.+?\});/);
         
             // if the match function above returned something, then we parse it as JSON and store it in our JSON variable
             if(ssContextObjectScriptHTML){ 
-                ssContextObject = JSON.parse(ssContextObjectScriptHTML[1] + "}");
+                ssContextObject = JSON.parse(ssContextObjectScriptHTML[1]);
+
+                if(typeof(ssContextObject.product) != 'undefined'){
+                    // STRIP SUPERFLUOUS INFORMATION
+                    // strip the information in the key "mainImage" from each product variant
+                    // it's a crazy mess of alphanumeric stuff that we don't need in our dataLayer
+                    var productVariants = ssContextObject.product.variants || [];
+
+                    for(var i=0; i < productVariants.length; i++){
+                        productVariants[i]['mainImage'] = {};
+                    }
+
+                    // SEARCH FOR CATEGORY TAGS -- THIS MIGHT BE UNRELIABLE
+                    // the following code attempts to scrape the DOM to find category information for the product
+                    // if the category information exists it should be found in the class names list within one of the elements in the page
+                    // if this element exists, it will have one or more classes that start with "category-"
+                    // so we will attempt to find it and then loop through its classes and find any class with "category-" in the title
+                    // remove the "category-" and append the rest of the class name to the categoryString variable
+                    // if there are more than one category it will place a "/" in between each category
+                    // it will stop looking after the 5th category to comply with Google Analytics 5 category depth limit
+                    var categoryClassesElement, categoryClasses, categoryString = "";
+
+                    categoryClassesElement = document.querySelector('[data-content-field="main-content"]');
+
+                    if(categoryClassesElement){
+                        categoryClassesElement = categoryClassesElement.querySelector('[class*=category-]');
+                    }
+                    else{
+                        categoryClassesElement = document.querySelector('body [class*=category-]');
+                    }
+
+                    categoryClasses = (categoryClassesElement) ? categoryClassesElement.className.match(/\bcategory-[\S]*/g) : [];
+
+                    for(var i=0; i < categoryClasses.length && i < 5; i++){
+                        categoryString = categoryString + ( i!=0 ? "/" : "") + categoryClasses[i].replace(/category-/, '');
+                    }
+
+                    // CREATE AN OBJECT WITH THE RAW SQUARESPACE DATA
+                    var ssRawProductDetail = {
+                        "item": ssContextObject.item,
+                        "product": ssContextObject.product,
+                        "category": categoryString
+                    };
+                
+
+                    // PUSH TO DATALAYER
+                    window.dataLayer = window.dataLayer || [];
+                    window.dataLayer.push({
+                        'event' : 'ssRawProductDetailPush',
+                        'ssRawProductDetail': ssRawProductDetail
+                    });
+
+                    break;
+                }
             }
-        }
-
-
-        if(typeof(ssContextObject.product) != 'undefined'){
-
-            // STRIP SUPERFLUOUS INFORMATION
-            // strip the information in the key "mainImage" from each product variant
-            // it's a crazy mess of alphanumeric stuff that we don't need in our dataLayer
-            var productVariants = ssContextObject.product.variants;            
-
-            for(var i=0; i < productVariants.length; i++){
-                productVariants[i]['mainImage'] = {};
-            }
-
-            // SEARCH FOR CATEGORY TAGS -- THIS MIGHT BE UNRELIABLE
-            // the following code attempts to scrape the DOM to find category information for the product
-            // if the category information exists it should be found in the class names list within one of the elements in the page
-            // if this element exists, it will have one or more classes that start with "category-"
-            // so we will attempt to find it and then loop through its classes and find any class with "category-" in the title
-            // remove the "category-" and append the rest of the class name to the categoryString variable
-            // if there are more than one category it will place a "/" in between each category
-            // it will stop looking after the 5th category to comply with Google Analytics 5 category depth limit
-            var categoryClassesElement, categoryClasses, categoryString = "";
-
-            categoryClassesElement = document.querySelector('[data-content-field="main-content"]');
-
-            if(categoryClassesElement){
-                categoryClassesElement = categoryClassesElement.querySelector('[class*=category-]');
-            }
-            else{
-                categoryClassesElement = document.querySelector('body [class*=category-]');
-            }
-
-            categoryClasses = (categoryClassesElement) ? categoryClassesElement.className.match(/\bcategory-[\S]*/g) : [];
-
-            for(var i=0; i < categoryClasses.length && i < 5; i++){
-                categoryString = categoryString + ( i!=0 ? "/" : "") + categoryClasses[i].replace(/category-/, '');
-            }
-
-            // CREATE AN OBJECT WITH THE RAW SQUARESPACE DATA
-            var ssRawProductDetail = {
-                "item": ssContextObject.item,
-                "product": ssContextObject.product,
-                "category": categoryString
-            };
-        
-
-            // PUSH TO DATALAYER
-            window.dataLayer = window.dataLayer || [];
-            window.dataLayer.push({
-                'event' : 'ssRawProductDetailPush',
-                'ssRawProductDetail': ssRawProductDetail
-            });
-        }
+        }                    
     }
 
 
