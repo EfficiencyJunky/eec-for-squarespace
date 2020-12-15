@@ -5,7 +5,7 @@
     2. Copy [this code][01_datalayer_push_code] into the "ORDER CONFIRMATION PAGE" section at the very bottom
     3. click "save" to save the changes. (NOTE: in some cases after clicking save, the contents of the code injection box disappear. This is a bug in Squarespace. Just reload the page and it will re-appear)
     4. To test this, we will have to actually make a purchase. Back in GTM, start or restart Preview mode, add a product to cart, visit the cart page, and click checkout. If the checkout page is hosted on "secure.squarespace.com" then GTM may complain that it has lost the connection. Disregard this complaint, complete the checkout, and we should be re-directed to the URL Path "/checkout/order-confirmed" (it will have some query parameters in it as well)
-    The `ssRawTransactionPush` event should show up in the Summary tab. Click on this event and check to make sure the `DL - SS Raw Transaction` and `URL Query - oid (for SS Transaction ID)` variables have been populated.
+    The `ssRawTransactionPush` event should show up in the Summary tab. Click on this event and check to make sure the `DL - SS Raw Transaction`, `URL Query - oid (for SS Transaction ID)`, `DL - EEC Purchase - Discount Status`, `DL - EEC Purchase - Free Shipping`, and `DL - EEC Purchase - Discount Amount` variables have been populated.
 
 
 2. Back in GTM, use a Custom Javascript Variable to transform the purchased items list into a list of `productJSON` objects and quantities, and then generate our `purchase` EEC data structure out of these lists (including the actionField with overall transaction details)
