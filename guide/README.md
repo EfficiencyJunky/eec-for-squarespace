@@ -129,6 +129,19 @@ In Google Analytics, go to settings, and choose the property that will be used f
 
     <img src="../img/01--GA_Setup/02--Settings--Property--custom_metrics.png">
 
+
+3. **OPTIONAL: Add a referral exclusion for secure.squarespace.com**</br>
+	If we are setting up a Squarespace site that uses the Squarespace hosted checkout (such as on the Business tier of service) we will need to add another referral exclusion</br>
+	The reason being, when customer's checkout, they will be sent to a checkout on the secure.squarespace.com domain and then when they complete their purchase, they are redirected back to our website's "checkout-complete" page.</br>
+	If we don't add the referral exclusion, then anyone who makes a purchase will appear as though their source / medium was `secure.squarespace.com / referral` no matter if they came from organic search or ads or direct.</br></br>
+	**Under "Tracking Info" choose "Referral Exclusion List"**
+	* Choose "Add Referral Exclusion" and type `secure.squarespace.com` in the "Domain" text box
+	* Now the referral exclusion will show up in our Referral Exclusion list
+
+    <img src="../img/01--GA_Setup/02--Settings--Property--referral_exclusion_list"></br>
+
+
+
 ## View Settings
 Now for the view settings. Repeat the following steps for each view that we want to enable EEC tracking on.
     
