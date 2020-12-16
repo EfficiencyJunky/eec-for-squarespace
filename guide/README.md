@@ -138,7 +138,7 @@ In Google Analytics, go to settings, and choose the property that will be used f
 	* Choose "Add Referral Exclusion" and type `secure.squarespace.com` in the "Domain" text box
 	* Now the referral exclusion will show up in our Referral Exclusion list
 
-    <img src="../img/01--GA_Setup/02--Settings--Property--referral_exclusion_list"></br>
+    <img src="../img/01--GA_Setup/02--Settings--Property--referral_exclusion_list.png"></br>
 
 
 
