@@ -488,6 +488,7 @@ The process for each of these will be the same **EXCEPT FOR THE "PURCHASE" TAG W
        * Category: `Ecommerce`
        * Action: `Add To Cart`
        * Label: `{{DL - EEC Detail - Product Name}}`
+       * Value: `{{DL - EEC Add - Quantity Add}}`
        * Non-Interactioin Hit: `False`
      * More Settings -> Ecommerce: 
          * Enable Enhanced Ecommerce Features: `True`
