@@ -1,62 +1,7 @@
-# ENHANCED ECOMMERCE FOR SQUARESPACE
-## Welcome
-The Enhanced Ecommerce (EEC) features of Google Analytics are an incredibly powerful set of tools for tracking and analyzing customer behavior in online stores. Over the past decade EEC has become the defacto tool for ecommerce measurement due to its comprehensive customization abilities and because it doesn't cost money. If set up correctly, it can provide a wealth of information on how your customers are progressing through the user journey from arrival at your store through purchase conversion and beyond.
-
-That being said, it is NOT an "out-of-the-box" type solution to all your ecommerce woes that you can simply just "turn-on" (although it seems this way in Google Analytics). It requires a decent amount of planning, implementation, and customization to set it up properly for your specific business no matter what ecommerce platform you use. Squarespace is no different. That's just the nature of anything worth doing!
-
-Thankfully we have some amazing tools like Google Tag Manager and Github to make this process as easy as possible.
-
-## Why this repository exists
-The goal of this repository is three-fold:
-1. Provide a [complete guide](./guide/) for setting up the most important functions of EEC on Squarespace
-2. Be an educational resource for anyone, regardless of their skill in coding OR marketing, to learn more about EEC and the tools available to implement it
-3. Provide a [place for people to connect](https://github.com/EfficiencyJunky/eec-for-squarespace/discussions) and discuss all things related to EEC on squarespace
-
-
-## Additional Resources
-**SIMO AHAVA**<br/>
-Simo Ahava is one of the world's leading experts (if not the leading one) on Google Tag Manager among other Google Properties. He's also a prolific blogger. We are very lucky to have him. If you are just getting started with GTM and EEC, I strongly encourage you read through as much of his blog as possible.
-
-Here are the most relevant of his articles:
-* [Simo Ahava: The difinitive Enhanced Ecommerce guide for Google Tag Manager](https://www.simoahava.com/analytics/enhanced-ecommerce-guide-for-google-tag-manager/)
-* [Simo Ahava: Product scoped custom dimensions and metrics](https://www.simoahava.com/gtm-tips/product-scoped-custom-dimensions-and-metrics/)
-* [Simo Ahava: Two ways to persist data via Google Tag Manager](https://www.simoahava.com/analytics/two-ways-to-persist-data-via-google-tag-manager/)
-
-<br/>
-
-**MEASURESCHOOL AND MEASUREMENTMARKETING.IO**<br/>
-If you are looking to learn EVERYTHING there is to know about Google Analytics, Google Tag Manager, Google Data Studio, Google Search Console, Google Optimize, and in general become the best measurement marketer possible, then you absolutely MUST check out Measure School and MeasurementMarketing.io. Both of them offer lots of free content on their YouTube channels but if you are serious about this profession you should give them all your money. It will be a great investment<br/>
-
-* MeasureSchool with Julian Juenemann
-  * [measureschool.com](https://measureschool.com/)
-  * [MeasureSchool on YouTube](https://www.youtube.com/channel/UClgihdkPzNDtuoQy4xDw5mA)
-* MeasurementMarketing.io with Chris Mercer
-  * [measurementmarketing.io](https://measurementmarketing.io/)
-  * [MeasurementMarketing on YouTube](https://www.youtube.com/c/MeasurementMarketingio/videos)
-
-
-**OFFICIAL GOOGLE DEVELOPER DOCS**<br/>
-* [Official Google Tag Manager Developer Guide for Enhanced Ecommerce](https://developers.google.com/tag-manager/enhanced-ecommerce)
-* [Official Google Analytics Developer Guide for Enhanced Ecommerce](https://developers.google.com/analytics/devguides/collection/analyticsjs/enhanced-ecommerce)
-
-**OTHER**
-* [How to scrape Squarespace Commerce Analytics data from <script> tags in an <html> document](https://stackoverflow.com/questions/58053572/scraping-information-from-a-script-tag-using-javascript/64887166#64887166)
-
-
----
-# THE GUIDE
-If you already understand how EEC works, are familiar with Google Tag Manager (GTM), and understand at least the basics of Javascript, or you just want to dive in, feel free to click the "GET STARTED" link below.
-
-If you are new to the world of Ecommerce, or any of the other things I just mentioned, consider reading further before jumping into the guide.
-
-## [GET STARTED](./guide/)
-
-
----
 # HOW EEC WORKS IN GENERAL
-The world of ecommerce is vast indeed. But it's surprisingly predictable in many ways. As you may have noticed, nearly every ecommerce website in existence today follows the exact same heirarchy and organizational structure. This is not by accident. Considering how many moving parts there are in a complete ecommerce solution, standardizing the website structure was an absolute necessity and hasn't changed in decades.
+The world of ecommerce is vast indeed. But it's also quite standardized and predictable in many ways. As you may have noticed, nearly every ecommerce website in existence today follows the exact same heirarchy and organizational structure. This is not by accident. Considering how many moving parts there are in a complete ecommerce solution, standardizing the website structure was an absolute necessity and this basic structure hasn't changed in decades.
 
-The point here being that understanding the structure of ecommerce websites is the first most important thing we all need to understand before diving head first into EEC tracking. Because EEC itself is structured around this standard way of doing things.
+The point here being that understanding the structure of ecommerce websites is the first most important thing we all need to understand before diving head first into setting up EEC tracking. Because EEC itself is structured around this standard way of doing things.
 
 ## LESSON #1: A Typical Ecommerce User Journey
 What I'm talking about when I say "structure" of an ecommerce website is really how the website "flows" or how the "user journey" has been set up. Although this section may have you saying "Hellooooooo captain obvious!!" because we have all bought things online...it is important to frame things this way in order to understand EEC implementation.
@@ -84,7 +29,7 @@ STAY WITH ME :) Even if you don't consider yourself a "technical marketer" pleas
 
 In order to alleviate any fear you may have of the word "Data Structure", here's an example.
 
-<script>
+```
 {
     'pageview': {
 		'url': 'https://www.turnerkirk.com/',
@@ -93,7 +38,7 @@ In order to alleviate any fear you may have of the word "Data Structure", here's
 		'pathname': "/",
     }
 }
-</script>
+```
 
 What do you see? A collection of information (**"data"**) in a **"structured"** form that humans can read or write code to manipulate, and computers can interpret or utilize to efficiently carry out tasks.
 
